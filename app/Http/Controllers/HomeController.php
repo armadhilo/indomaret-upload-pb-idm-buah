@@ -4,17 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Helper\DatabaseConnection;
 use App\Helper\ApiFormatter;
-use Carbon\Carbon;
+use App\Http\Requests\AuthRequest;
 use Illuminate\Http\Request;
-use Exception;
-use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Queue\Connectors\DatabaseConnector;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Storage;
 
 class HomeController extends Controller
 {
@@ -26,5 +18,28 @@ class HomeController extends Controller
 
     function index(){
         return view("home");
+    }
+
+    public function actionLogin(AuthRequest $request){
+        // sb.AppendLine("Select coalesce(Count(1),0) ")
+        // sb.AppendLine("  From tbmaster_user ")
+        // sb.AppendLine(" Where kodeigr = '" & KDIGR & "' ")
+        // sb.AppendLine("   And userid = '" & Replace(txtUser.Text, "'", "") & "' ")
+        // sb.AppendLine("   And userpassword = '" & Replace(txtPassword.Text, "'", "") & "'  ")
+
+
+        $data = DB::table('tbmaster_user')
+            ->where([
+                'kodeigr' => session('KODECABANG'),
+                'userid' => $request->user,
+                'userpassword' => $request->password,
+            ])->first();
+
+        if(empty($data)){
+            $message = 'Username atau Password Salah!!';
+            return ApiFormatter::error(400, $message);
+        }
+
+        return ApiFormatter::success(200, "Login Berhasil..!");
     }
 }
