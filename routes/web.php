@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\ClusterBuahController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\JadwalKirimBuahController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\MasterTimbanganController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,11 +28,47 @@ Route::middleware(['mylogin'])->group(function () {
     Route::group(['prefix' => 'home'], function(){
 
         Route::get('/', [HomeController::class, 'index']);
+    });
+
+    //MASTER TIMBANGAN
+    Route::group(['prefix' => 'master-timbangan'], function(){
+
+        Route::get('/', [MasterTimbanganController::class, 'index']);
+        Route::get('/detail/{pluigr}', [MasterTimbanganController::class, 'detail']);
+        Route::get('/datatables', [MasterTimbanganController::class, 'datatables']);
+        Route::get('/datatables-help-timbangan', [MasterTimbanganController::class, 'datatablesHelpTimbangan']);
 
         Route::group(['prefix' => 'action'], function(){
-            Route::get('pos', [HomeController::class, 'actionPos']);
-            Route::get('spi', [HomeController::class, 'actionSpi']);
-            Route::get('klik', [HomeController::class, 'actionKlik']);
+            Route::get('add', [MasterTimbanganController::class, 'actionAdd']);
+            Route::get('hapus/{pluigr}/{nama_barang}', [MasterTimbanganController::class, 'actionHapus']);
+            Route::get('update-all-data', [MasterTimbanganController::class, 'actionUpdateAllData']);
+            Route::get('kirim', [MasterTimbanganController::class, 'actionKirim']);
+        });
+    });
+
+    //JADWAL KIRIM
+    Route::group(['prefix' => 'jadwal-kirim'], function(){
+
+        Route::get('/', [JadwalKirimBuahController::class, 'index']);
+        Route::get('/load-toko', [JadwalKirimBuahController::class, 'loadToko']);
+        Route::get('/datatables', [JadwalKirimBuahController::class, 'datatables']);
+        Route::get('/load-detail-hari/{toko}', [JadwalKirimBuahController::class, 'loadDetailHari']);
+
+        Route::group(['prefix' => 'action'], function(){
+            Route::get('save', [JadwalKirimBuahController::class, 'actionSave']);
+            Route::get('hapus/{kode_toko}', [JadwalKirimBuahController::class, 'actionHapus']);
+        });
+    });
+
+    //CLUSTER BUAH
+    Route::group(['prefix' => 'cluster-buah'], function(){
+
+        Route::get('/', [ClusterBuahController::class, 'index']);
+        Route::get('/load-toko', [ClusterBuahController::class, 'loadToko']);
+
+        Route::group(['prefix' => 'action'], function(){
+            Route::get('save', [ClusterBuahController::class, 'actionSave']);
+            Route::get('hapus/{kode_cluster}', [ClusterBuahController::class, 'actionHapus']);
         });
     });
 });

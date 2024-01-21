@@ -21,12 +21,11 @@ class JadwalKirimBuahController extends Controller
     public function index(){
 
         $this->CreateTabelBuah();
-        $this->LoadToko();
 
         return view("master_timbangan");
     }
 
-    private function loadToko(){
+    public function loadToko(){
         // sb.AppendLine("SELECT tko_kodeomi, ")
         // sb.AppendLine("       tko_namaomi ")
         // sb.AppendLine("  FROM tbmaster_tokoigr ")
@@ -122,7 +121,7 @@ class JadwalKirimBuahController extends Controller
     }
 
     //! BAGIAN C
-    public function delete($kode_toko){
+    public function actionHapus($kode_toko){
         //* Anda Yakin Untuk Menghapus Toko " & dgvJadwal.CurrentRow.Cells(1).Value & " ??
 
         //! DELETE FROM JADWAL_KIRIM_BUAH

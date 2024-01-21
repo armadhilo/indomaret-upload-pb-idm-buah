@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
-class JadwalKirimBuahController extends Controller
+class ClusterBuahController extends Controller
 {
 
     public function __construct(Request $request)
@@ -22,12 +22,11 @@ class JadwalKirimBuahController extends Controller
     public function index(){
 
         $this->CreateTabelBuah();
-        $this->LoadToko();
 
         return view("master_timbangan");
     }
 
-    private function loadToko(){
+    public function loadToko(){
         //! Load Toko
         // sb.AppendLine("SELECT TKO_KodeOMI, ")
         // sb.AppendLine("       TKO_NamaOMI ")
@@ -125,7 +124,7 @@ class JadwalKirimBuahController extends Controller
 
     //! CLICK KEYBOARD DEL
     //? langsung dari table
-    public function actionDelete($kode_cluster){
+    public function actionHapus($kode_cluster){
         //* Anda Yakin Untuk Menghapus Toko " & dgvCluster.CurrentRow.Cells(1).Value & " ??
 
         //! DELETE FROM CLUSTER_BUAH
