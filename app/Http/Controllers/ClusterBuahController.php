@@ -22,8 +22,7 @@ class ClusterBuahController extends Controller
     public function index(){
 
         $this->CreateTabelBuah();
-
-        return view("master_timbangan");
+        return view("menu.cluster-buah");
     }
 
     public function loadToko(){
@@ -110,8 +109,8 @@ class ClusterBuahController extends Controller
         // sb.AppendLine(") ")
 
         DB::table('cluster_buah')->insert([
-            'clb_kode' => $request->kode_toko,
-            'clb_toko' => $request->kode_cluster,
+            'clb_kode' => $request->kode_cluster,
+            'clb_toko' => $request->kode_toko,
             'clb_nourut' => $request->jarak_kirim,
             'clb_create_by' => session('userid'),
             'clb_create_dt' => Carbon::now(),
@@ -124,7 +123,7 @@ class ClusterBuahController extends Controller
 
     //! CLICK KEYBOARD DEL
     //? langsung dari table
-    public function actionHapus($kode_cluster){
+    public function actionHapus($kode_toko){
         //* Anda Yakin Untuk Menghapus Toko " & dgvCluster.CurrentRow.Cells(1).Value & " ??
 
         //! DELETE FROM CLUSTER_BUAH
@@ -133,12 +132,12 @@ class ClusterBuahController extends Controller
 
         DB::table('cluster_buah')
             ->where([
-                'clb_toko' => $kode_cluster
+                'clb_toko' => $kode_toko
             ])
             ->delete();
 
         //* Toko " & dgvCluster.CurrentRow.Cells(1).Value & " Berhasil Dihapus
-        $message = "Toko $kode_cluster Berhasil Dihapus";
+        $message = "Toko $kode_toko Berhasil Dihapus";
         return ApiFormatter::success(200, $message);
     }
 }

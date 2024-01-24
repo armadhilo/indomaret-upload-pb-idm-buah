@@ -31,6 +31,15 @@ class ClusterBuahSaveRequest extends FormRequest
         ];
     }
 
+    public function messages()
+    {
+        return [
+            'kode_toko.required' => 'Kode Toko',
+            'kode_cluster.required' => 'Kode Cluster',
+            'jarak_kirim.required' => 'Jarak Kirim',
+        ];
+    }
+
     protected function failedValidation(Validator $validator) {
         $errors = json_decode($validator->errors());
         $array = [];
@@ -44,7 +53,7 @@ class ClusterBuahSaveRequest extends FormRequest
             }
         }
         throw new HttpResponseException(response()->json([
-            'code' => 400,
+            'code' => 500,
             'errors' => $array,
             'message' => 'Input validation error'
         ], 400));

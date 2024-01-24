@@ -39,8 +39,8 @@ Route::middleware(['mylogin'])->group(function () {
         Route::get('/datatables-help-timbangan', [MasterTimbanganController::class, 'datatablesHelpTimbangan']);
 
         Route::group(['prefix' => 'action'], function(){
-            Route::get('add', [MasterTimbanganController::class, 'actionAdd']);
-            Route::get('hapus/{pluigr}/{nama_barang}', [MasterTimbanganController::class, 'actionHapus']);
+            Route::post('add', [MasterTimbanganController::class, 'actionAdd']);
+            Route::delete('hapus/{pluigr}/{nama_barang}', [MasterTimbanganController::class, 'actionHapus']);
             Route::get('update-all-data', [MasterTimbanganController::class, 'actionUpdateAllData']);
             Route::get('kirim', [MasterTimbanganController::class, 'actionKirim']);
         });
@@ -55,8 +55,8 @@ Route::middleware(['mylogin'])->group(function () {
         Route::get('/load-detail-hari/{toko}', [JadwalKirimBuahController::class, 'loadDetailHari']);
 
         Route::group(['prefix' => 'action'], function(){
-            Route::get('save', [JadwalKirimBuahController::class, 'actionSave']);
-            Route::get('hapus/{kode_toko}', [JadwalKirimBuahController::class, 'actionHapus']);
+            Route::post('save', [JadwalKirimBuahController::class, 'actionSave']);
+            Route::delete('hapus/{kode_toko}', [JadwalKirimBuahController::class, 'actionHapus']);
         });
     });
 
@@ -65,10 +65,12 @@ Route::middleware(['mylogin'])->group(function () {
 
         Route::get('/', [ClusterBuahController::class, 'index']);
         Route::get('/load-toko', [ClusterBuahController::class, 'loadToko']);
+        Route::get('/datatables', [ClusterBuahController::class, 'datatables']);
+
 
         Route::group(['prefix' => 'action'], function(){
-            Route::get('save', [ClusterBuahController::class, 'actionSave']);
-            Route::get('hapus/{kode_cluster}', [ClusterBuahController::class, 'actionHapus']);
+            Route::post('save', [ClusterBuahController::class, 'actionSave']);
+            Route::delete('hapus/{kode_toko}', [ClusterBuahController::class, 'actionHapus']);
         });
     });
 });

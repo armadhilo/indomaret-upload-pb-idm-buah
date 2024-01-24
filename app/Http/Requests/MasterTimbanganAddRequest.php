@@ -27,7 +27,14 @@ class MasterTimbanganAddRequest extends FormRequest
         return [
             'pluigr' => ['required'],
             'plubuah' =>  ['required'],
-            'nama_cabang' =>  ['required'],
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'pluigr.required' => 'PLUIGR',
+            'plubuah.required' => 'PLUBUAH',
         ];
     }
 
@@ -44,7 +51,7 @@ class MasterTimbanganAddRequest extends FormRequest
             }
         }
         throw new HttpResponseException(response()->json([
-            'code' => 400,
+            'code' => 500,
             'errors' => $array,
             'message' => 'Input validation error'
         ], 400));

@@ -21,8 +21,7 @@ class JadwalKirimBuahController extends Controller
     public function index(){
 
         $this->CreateTabelBuah();
-
-        return view("master_timbangan");
+        return view("menu.jadwal-kirim-buah");
     }
 
     public function loadToko(){
@@ -106,9 +105,21 @@ class JadwalKirimBuahController extends Controller
     }
 
     //! BAGIAN B
-    public function actionSave(){
+    public function actionSave(Request $request){
         //* jika kode toko kosong -> Pilih Dulu Kode Toko!!", MsgBoxStyle.Information, ProgName)
         //* Simpan Jadwal Kirim Buah Toko " & Trim(cboKodeToko.Text) & " ??",
+
+        $days = ["minggu","senin", "selasa", "rabu", "kamis", "jumat", "sabtu"];
+
+        foreach ($days as $day) {
+            if (!$this->simpanJadwalKirim($request->kode_toko, $request->nama_toko, strtoupper($day), isset($request->$day))) {
+                $message = "Toko $request->kode_toko Gagal Disimpan !!";
+                return ApiFormatter::error(400, $message);
+            }
+        }
+
+        $message = "Toko $request->kode_toko Berhasil Disimpan !!";
+        return ApiFormatter::success(200, $message);
 
         //! GUNAKAN ACTION simpanJadwalKirim
         // If Not simpanJadwalKirim(Trim(cboKodeToko.Text), Trim(txtNamaToko.Text), "MINGGU", cbMinggu.Checked) Then MsgBox("Toko " & cboKodeToko.Text & " Gagal Disimpan !!") : Exit Sub
@@ -145,69 +156,75 @@ class JadwalKirimBuahController extends Controller
         // sb.AppendLine(" Where JKB_KodeToko = '" & toko & "' ")
         // sb.AppendLine("   And JKB_Hari = '" & hari & "' ")
 
-        $check = DB::table('JADWAL_KIRIM_BUAH')
+        try {
+            $check = DB::table('jadwal_kirim_buah')
             ->where([
-                'JKB_KodeToko' => $toko,
-                'JKB_Hari' => $hari,
+                'jkb_kodetoko' => $toko,
+                'jkb_hari' => $hari,
             ])
             ->count();
 
-        // If flagKirim Then
-        //     'JIKA KIRIM DAN BELUM DIINSERT DATA
-        //     If jum = 0 Then
-        //         sb = New StringBuilder
-        //         sb.AppendLine("INSERT INTO jadwal_kirim_buah ")
-        //         sb.AppendLine("( ")
-        //         sb.AppendLine("  jkb_hari, ")
-        //         sb.AppendLine("  jkb_kodetoko, ")
-        //         sb.AppendLine("  jkb_namatoko, ")
-        //         sb.AppendLine("  jkb_create_by, ")
-        //         sb.AppendLine("  jkb_create_dt ")
-        //         sb.AppendLine(") ")
-        //         sb.AppendLine("VALUES ")
-        //         sb.AppendLine("( ")
-        //         sb.AppendLine("  '" & hari & "', ")
-        //         sb.AppendLine("  '" & toko & "', ")
-        //         sb.AppendLine("  '" & namaToko & "', ")
-        //         sb.AppendLine("  '" & UserID & "', ")
-        //         sb.AppendLine("  CURRENT_TIMESTAMP ")
-        //         sb.AppendLine(") ")
-        //         ExecQRY(sb.ToString, "INSERT INTO JADWAL_KIRIM_BUAH")
-        //     End If
-        // Else
-        //     'JIKA TIDAK KIRIM DAN SUDAH ADA DATA
-        //     If jum > 0 Then
-        //         sb = New StringBuilder
-        //         sb.AppendLine("DELETE FROM jadwal_kirim_buah ")
-        //         sb.AppendLine(" WHERE jkb_kodetoko = '" & toko & "' ")
-        //         sb.AppendLine("   AND jkb_hari = '" & hari & "' ")
-        //         ExecQRY(sb.ToString, "DELETE FROM JADWAL_KIRIM_BUAH")
-        //     End If
-        // End If
+            // If flagKirim Then
+            //     'JIKA KIRIM DAN BELUM DIINSERT DATA
+            //     If jum = 0 Then
+            //         sb = New StringBuilder
+            //         sb.AppendLine("INSERT INTO jadwal_kirim_buah ")
+            //         sb.AppendLine("( ")
+            //         sb.AppendLine("  jkb_hari, ")
+            //         sb.AppendLine("  jkb_kodetoko, ")
+            //         sb.AppendLine("  jkb_namatoko, ")
+            //         sb.AppendLine("  jkb_create_by, ")
+            //         sb.AppendLine("  jkb_create_dt ")
+            //         sb.AppendLine(") ")
+            //         sb.AppendLine("VALUES ")
+            //         sb.AppendLine("( ")
+            //         sb.AppendLine("  '" & hari & "', ")
+            //         sb.AppendLine("  '" & toko & "', ")
+            //         sb.AppendLine("  '" & namaToko & "', ")
+            //         sb.AppendLine("  '" & UserID & "', ")
+            //         sb.AppendLine("  CURRENT_TIMESTAMP ")
+            //         sb.AppendLine(") ")
+            //         ExecQRY(sb.ToString, "INSERT INTO JADWAL_KIRIM_BUAH")
+            //     End If
+            // Else
+            //     'JIKA TIDAK KIRIM DAN SUDAH ADA DATA
+            //     If jum > 0 Then
+            //         sb = New StringBuilder
+            //         sb.AppendLine("DELETE FROM jadwal_kirim_buah ")
+            //         sb.AppendLine(" WHERE jkb_kodetoko = '" & toko & "' ")
+            //         sb.AppendLine("   AND jkb_hari = '" & hari & "' ")
+            //         ExecQRY(sb.ToString, "DELETE FROM JADWAL_KIRIM_BUAH")
+            //     End If
+            // End If
 
-        if($flag_kirim){
-            if($check == 0){
-                //! JIKA KIRIM DAN BELUM DIINSERT DATA
-                DB::table('jadwal_kirim_buah')
-                    ->insert([
-                        'jkb_hari' => $hari,
-                        'jkb_kodetoko' => $toko,
-                        'jkb_namatoko' => $nama_toko,
-                        'jkb_create_by' => session('userid'),
-                        'jkb_create_dt' => Carbon::now(),
-                    ]);
+            if($flag_kirim){
+                if($check == 0){
+                    //! JIKA KIRIM DAN BELUM DIINSERT DATA
+                    DB::table('jadwal_kirim_buah')
+                        ->insert([
+                            'jkb_hari' => $hari,
+                            'jkb_kodetoko' => $toko,
+                            'jkb_namatoko' => $nama_toko,
+                            'jkb_create_by' => session('userid'),
+                            'jkb_create_dt' => Carbon::now(),
+                        ]);
+                }
+            }else{
+                if($check > 0){
+                    DB::table('jadwal_kirim_buah')
+                        ->where([
+                            'jkb_kodetoko' => $toko,
+                            'jkb_hari' => $hari,
+                        ])
+                        ->delete();
+                }
             }
-        }else{
-            if($check > 0){
-                DB::table('jadwal_kirim_buah')
-                    ->where([
-                        'jkb_kodetoko' => $toko,
-                        'jkb_hari' => $hari,
-                    ])
-                    ->delete();
-            }
+            return true;
+        } catch (\Throwable $th) {
+            return false;
         }
 
-        return true;
+        
+
     }
 }

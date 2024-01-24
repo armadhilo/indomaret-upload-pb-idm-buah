@@ -9,6 +9,8 @@ use App\Http\Requests\MasterTimbanganAddRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\MasterTimbanganExport;
 
 class MasterTimbanganController extends Controller
 {
@@ -19,10 +21,9 @@ class MasterTimbanganController extends Controller
     }
 
     function index(){
-
         $this->CreateTabelTimbangan();
 
-        return view("master_timbangan");
+        return view("menu.master-timbangan");
     }
 
     //! BAGIAN A
@@ -64,7 +65,7 @@ class MasterTimbanganController extends Controller
         // sb.AppendLine(" ORDER BY prd_deskripsipendek ")
 
         $data = DB::table('tbmaster_prodmast')
-            ->select('prd_deskripsipendek as desc')
+            ->select(['prc_pluigr','prd_deskripsipendek as desc'])
             ->join('tbmaster_prodcrm',function($join){
                 $join->on('prc_pluigr','=','prd_prdcd');
             })
@@ -165,7 +166,7 @@ class MasterTimbanganController extends Controller
         }else{
             $query .= "	  ROUND(COALESCE(UBR_MAX_UMUR_BRG,0) * CASE WHEN UBR_MAX_UMUR_BRG_S = 'B' THEN 30 ELSE 1 END / CASE WHEN UBR_MAX_UMUR_BRG_S = 'J' THEN 24 ELSE 1 END,0), ";
         }
-        $query .= "	      '" . $request->nama_cabang . "', ";
+        $query .= "	      '" . session("NAMACABANG") . "', ";
         $query .= "	      CASE WHEN BRG_Kemasan = 'WHL' Then 0 Else 1 END, ";
         $query .= "	      PRD_KodeDepartement, ";
         $query .= "	      '" . session('userid') . "', ";
@@ -214,6 +215,7 @@ class MasterTimbanganController extends Controller
                 'mtb_plubh AS plu_bh',
                 'mtb_deskripsi AS desk',
                 'st_avgcost AS acost',
+                'mtb_bestbefore AS exp_date',
             )
             ->join('tbmaster_stock',function($join){
                 $join->on('st_prdcd','=','mtb_pluigr');
@@ -230,7 +232,6 @@ class MasterTimbanganController extends Controller
     //! ADA ACTION HAPUS
     public function actionHapus($pluigr, $nama_barang){
         //* Hapus '" & NamaBarang & "' ??
-
         //! DELETE FROM Master_TimbanganBuah
         // sb.AppendLine("DELETE FROM Master_TimbanganBuah ")
         // sb.AppendLine(" WHERE MTB_PLUIGR = '" & dgv.CurrentRow.Cells(0).Value & "' ")
@@ -346,6 +347,9 @@ class MasterTimbanganController extends Controller
             ")
             ->whereNull('mtb_recordid')
             ->get();
+        // return $data;
+
+        return Excel::download(new MasterTimbanganExport($data), 'INDOMARCO.csv');
 
         //* Kirim Ke Folder Timbangan Selesai, Harap Tunggu 1 Menit Untuk Timbangan Mengambil Data
 

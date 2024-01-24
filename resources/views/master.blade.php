@@ -9,52 +9,65 @@
 
     <title>@php echo str_replace("_", " ", env('APP_NAME')); @endphp</title>
 
-    <link rel="stylesheet" href="fonts/all.min.css">
-    <link rel="stylesheet" href="css/sb-admin-2.min.css">
-    <link rel="stylesheet" href="css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" href="css/bootstrap-select.min.css">
-    <link rel="stylesheet" href="css/select.dataTables.min.css">
-    <link rel="stylesheet" href="css/fixedColumns.bootstrap4.min.css">
-    <link rel="stylesheet" href="css/bootstrap-datepicker3.css">
-    <link rel="stylesheet" href="css/fixedHeader.dataTables.min.css">
-    <link rel="stylesheet" href="css/responsive.dataTables.min.css">
-    <link rel="stylesheet" href="css/buttons.dataTables.min.css">
-    <link rel="stylesheet" href="css/print.min.css">
-    <link rel="stylesheet" href="css/pace-theme-default.min.css">
+    <link rel="stylesheet" href="{{ asset('fonts/all.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/sb-admin-2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/dataTables.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap-select.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/select.dataTables.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/fixedColumns.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap-datepicker3.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/fixedHeader.dataTables.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/responsive.dataTables.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/buttons.dataTables.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/print.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/pace-theme-default.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/select2-bootstrap-5-theme.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/style-additional.css') }}">
+
+    @yield('css')
     <!-- <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet"> -->
 
     <!-- <script src="../resources/js/jquery.min.js"></script> -->
     <!-- <script src="../resources/js/jquery-3.5.1.js"></script> -->
-    <script src="js/jquery-3.3.1.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.bundle.min.js"></script>
-    <script src="js/jquery.easing.min.js"></script>
-    <script src="js/jquery.mask.min.js"></script>
-    <script src="js/jquery-ui.js"></script>
+    <script src="{{ asset('js/jquery-3.3.1.min.js') }}"></script>
+    <script src="{{ asset('js/popper.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('js/jquery.easing.min.js') }}"></script>
+    <script src="{{ asset('js/jquery.mask.min.js') }}"></script>
+    <script src="{{ asset('js/jquery-ui.js') }}"></script>
     <!-- <script src="../resources/js/datepicker.min.js"></script> -->
-    <script src="js/sb-admin-2.min.js"></script>
-    <script src="js/jquery.dataTables.min.js"></script>
-    <script src="js/dataTables.bootstrap4.min.js"></script>
-    <script src="js/bootstrap-select.min.js"></script>
-    <script src="js/bootstrap-datepicker.min.js"></script>
-    <script src="js/dataTables.select.min.js"></script>
-    <script src="js/datatables-demo.js"></script>
-    <script src="js/dataTables.fixedColumns.min.js"></script>
-    <script src="js/dataTables.fixedHeader.min.js"></script>
-    <script src="js/dataTables.fixedHeader.min.js"></script>
-    <script src="js/Chart.min.js"></script>
-    <script src="js/chart-area-demo.js"></script>
-    <script src="js/chart-pie-demo.js"></script>
-    <script src="js/sweatalert.js"></script>
-    <script src="js/dataTables.buttons.min.js"></script>
-    <script src="js/jszip.min.js"></script>
-    <script src="js/buttons.flash.min.js"></script>
-    <script src="js/buttons.html5.min.js"></script>
-    <script src="js/pace.min.js"></script>
-    <script src="js/print.min.js"></script>
-    <script src="js/jquery.number.min.js"></script>
-    {{-- <script src="../resources/js/jquery.number.min.js.map"></script> --}}
+    <script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
+    <script src="{{ asset('js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('js/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap-select.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ asset('js/dataTables.select.min.js') }}"></script>
+    <script src="{{ asset('js/datatables-demo.js') }}"></script>
+    <script src="{{ asset('js/dataTables.fixedColumns.min.js') }}"></script>
+    <script src="{{ asset('js/dataTables.fixedHeader.min.js') }}"></script>
+    <script src="{{ asset('js/dataTables.fixedHeader.min.js') }}"></script>
+    {{-- <script src="{{ asset('js/Chart.min.js') }}"></script> --}}
+    {{-- <script src="{{ asset('js/chart-area-demo.js') }}"></script> --}}
+    {{-- <script src="{{ asset('js/chart-pie-demo.js') }}"></script> --}}
+    <script src="{{ asset('js/sweatalert.js') }}"></script>
+    <script src="{{ asset('js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('js/jszip.min.js') }}"></script>
+    <script src="{{ asset('js/buttons.flash.min.js') }}"></script>
+    <script src="{{ asset('js/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('js/pace.min.js') }}"></script>
+    <script src="{{ asset('js/print.min.js') }}"></script>
+    <script src="{{ asset('js/select2.min.js') }}"></script>
+    <script src="{{ asset('js/jquery.number.min.js') }}"></script>
+    {{-- <script src="{{ asset('../resources/js/jquery.number.min.js.map"></script> --}}
     <script>
+
+        $.ajaxSetup({
+            headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                    // 'Authorization': '{{session()->get('token_jwt')}}',
+            }
+        });
         setInterval(refreshToken, 3900000); // 65min
 
         function refreshToken() {
@@ -67,17 +80,47 @@
                 }
             });
         }
-    </script>
-    <!-- <script>
-        $(document).ready(function() {
-            $("#sidebarToggle").click(function() {
-                $("#accordionSidebar").toggleClass("toggled");
+
+        function hanyaAngka(e, decimal) {
+            var key;
+            var keychar;
+            if (window.event) {
+                key = window.event.keyCode;
+            } else if (e) {
+                key = e.which;
+            } else {
+                return true;
+            }
+            keychar = String.fromCharCode(key);
+            if ((key==null) || (key==0) || (key==8) ||  (key==9) || (key==13) || (key==27) ) {
+                return true;
+            } else if ((("0123456789").indexOf(keychar) > -1)) {
+                return true;
+            } else if (decimal && (keychar == ".")) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        $(document).ready(function(){
+            $('.select2').select2({
+                theme: "bootstrap-5",
+                placeholder: $( this ).data( 'placeholder' ),
             });
         });
-    </script> -->
+    </script>
     <style>
         body{
             padding: 0!important;
+        }
+
+        /* .select2-results__options li:first-child{
+            padding: 0!important;
+        } */
+
+        .select-r td {
+            background-color: #566cfb !important;
+            color: white!important;
         }
     </style>
 </head>
