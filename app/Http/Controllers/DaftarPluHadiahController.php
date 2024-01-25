@@ -139,7 +139,6 @@ class DaftarPluHadiahController extends Controller
         $check = DB::table('information_schema.tables')
             ->whereRaw("upper(table_name) = 'PLU_HADIAH_PERISHABLE'")
             ->count();
-        return $check;
 
         if($check == 0){
             //! CREATE TABLE PLU_HADIAH_PERISHABLE
