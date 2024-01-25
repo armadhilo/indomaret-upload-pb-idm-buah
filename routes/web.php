@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ClusterBuahController;
+use App\Http\Controllers\DaftarPluHadiahController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JadwalKirimBuahController;
 use App\Http\Controllers\LoginController;
@@ -71,6 +72,20 @@ Route::middleware(['mylogin'])->group(function () {
         Route::group(['prefix' => 'action'], function(){
             Route::post('save', [ClusterBuahController::class, 'actionSave']);
             Route::delete('hapus/{kode_toko}', [ClusterBuahController::class, 'actionHapus']);
+        });
+    });
+
+    //PLU HADIAH
+    Route::group(['prefix' => 'plu-hadiah'], function(){
+
+        Route::get('/', [DaftarPluHadiahController::class, 'index']);
+        Route::get('/datatables-master', [DaftarPluHadiahController::class, 'datatablesProdMaster']);
+        Route::get('/datatables-hadiah', [DaftarPluHadiahController::class, 'datatablesHadiahPerishable']);
+
+
+        Route::group(['prefix' => 'action'], function(){
+            Route::post('insert', [DaftarPluHadiahController::class, 'actionInsertHadiahPerishable']);
+            Route::delete('hapus/{prdcd}', [DaftarPluHadiahController::class, 'actionHapusHadiahPerishable']);
         });
     });
 });

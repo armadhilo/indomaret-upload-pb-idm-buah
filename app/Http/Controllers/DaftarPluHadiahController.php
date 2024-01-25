@@ -21,7 +21,7 @@ class DaftarPluHadiahController extends Controller
 
     function index(){
         $this->createTableHadiahPerishable();
-        return view("home");
+        return view("menu.plu-hadiah");
     }
 
     public function datatablesProdMaster(){
@@ -75,8 +75,8 @@ class DaftarPluHadiahController extends Controller
         // sb.AppendLine("  FROM PLU_HADIAH_PERISHABLE ")
         // sb.AppendLine(" WHERE PHP_PRDCD = '" & dgvAsal.CurrentRow.Cells(0).Value & "' ")
 
-        $check = DB::table('PLU_HADIAH_PERISHABLE')
-            ->where('PHP_PRDCD', $request->prdcd)
+        $check = DB::table('plu_hadiah_perishable')
+            ->where('php_prdcd', $request->prdcd)
             ->count();
 
         if($check > 0){
@@ -139,8 +139,9 @@ class DaftarPluHadiahController extends Controller
         $check = DB::table('information_schema.tables')
             ->whereRaw("upper(table_name) = 'PLU_HADIAH_PERISHABLE'")
             ->count();
+        return $check;
 
-        if($check > 0){
+        if($check == 0){
             //! CREATE TABLE PLU_HADIAH_PERISHABLE
             // sb.AppendLine("CREATE TABLE PLU_HADIAH_PERISHABLE ")
             // sb.AppendLine("( ")
@@ -149,12 +150,13 @@ class DaftarPluHadiahController extends Controller
             // sb.AppendLine("  PHP_CREATE_BY VARCHAR(5), ")
             // sb.AppendLine("  PHP_CREATE_DT DATE   ")
 
-            DB::insert("
-                CREATE TABLE PLU_HADIAH_PERISHABLE
-                PHP_PRDCD VARCHAR(15)
-                PHP_DeskripsiPanjang VARCHAR(250)
-                PHP_CREATE_BY VARCHAR(5)
+            DB::statement("
+                CREATE TABLE PLU_HADIAH_PERISHABLE (
+                PHP_PRDCD VARCHAR(15),
+                PHP_DeskripsiPanjang VARCHAR(250),
+                PHP_CREATE_BY VARCHAR(5),
                 PHP_CREATE_DT DATE
+                )
             ");
         }
     }
