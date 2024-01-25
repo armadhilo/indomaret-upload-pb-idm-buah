@@ -49,7 +49,7 @@
     #tb tbody tr {
         cursor: pointer;
     }
-    
+
     .header-form .form-group > * {
         width: 150px;
         height: 35px;
@@ -210,6 +210,7 @@
                         $(this).toggleClass("select-r");
                         selectedRowData = data;
                         syncCheckBox(data.toko);
+                        $("#list_toko").val(data.toko).change();
                     });
                 }
             });
@@ -234,7 +235,7 @@
                 success: function(response){
                     setTimeout(function () {  $('#modal_loading').modal('hide'); }, 500);
                     $('.form-group-day input').prop('checked', false);
-                    $('#list_toko').val(null).trigger('change');
+                    // $('#list_toko').val(null).trigger('change');
                     response.data.forEach(element => {
                         $(`[name=${element.jkb_hari.toLowerCase()}]`).prop('checked', true);
                     });

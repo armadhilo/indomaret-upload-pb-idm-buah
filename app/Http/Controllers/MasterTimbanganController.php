@@ -135,7 +135,7 @@ class MasterTimbanganController extends Controller
             ->where('st_prdcd', $request->pluigr)
             ->count();
 
-        if($check > 0){
+        if($check == 0){
             $message = "PLUIGR $request->pluigr Belum Terdaftar Di tbMaster_Stock!!";
             return ApiFormatter::error(400, $message);
         }

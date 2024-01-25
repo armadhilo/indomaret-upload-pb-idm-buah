@@ -43,7 +43,7 @@
     <li class="nav-item @if($sub_url == 'plu-hadiah') active @endif">
         <a class="nav-link" href="{{ url('/plu-hadiah') }}">
             <i class="fas fa-fw fa-chart-area"></i>
-            <span>PLU HADIAH</span></a>
+            <span>Plu Hadiah</span></a>
     </li>
 
     <!-- Sidebar Toggler (Sidebar) -->
