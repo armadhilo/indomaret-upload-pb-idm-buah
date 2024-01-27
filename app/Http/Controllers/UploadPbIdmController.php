@@ -606,9 +606,17 @@ class UploadPbIdmController extends Controller
     public function actionF8F9F10(){
 
         //! VARIABLE
-        $jum = '';
+        //? default
         $buttonPress = '';
         $NoUrJenisPB = 0;
+        $JumlahPB = 0;
+
+        //? custom
+        $ip = $this->getIP();
+        $noPB = '';
+        $tglPB = '';
+        $KodeToko = '';
+
         // If Strings.Format(Now, "HHmmss") >= "234000" Then
         //     MsgBox("Mohon Tunggu Sampai JAM 12 MALAM" & vbNewLine & "Untuk Melakukan UPLOAD PB!!", MsgBoxStyle.Information, ProgName)
         //     Exit Sub
@@ -624,12 +632,11 @@ class UploadPbIdmController extends Controller
         // End If
 
         //! CHECK TOMBOL YANG DITEKAN
+        $JenisPB = 'CHILLED FOOD';
         if($buttonPress == 'F8'){
-            $jenisPB = 'IMPORT';
+            $JenisPB = 'IMPORT';
         }elseif($buttonPress == 'F9'){
-            $jenisPB = 'LOKAL';
-        }elseif($buttonPress == 'F10'){
-            $jenisPB = 'CHILLED FOOD';
+            $JenisPB = 'LOKAL';
         }
 
         //* YAKIN INGIN MEMPROSES" & vbNewLine & PADC(JenisPB & " ??
@@ -645,6 +652,10 @@ class UploadPbIdmController extends Controller
         // sb.AppendLine("DELETE FROM TEMP_PB_VALID ")
         // sb.AppendLine(" Where IP = '" & IP & "' ")
 
+        DB::table('TEMP_PB_VALID')
+            ->where('ip', $ip)
+            ->delete();
+
         //? check jika datatables header dan detail harus ada
 
         //! GET URUTAN JENISPB
@@ -652,6 +663,11 @@ class UploadPbIdmController extends Controller
         // sb.AppendLine("  FROM URUTAN_JENISPB_BUAH ")
         // sb.AppendLine(" WHERE DATE_TRUNC('DAY', UJB_CREATE_DT) = CURRENT_DATE ")
         // sb.AppendLine("   AND UJB_JenisPB = '" & JenisPB & "' ")
+
+        $count = DB::table('URUTAN_JENISPB_BUAH')
+            ->whereRaw("DATE_TRUNC('DAY', UJB_CREATE_DT) = CURRENT_DATE")
+            ->where('UJB_JenisPB', $JenisPB)
+            ->count();
 
         if($jum == 0){
             //! GET URUTAN NoUrJenisPB
@@ -681,6 +697,14 @@ class UploadPbIdmController extends Controller
             // sb.AppendLine("  '" & UserID & "', ")
             // sb.AppendLine("  CURRENT_TIMESTAMP ")
             // sb.AppendLine(") ")
+
+            DB::table('URUTAN_JENISPB_BUAH')
+                ->insert([
+                    'UJB_JenisPB' => $JenisPB,
+                    'UJB_NoUrut' => $NoUrJenisPB,
+                    'UJB_Create_By' => session('userid'),
+                    'UJB_Create_Dt' => Carbon::now(),
+                ]);
         }else{
             //! GET URUTAN JENISPB -> NoUrJenisPB
             // sb.AppendLine("SELECT COALESCE(Count(0),0) ")
@@ -689,7 +713,7 @@ class UploadPbIdmController extends Controller
             // sb.AppendLine("   AND UJB_JenisPB = '" & JenisPB & "' ")
 
             $count = DB::table('URUTAN_JENISPB_BUAH')
-                ->where('UJB_JenisPB', $jenisPB)
+                ->where('UJB_JenisPB', $JenisPB)
                 ->whereRaw("DATE_TRUNC('DAY', UJB_CREATE_DT) = CURRENT_DATE")
                 ->count();
 
@@ -704,134 +728,159 @@ class UploadPbIdmController extends Controller
             // tglPB = dgvHeader.Rows(i).Cells(2).Value.ToString
 
             //! GET KODETOKO TIDAK TERDAFTAR
-            // sb.AppendLine("Select DISTINCT CPB_KodeToko ")
-            // sb.AppendLine("  From CSV_PB_Buah ")
-            // sb.AppendLine(" Where CPB_NoPB = '" & noPB & "' ")
-            // sb.AppendLine("   and DATE_TRUNC('DAY', CPB_TglPB) = TO_DATE('" & tglPB & "','DD-MM-YYYY') ")
-            // sb.AppendLine("   And CPB_IP = '" & IP & "' ")
-            // sb.AppendLine(" AND (CPB_Flag IS NULL OR CPB_Flag = '') ")
-            // sb.AppendLine("   and NOT EXISTS ")
-            // sb.AppendLine("   ( ")
-            // sb.AppendLine("     Select CLB_Toko ")
-            // sb.AppendLine("	      From CLUSTER_BUAH ")
-            // sb.AppendLine("	     Where CLB_Toko = CPB_KodeToko ")
-            // sb.AppendLine("   ) ")
+            $data = DB::select("
+                Select DISTINCT CPB_KodeToko
+                From CSV_PB_Buah
+                Where CPB_NoPB = '" . $noPB . "'
+                    and DATE_TRUNC('DAY', CPB_TglPB) = TO_DATE('" . $tglPB . "','DD-MM-YYYY')
+                    And CPB_IP = '" . $ip . "'
+                    AND (CPB_Flag IS NULL OR CPB_Flag = '')
+                    and NOT EXISTS
+                    (
+                        Select CLB_Toko
+                            From CLUSTER_BUAH
+                            Where CLB_Toko = CPB_KodeToko
+                    )
+            ");
 
-            if(count($TokoTidakTerdaftar)){
-                $listToko = '';
-                foreach($TokoTidakTerdaftar as $item){
-                    //? list toko disini
+            if(count($data)){
+                $list = '';
+                foreach($data as $item){
+                    $list .= $item->CPB_KodeToko . ',';
                 }
+
                 //* TOKO " & TokoTidakTerdaftar & " BELUM TERDAFTAR DI CLUSTER_BUAH!!
+                $message = "TOKO " . rtrim($list, ",") . " BELUM TERDAFTAR DI CLUSTER_BUAH!!";
+                return ApiFormatter::error(400, $message);
             }
 
             //! CEK SUDAH TERDAFTAR DI tbMaster_TokoIGR-2
-            // sb.AppendLine("Select DISTINCT CPB_KodeToko ")
-            // sb.AppendLine("  From CSV_PB_BUAH ")
-            // sb.AppendLine(" Where CPB_NoPB = '" & noPB & "' ")
-            // sb.AppendLine("   and DATE_TRUNC('DAY', CPB_TglPB) = TO_DATE('" & tglPB & "','DD-MM-YYYY') ")
-            // sb.AppendLine("   and CPB_IP = '" & IP & "' ")
-            // sb.AppendLine(" AND (CPB_Flag IS NULL OR CPB_Flag = '') ")
-            // sb.AppendLine("   and NOT EXISTS ")
-            // sb.AppendLine("   ( ")
-            // sb.AppendLine("     Select Tko_KodeOMI ")
-            // sb.AppendLine("	      From tbMaster_TokoIGR ")
-            // sb.AppendLine("	     Where Tko_KodeOMI = CPB_KodeToko ")
-            // sb.AppendLine("        And COALESCE(TKO_TGLTUTUP,CURRENT_DATE+1) > CURRENT_DATE ")
-            // sb.AppendLine("   ) ")
+            $data = DB::select("
+                Select DISTINCT CPB_KodeToko
+                From CSV_PB_BUAH
+                Where CPB_NoPB = '" . $noPB . "'
+                    and DATE_TRUNC('DAY', CPB_TglPB) = TO_DATE('" . $tglPB . "','DD-MM-YYYY')
+                    and CPB_IP = '" . $ip . "'
+                    AND (CPB_Flag IS NULL OR CPB_Flag = '')
+                    and NOT EXISTS
+                    (
+                        Select Tko_KodeOMI
+                            From tbMaster_TokoIGR
+                            Where Tko_KodeOMI = CPB_KodeToko
+                            And COALESCE(TKO_TGLTUTUP,CURRENT_DATE+1) > CURRENT_DATE
+                    )
+            ");
 
-            if(count($TokoTidakTerdaftar2)){
-                $listToko2 = '';
-                foreach($TokoTidakTerdaftar2 as $item){
-                    //? list toko disini
+            if(count($data)){
+                $list = '';
+                foreach($data as $item){
+                    $list .= $item->CPB_KodeToko . ',';
                 }
+
                 //* TOKO " & TokoTidakTerdaftar2 & " Tidak Terdaftar Di TbMaster_TokoIGR !!
+                $message = "TOKO " . rtrim($list, ",") . " Tidak Terdaftar Di TbMaster_TokoIGR !!";
+                return ApiFormatter::error(400, $message);
             }
 
             //! CEK SUDAH TERDAFTAR DI tbMaster_TokoIGR-2
-            // sb.AppendLine("Select DISTINCT CPB_KodeToko ")
-            // sb.AppendLine("  From CSV_PB_BUAH ")
-            // sb.AppendLine(" Where CPB_NoPB = '" & noPB & "' ")
-            // sb.AppendLine("   and DATE_TRUNC('DAY', CPB_TglPB) = TO_DATE('" & tglPB & "','DD-MM-YYYY') ")
-            // sb.AppendLine("   and CPB_IP = '" & IP & "' ")
-            // sb.AppendLine(" AND (CPB_Flag IS NULL OR CPB_Flag = '') ")
-            // sb.AppendLine("   and EXISTS ")
-            // sb.AppendLine("   ( ")
-            // sb.AppendLine("     Select Tko_KodeSBU ")
-            // sb.AppendLine("	      From tbMaster_TokoIGR ")
-            // sb.AppendLine("	     Where Tko_KodeOMI = CPB_KodeToko ")
-            // sb.AppendLine("	       And Tko_KodeSBU <> 'I' ")
-            // sb.AppendLine("        And COALESCE(TKO_TGLTUTUP,CURRENT_DATE+1) > CURRENT_DATE ")
-            // sb.AppendLine("   ) ")
+            $data = DB::select("
+                Select DISTINCT CPB_KodeToko
+                From CSV_PB_BUAH
+                Where CPB_NoPB = '" . $noPB . "'
+                    and DATE_TRUNC('DAY', CPB_TglPB) = TO_DATE('" . $tglPB . "','DD-MM-YYYY')
+                    and CPB_IP = '" . $ip . "'
+                    AND (CPB_Flag IS NULL OR CPB_Flag = '')
+                    and EXISTS
+                    (
+                        Select Tko_KodeSBU
+                            From tbMaster_TokoIGR
+                            Where Tko_KodeOMI = CPB_KodeToko
+                            And Tko_KodeSBU <> 'I'
+                            And COALESCE(TKO_TGLTUTUP,CURRENT_DATE+1) > CURRENT_DATE
+                    )
+            ");
 
-            if(count($SBUNotI)){
-                $listSBUNotI = '';
-                foreach($SBUNotI as $item){
-                    //? list toko disini
+            if(count($data)){
+                $list = '';
+                foreach($data as $item){
+                    $list .= $item->CPB_KodeToko . ',';
                 }
                 //* TOKO " & SBUNotI & " KODE SBU nya Bukan I !!
+                $message = "TOKO " . rtrim($list, ",") . " KODE SBU nya Bukan I !!";
+                return ApiFormatter::error(400, $message);
             }
 
             //! CEK JADWAL KIRIM BUAH
-            // sb.AppendLine("Select DISTINCT CPB_KodeToko ")
-            // sb.AppendLine("  From CSV_PB_BUAH ")
-            // sb.AppendLine(" Where CPB_NoPB = '" & noPB & "' ")
-            // sb.AppendLine("   and DATE_TRUNC('DAY', CPB_TglPB) = TO_DATE('" & tglPB & "','DD-MM-YYYY') ")
-            // sb.AppendLine("   and CPB_IP = '" & IP & "' ")
-            // sb.AppendLine(" AND (CPB_Flag IS NULL OR CPB_Flag = '') ")
-            // sb.AppendLine("   and NOT EXISTS ")
-            // sb.AppendLine("   ( ")
-            // sb.AppendLine("SELECT JKB_HARI ")
-            // sb.AppendLine("  FROM JADWAL_KIRIM_BUAH ")
-            // sb.AppendLine(" WHERE JKB_KodeToko = CPB_KodeToko ")
-            // sb.AppendLine("   AND JKB_Hari = CASE Trim(To_Char(CURRENT_DATE,'DAY'))  ")
-            // sb.AppendLine("                   WHEN 'SATURDAY' THEN 'SENIN' ")
-            // sb.AppendLine("                   WHEN 'SUNDAY' THEN 'SENIN' ")
-            // sb.AppendLine("                   WHEN 'MONDAY' THEN 'SELASA' ")
-            // sb.AppendLine("                   WHEN 'TUESDAY' THEN 'RABU' ")
-            // sb.AppendLine("                   WHEN 'WEDNESDAY' THEN 'KAMIS' ")
-            // sb.AppendLine("                   WHEN 'THURSDAY' THEN 'JUMAT' ")
-            // sb.AppendLine("                   WHEN 'FRIDAY' THEN 'SABTU' ")
-            // sb.AppendLine("                   WHEN 'SABTU' THEN 'SENIN' ")
-            // sb.AppendLine("                   WHEN 'MINGGU' THEN 'SENIN' ")
-            // sb.AppendLine("                   WHEN 'SENIN' THEN 'SELASA' ")
-            // sb.AppendLine("                   WHEN 'SELASA' THEN 'RABU' ")
-            // sb.AppendLine("                   WHEN 'RABU' THEN 'KAMIS' ")
-            // sb.AppendLine("                   WHEN 'KAMIS' THEN 'JUMAT' ")
-            // sb.AppendLine("                   WHEN 'JUMAT' THEN 'SABTU' ")
-            // sb.AppendLine("                   ELSE 'SAPI' ")
-            // sb.AppendLine("                  END     ")
-            // sb.AppendLine("   ) ")
+            $data = DB::select("
+                Select DISTINCT CPB_KodeToko
+                From CSV_PB_BUAH
+                Where CPB_NoPB = '" . $noPB . "'
+                    and DATE_TRUNC('DAY', CPB_TglPB) = TO_DATE('" . $tglPB . "','DD-MM-YYYY')
+                    and CPB_IP = '" . $ip . "'
+                    AND (CPB_Flag IS NULL OR CPB_Flag = '')
+                    and NOT EXISTS
+                    (
+                        SELECT JKB_HARI
+                        FROM JADWAL_KIRIM_BUAH
+                        WHERE JKB_KodeToko = CPB_KodeToko
+                        AND JKB_Hari = CASE Trim(To_Char(CURRENT_DATE,'DAY'))
+                                            WHEN 'SATURDAY' THEN 'SENIN'
+                                            WHEN 'SUNDAY' THEN 'SENIN'
+                                            WHEN 'MONDAY' THEN 'SELASA'
+                                            WHEN 'TUESDAY' THEN 'RABU'
+                                            WHEN 'WEDNESDAY' THEN 'KAMIS'
+                                            WHEN 'THURSDAY' THEN 'JUMAT'
+                                            WHEN 'FRIDAY' THEN 'SABTU'
+                                            WHEN 'SABTU' THEN 'SENIN'
+                                            WHEN 'MINGGU' THEN 'SENIN'
+                                            WHEN 'SENIN' THEN 'SELASA'
+                                            WHEN 'SELASA' THEN 'RABU'
+                                            WHEN 'RABU' THEN 'KAMIS'
+                                            WHEN 'KAMIS' THEN 'JUMAT'
+                                            WHEN 'JUMAT' THEN 'SABTU'
+                                            ELSE 'SAPI'
+                                        END
+                    )
+            ");
 
-            if(count($KirimHariIni)){
-                $listSBUNotI = '';
-                foreach($KirimHariIni as $item){
-                    //? list toko disini
+            if(count($data)){
+                $list = '';
+                foreach($data as $item){
+                    $list .= $item->CPB_KodeToko . ',';
                 }
+
                 //* Hari Ini Bukan Jadwal Picking Untuk TOKO " & KirimHariIni
+                $message = "Hari Ini Bukan Jadwal Picking Untuk TOKO " . rtrim($list, ",");
+                return ApiFormatter::error(400, $message);
             }
 
             // ProsesPBIDM(dgvHeader.Rows(i).Cells(3).Value, txtPathFilePBBH.Text & "\" & dgvHeader.Rows(i).Cells(6).Value, JenisPB, NoUrJenisPB)
 
-            if(AdaProses){
-                //! INSERT INTO TEMP_PB_VALID
-                // sb.AppendLine("INSERT INTO TEMP_PB_VALID ")
-                // sb.AppendLine("( ")
-                // sb.AppendLine("  KodeToko, ")
-                // sb.AppendLine("  NoPB, ")
-                // sb.AppendLine("  TglPB, ")
-                // sb.AppendLine("  IP ")
-                // sb.AppendLine(") ")
-                // sb.AppendLine("VALUES ")
-                // sb.AppendLine("( ")
-                // sb.AppendLine(" '" & KodeToko & "', ")
-                // sb.AppendLine(" '" & noPB & "', ")
-                // sb.AppendLine(" TO_DATE('" & tglPB & "','DD-MM-YYYY'), ")
-                // sb.AppendLine(" '" & IP & "'  ")
-                // sb.AppendLine(") ")
+            //! INSERT INTO TEMP_PB_VALID
+            // sb.AppendLine("INSERT INTO TEMP_PB_VALID ")
+            // sb.AppendLine("( ")
+            // sb.AppendLine("  KodeToko, ")
+            // sb.AppendLine("  NoPB, ")
+            // sb.AppendLine("  TglPB, ")
+            // sb.AppendLine("  IP ")
+            // sb.AppendLine(") ")
+            // sb.AppendLine("VALUES ")
+            // sb.AppendLine("( ")
+            // sb.AppendLine(" '" & KodeToko & "', ")
+            // sb.AppendLine(" '" & noPB & "', ")
+            // sb.AppendLine(" TO_DATE('" & tglPB & "','DD-MM-YYYY'), ")
+            // sb.AppendLine(" '" & IP & "'  ")
+            // sb.AppendLine(") ")
 
-                $JumlahPB += 1;
-            }
+            DB::table('TEMP_PB_VALID')
+                ->insert([
+                    'KodeToko' => $KodeToko,
+                    'NoPB' => $noPB,
+                    'TglPB' => DB::raw("TO_DATE('" . $tglPB . "','DD-MM-YYYY')"),
+                    'IP' => $ip
+                ]);
+
+            $JumlahPB += 1;
 
             skipPBBH:
 
@@ -843,78 +892,87 @@ class UploadPbIdmController extends Controller
         }
 
         //! HITUNG JUMLAH ITEM DI PBOMI
-        // sb.AppendLine("SELECT COALESCE(Count(0),0)  ")
-        // sb.AppendLine("  FROM tbMaster_pbomi  ")
-        // sb.AppendLine(" WHERE EXISTS ")
-        // sb.AppendLine(" ( ")
-        // sb.AppendLine("   SELECT cpb_kodetoko  ")
-        // sb.AppendLine("     FROM csv_pb_buah,  ")
-        // sb.AppendLine("          cluster_buah  ")
-        // sb.AppendLine("    WHERE CPB_JenisPB = '" & JenisPB & "'  ")
-        // sb.AppendLine("      AND CPB_RecordID IS NULL  ")
-        // sb.AppendLine("      AND CPB_IP = '" & IP & "'  ")
-        // sb.AppendLine("      AND CLB_Toko = CPB_KodeToko  ")
-        // sb.AppendLine(" AND (CPB_Flag IS NULL OR CPB_Flag = '') ")
-        // sb.AppendLine("      AND cpb_kodetoko = pbo_kodeomi ")
-        // sb.AppendLine("      AND cpb_nopb = pbo_nopb ")
-        // sb.AppendLine("      AND cpb_tglpb = pbo_tglpb  ")
-        // sb.AppendLine("      AND EXISTS  ")
-        // sb.AppendLine("   (  ")
-        // sb.AppendLine("   SELECT KodeToko  ")
-        // sb.AppendLine("     FROM TEMP_PB_VALID  ")
-        // sb.AppendLine("    WHERE KodeToko = CPB_KodeToko  ")
-        // sb.AppendLine("      AND NoPB = CPB_NoPB  ")
-        // sb.AppendLine("      AND TglPB = CPB_TglPB  ")
-        // sb.AppendLine("      AND IP = '" & IP & "'   ")
-        // sb.AppendLine("   )  ")
-        // sb.AppendLine(" ) ")
+        $count = DB::select("
+            SELECT COALESCE(Count(0),0) as count
+            FROM tbMaster_pbomi
+            WHERE EXISTS
+            (
+                SELECT cpb_kodetoko
+                FROM csv_pb_buah,
+                    cluster_buah
+                WHERE CPB_JenisPB = '" . $JenisPB . "'
+                AND CPB_RecordID IS NULL
+                AND CPB_IP = '" . $ip . "'
+                AND CLB_Toko = CPB_KodeToko
+                AND (CPB_Flag IS NULL OR CPB_Flag = '')
+                AND cpb_kodetoko = pbo_kodeomi
+                AND cpb_nopb = pbo_nopb
+                AND cpb_tglpb = pbo_tglpb
+                AND EXISTS
+                (
+                SELECT KodeToko
+                    FROM TEMP_PB_VALID
+                    WHERE KodeToko = CPB_KodeToko
+                        AND NoPB = CPB_NoPB
+                        AND TglPB = CPB_TglPB
+                        AND IP = '" . $ip . "'
+                )
+            )
+        ");
 
-        if($jum > 0){
+        if($count[0]->count > 0){
             //! INSERT INTO PICKING_ANTRIAN_BUAH
-            // sb.AppendLine("INSERT INTO PICKING_ANTRIAN_BUAH ")
-            // sb.AppendLine("( ")
-            // sb.AppendLine("  PAB_KodeCluster, ")
-            // sb.AppendLine("  PAB_JenisPB,   ")
-            // sb.AppendLine("  PAB_Create_By, ")
-            // sb.AppendLine("  PAB_Create_Dt ")
-            // sb.AppendLine(") ")
-            // sb.AppendLine("SELECT DISTINCT CLB_Kode AS KodeCluster, ")
-            // sb.AppendLine("       '" & JenisPB & "' AS JenisPB, ")
-            // sb.AppendLine("       '" & UserID & "', ")
-            // sb.AppendLine("       CURRENT_DATE  ")
-            // sb.AppendLine("  FROM csv_pb_buah, ")
-            // sb.AppendLine("       cluster_buah ")
-            // sb.AppendLine(" WHERE CPB_JenisPB = '" & JenisPB & "' ")
-            // sb.AppendLine("   AND CPB_RecordID IS NULL ")
-            // sb.AppendLine("   AND CPB_IP = '" & IP & "' ")
-            // sb.AppendLine("   AND CLB_Toko = CPB_KodeToko ")
-            // sb.AppendLine(" AND (CPB_Flag IS NULL OR CPB_Flag = '') ")
-            // sb.AppendLine("   AND EXISTS ")
-            // sb.AppendLine("( ")
-            // sb.AppendLine("SELECT KodeToko ")
-            // sb.AppendLine("  FROM TEMP_PB_VALID ")
-            // sb.AppendLine(" WHERE KodeToko = CPB_KodeToko ")
-            // sb.AppendLine("   AND NoPB = CPB_NoPB ")
-            // sb.AppendLine("   AND TglPB = CPB_TglPB ")
-            // sb.AppendLine("   AND IP = '" & IP & "' ")
-            // sb.AppendLine(") ")
+            DB::insert("
+                INSERT INTO PICKING_ANTRIAN_BUAH
+                (
+                    PAB_KodeCluster,
+                    PAB_JenisPB,
+                    PAB_Create_By,
+                    PAB_Create_Dt
+                )
+                SELECT DISTINCT CLB_Kode AS KodeCluster,
+                    '" . $JenisPB . "' AS JenisPB,
+                    '" . session('userid') . "',
+                    CURRENT_DATE
+                FROM csv_pb_buah,
+                    cluster_buah
+                WHERE CPB_JenisPB = '" . $JenisPB . "'
+                    AND CPB_RecordID IS NULL
+                    AND CPB_IP = '" . $ip . "'
+                    AND CLB_Toko = CPB_KodeToko
+                    AND (CPB_Flag IS NULL OR CPB_Flag = '')
+                    AND EXISTS
+                    (
+                        SELECT KodeToko
+                        FROM TEMP_PB_VALID
+                        WHERE KodeToko = CPB_KodeToko
+                            AND NoPB = CPB_NoPB
+                            AND TglPB = CPB_TglPB
+                            AND IP = '" . $ip . "'
+                    )
+            ");
         }
 
         //! SET FLAG CSV_PB_BUAH
-        // sb.AppendLine("UPDATE CSV_PB_BUAH ")
-        // sb.AppendLine("   SET CPB_Flag = '1' ")
-        // sb.AppendLine(" WHERE CPB_IP = '" & IP & "' ")
-        // sb.AppendLine(" AND (CPB_Flag IS NULL OR CPB_Flag = '') ")
-        // sb.AppendLine("   AND EXISTS ")
-        // sb.AppendLine("   ( ")
-        // sb.AppendLine("     SELECT KodeToko ")
-        // sb.AppendLine("       FROM TEMP_PB_VALID ")
-        // sb.AppendLine("      WHERE KodeToko = CPB_KodeToko ")
-        // sb.AppendLine("        AND NoPB = CPB_NoPB ")
-        // sb.AppendLine("        AND TglPB = CPB_TglPB ")
-        // sb.AppendLine("        AND IP = '" & IP & "' ")
-        // sb.AppendLine("   ) ")
+        DB::update("
+            UPDATE CSV_PB_BUAH
+            SET CPB_Flag = '1'
+            WHERE CPB_IP = '" . $ip . "'
+                AND (CPB_Flag IS NULL OR CPB_Flag = '')
+                AND EXISTS
+                (
+                    SELECT KodeToko
+                    FROM TEMP_PB_VALID
+                    WHERE KodeToko = CPB_KodeToko
+                        AND NoPB = CPB_NoPB
+                        AND TglPB = CPB_TglPB
+                        AND IP = '" . $ip . "'
+                )
+        ");
 
         //* PROSES UPLOAD " & JenisPB & " SELESAI DILAKUKAN
+        $message = "PROSES UPLOAD " . $JenisPB . " SELESAI DILAKUKAN";
+        return ApiFormatter::success(200, $message);
+
     }
 }
