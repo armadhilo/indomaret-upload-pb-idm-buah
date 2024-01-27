@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\ApiFormatter;
+use Carbon\Carbon;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\DB;
 
@@ -47,20 +50,22 @@ class Controller extends BaseController
 
         if($data == 0){
             //! CREATE TABLE TEMP_CSV_PB_BUAH
-            // sb.AppendLine("CREATE TABLE TEMP_CSV_PB_BUAH ")
-            // sb.AppendLine("(  ")
-            // sb.AppendLine("  JENIS     VARCHAR(15), ")
-            // sb.AppendLine("  NOPB      VARCHAR(15), ")
-            // sb.AppendLine("  TGLPB     VARCHAR(10), ")
-            // sb.AppendLine("  TOKO      VARCHAR(5), ")
-            // sb.AppendLine("  PLUIDM    VARCHAR(8), ")
-            // sb.AppendLine("  PLUIGR    VARCHAR(8), ")
-            // sb.AppendLine("  QTY       VARCHAR(10), ")
-            // sb.AppendLine("  RUPIAH    NUMERIC(14,4), ")
-            // sb.AppendLine("  STOCK     NUMERIC(10), ")
-            // sb.AppendLine("  NAMA_FILE VARCHAR(300), ")
-            // sb.AppendLine("  REQ_ID    VARCHAR(25) ")
-            // sb.AppendLine(")  ")
+            DB::insert("
+                CREATE TABLE TEMP_CSV_PB_BUAH
+                (
+                    JENIS     VARCHAR(15),
+                    NOPB      VARCHAR(15),
+                    TGLPB     VARCHAR(10),
+                    TOKO      VARCHAR(5),
+                    PLUIDM    VARCHAR(8),
+                    PLUIGR    VARCHAR(8),
+                    QTY       VARCHAR(10),
+                    RUPIAH    NUMERIC(14,4),
+                    STOCK     NUMERIC(10),
+                    NAMA_FILE VARCHAR(300),
+                    REQ_ID    VARCHAR(25)
+                )
+            ");
         }
 
         $data = DB::table('information_schema.columns')
@@ -69,24 +74,26 @@ class Controller extends BaseController
 
         if($data == 0){
             //! CREATE TABLE CSV_PB_BUAH
-            // sb.AppendLine("Create Table CSV_PB_BUAH ")
-            // sb.AppendLine("( ")
-            // sb.AppendLine("  CPB_RecordID VARCHAR(1), ")
-            // sb.AppendLine("  CPB_KodeToko VARCHAR(5), ")
-            // sb.AppendLine("  CPB_NoPB VARCHAR(15), ")
-            // sb.AppendLine("  CPB_TglPB DATE, ")
-            // sb.AppendLine("  CPB_PluIDM VARCHAR(10), ")
-            // sb.AppendLine("  CPB_QTY NUMERIC(18,2), ")
-            // sb.AppendLine("  CPB_GROSS NUMERIC(14,4), ")
-            // sb.AppendLine("  CPB_IP  VARCHAR(30), ")
-            // sb.AppendLine("  CPB_FileName VARCHAR(300), ")
-            // sb.AppendLine("  CPB_TglProses DATE, ")
-            // sb.AppendLine("  CPB_Flag VARCHAR(1), ")
-            // sb.AppendLine("  CPB_CREATE_BY VARCHAR(3), ")
-            // sb.AppendLine("  CPB_NoUrut NUMERIC(5), ")
-            // sb.AppendLine("  CPB_AlokasiBuah VARCHAR(300), ")
-            // sb.AppendLine("  CPB_JenisPB VARCHAR(20) ")
-            // sb.AppendLine(") ")
+            DB::insert("
+                Create Table CSV_PB_BUAH
+                (
+                    CPB_RecordID VARCHAR(1),
+                    CPB_KodeToko VARCHAR(5),
+                    CPB_NoPB VARCHAR(15),
+                    CPB_TglPB DATE,
+                    CPB_PluIDM VARCHAR(10),
+                    CPB_QTY NUMERIC(18,2),
+                    CPB_GROSS NUMERIC(14,4),
+                    CPB_IP  VARCHAR(30),
+                    CPB_FileName VARCHAR(300),
+                    CPB_TglProses DATE,
+                    CPB_Flag VARCHAR(1),
+                    CPB_CREATE_BY VARCHAR(3),
+                    CPB_NoUrut NUMERIC(5),
+                    CPB_AlokasiBuah VARCHAR(300),
+                    CPB_JenisPB VARCHAR(20)
+                )
+            ");
         }
 
         $data = DB::table('information_schema.columns')
@@ -95,22 +102,24 @@ class Controller extends BaseController
 
         if($data == 0){
             //! CREATE TABLE CSV_PB_BUAH2
-            // sb.AppendLine("Create Table CSV_PB_BUAH2 ")
-            // sb.AppendLine("( ")
-            // sb.AppendLine("  CPB_RecordID VARCHAR(1), ")
-            // sb.AppendLine("  CPB_KodeToko VARCHAR(5), ")
-            // sb.AppendLine("  CPB_NoPB VARCHAR(15), ")
-            // sb.AppendLine("  CPB_TglPB DATE, ")
-            // sb.AppendLine("  CPB_PluIDM VARCHAR(10), ")
-            // sb.AppendLine("  CPB_QTY NUMERIC(18,2), ")
-            // sb.AppendLine("  CPB_GROSS NUMERIC(14,4),     ")
-            // sb.AppendLine("  CPB_IP  VARCHAR(30), ")
-            // sb.AppendLine("  CPB_FileName VARCHAR(300), ")
-            // sb.AppendLine("  CPB_TglProses DATE, ")
-            // sb.AppendLine("  CPB_Flag VARCHAR(1), ")
-            // sb.AppendLine("  CPB_CREATE_BY VARCHAR(3), ")
-            // sb.AppendLine("  CPB_NoUrut NUMERIC(5) ")
-            // sb.AppendLine(") ")
+            DB::insert("
+                Create Table CSV_PB_BUAH2
+                (
+                    CPB_RecordID VARCHAR(1),
+                    CPB_KodeToko VARCHAR(5),
+                    CPB_NoPB VARCHAR(15),
+                    CPB_TglPB DATE,
+                    CPB_PluIDM VARCHAR(10),
+                    CPB_QTY NUMERIC(18,2),
+                    CPB_GROSS NUMERIC(14,4),
+                    CPB_IP  VARCHAR(30),
+                    CPB_FileName VARCHAR(300),
+                    CPB_TglProses DATE,
+                    CPB_Flag VARCHAR(1),
+                    CPB_CREATE_BY VARCHAR(3),
+                    CPB_NoUrut NUMERIC(5)
+                )
+            ");
         }
 
         $data = DB::table('information_schema.columns')
@@ -119,30 +128,32 @@ class Controller extends BaseController
 
         if($data == 0){
             //! CREATE TABLE TBTR_HEADER_BUAH
-            // sb.AppendLine("CREATE TABLE TBTR_HEADER_BUAH ( ")
-            // sb.AppendLine("  HDB_kodeigr          VARCHAR(2)   DEFAULT NULL, ")
-            // sb.AppendLine("  HDB_flag             VARCHAR(1)   DEFAULT NULL, ")
-            // sb.AppendLine("  HDB_tgltransaksi     DATE          DEFAULT NULL, ")
-            // sb.AppendLine("  HDB_kodetoko         VARCHAR(4)   DEFAULT NULL, ")
-            // sb.AppendLine("  HDB_nopb             VARCHAR(15)  DEFAULT NULL, ")
-            // sb.AppendLine("  HDB_tglpb            DATE          DEFAULT NULL, ")
-            // sb.AppendLine("  HDB_itempb           NUMERIC(5,0)   DEFAULT NULL, ")
-            // sb.AppendLine("  HDB_itemvalid        NUMERIC(5,0)   DEFAULT NULL, ")
-            // sb.AppendLine("  HDB_rphvalid         NUMERIC(15,4)  DEFAULT NULL, ")
-            // sb.AppendLine("  HDB_itemsales        NUMERIC(5,0)   DEFAULT NULL, ")
-            // sb.AppendLine("  HDB_rphsales         NUMERIC(15,4)  DEFAULT NULL, ")
-            // sb.AppendLine("  HDB_tglscanning      DATE          DEFAULT NULL, ")
-            // sb.AppendLine("  HDB_itemscanning     NUMERIC(5,0)   DEFAULT NULL, ")
-            // sb.AppendLine("  HDB_rphscanning      NUMERIC(15,4)  DEFAULT NULL, ")
-            // sb.AppendLine("  HDB_filepb           VARCHAR(200) DEFAULT NULL, ")
-            // sb.AppendLine("  HDB_keterangan       VARCHAR(50)  DEFAULT NULL, ")
-            // sb.AppendLine("  HDB_KodeCluster      VARCHAR(10)   DEFAULT NULL, ")
-            // sb.AppendLine("  HDB_NoUrut           VARCHAR(5)   DEFAULT NULL, ")
-            // sb.AppendLine("  HDB_create_by        VARCHAR(3)   DEFAULT NULL, ")
-            // sb.AppendLine("  HDB_create_dt        DATE          DEFAULT NULL, ")
-            // sb.AppendLine("  HDB_modify_by        VARCHAR(3)   DEFAULT NULL, ")
-            // sb.AppendLine("  HDB_modify_dt        DATE         DEFAULT NULL ")
-            // sb.AppendLine(") ")
+            DB::insert("
+                CREATE TABLE TBTR_HEADER_BUAH (
+                    HDB_kodeigr          VARCHAR(2)   DEFAULT NULL,
+                    HDB_flag             VARCHAR(1)   DEFAULT NULL,
+                    HDB_tgltransaksi     DATE          DEFAULT NULL,
+                    HDB_kodetoko         VARCHAR(4)   DEFAULT NULL,
+                    HDB_nopb             VARCHAR(15)  DEFAULT NULL,
+                    HDB_tglpb            DATE          DEFAULT NULL,
+                    HDB_itempb           NUMERIC(5,0)   DEFAULT NULL,
+                    HDB_itemvalid        NUMERIC(5,0)   DEFAULT NULL,
+                    HDB_rphvalid         NUMERIC(15,4)  DEFAULT NULL,
+                    HDB_itemsales        NUMERIC(5,0)   DEFAULT NULL,
+                    HDB_rphsales         NUMERIC(15,4)  DEFAULT NULL,
+                    HDB_tglscanning      DATE          DEFAULT NULL,
+                    HDB_itemscanning     NUMERIC(5,0)   DEFAULT NULL,
+                    HDB_rphscanning      NUMERIC(15,4)  DEFAULT NULL,
+                    HDB_filepb           VARCHAR(200) DEFAULT NULL,
+                    HDB_keterangan       VARCHAR(50)  DEFAULT NULL,
+                    HDB_KodeCluster      VARCHAR(10)   DEFAULT NULL,
+                    HDB_NoUrut           VARCHAR(5)   DEFAULT NULL,
+                    HDB_create_by        VARCHAR(3)   DEFAULT NULL,
+                    HDB_create_dt        DATE          DEFAULT NULL,
+                    HDB_modify_by        VARCHAR(3)   DEFAULT NULL,
+                    HDB_modify_dt        DATE         DEFAULT NULL
+                )
+            ");
         }
 
         $data = DB::table('information_schema.columns')
@@ -151,16 +162,18 @@ class Controller extends BaseController
 
         if($data == 0){
             //! CREATE TABLE CLUSTER_BUAH
-            // sb.AppendLine("CREATE TABLE CLUSTER_BUAH ")
-            // sb.AppendLine("( ")
-            // sb.AppendLine("  CLB_Kode      VARCHAR(10), ")
-            // sb.AppendLine("  CLB_Toko      VARCHAR(5), ")
-            // sb.AppendLine("  CLB_NoUrut    NUMERIC(5), ")
-            // sb.AppendLine("  CLB_Create_By VARCHAR(5), ")
-            // sb.AppendLine("  CLB_Create_Dt DATE, ")
-            // sb.AppendLine("  CLB_Modify_By VARCHAR(5), ")
-            // sb.AppendLine("  CLB_Modify_Dt DATE ")
-            // sb.AppendLine(") ")
+            DB::insert("
+                CREATE TABLE CLUSTER_BUAH
+                (
+                    CLB_Kode      VARCHAR(10),
+                    CLB_Toko      VARCHAR(5),
+                    CLB_NoUrut    NUMERIC(5),
+                    CLB_Create_By VARCHAR(5),
+                    CLB_Create_Dt DATE,
+                    CLB_Modify_By VARCHAR(5),
+                    CLB_Modify_Dt DATE
+                )
+            ");
         }
 
         $data = DB::table('information_schema.columns')
@@ -169,14 +182,16 @@ class Controller extends BaseController
 
         if($data == 0){
             //! CREATE TABLE JADWAL_KIRIM_BUAH
-            // sb.AppendLine("CREATE TABLE JADWAL_KIRIM_BUAH ")
-            // sb.AppendLine("( ")
-            // sb.AppendLine("  JKB_HARI      VARCHAR(10), ")
-            // sb.AppendLine("  JKB_KodeToko  VARCHAR(5), ")
-            // sb.AppendLine("  JKB_NamaToko  VARCHAR(50), ")
-            // sb.AppendLine("  JKB_Create_By VARCHAR(5), ")
-            // sb.AppendLine("  JKB_Create_Dt DATE ")
-            // sb.AppendLine(") ")
+            DB::insert("
+                CREATE TABLE JADWAL_KIRIM_BUAH
+                (
+                    JKB_HARI      VARCHAR(10),
+                    JKB_KodeToko  VARCHAR(5),
+                    JKB_NamaToko  VARCHAR(50),
+                    JKB_Create_By VARCHAR(5),
+                    JKB_Create_Dt DATE
+                )
+            ");
         }
 
         $data = DB::table('information_schema.columns')
@@ -185,14 +200,16 @@ class Controller extends BaseController
 
         if($data == 0){
             //! CREATE TABLE TEMP_ALOKASI_BUAH
-            // sb.AppendLine("CREATE TABLE TEMP_ALOKASI_BUAH ")
-            // sb.AppendLine("( ")
-            // sb.AppendLine("  JENIS VARCHAR(20), ")
-            // sb.AppendLine("  TOKO VARCHAR(5), ")
-            // sb.AppendLine("  PLUIDM VARCHAR(10), ")
-            // sb.AppendLine("  QTY NUMERIC(10), ")
-            // sb.AppendLine("  IP VARCHAR(30) ")
-            // sb.AppendLine(") ")
+            DB::insert("
+                CREATE TABLE TEMP_ALOKASI_BUAH
+                (
+                    JENIS VARCHAR(20),
+                    TOKO VARCHAR(5),
+                    PLUIDM VARCHAR(10),
+                    QTY NUMERIC(10),
+                    IP VARCHAR(30)
+                )
+            ");
 
         }
 
@@ -202,13 +219,15 @@ class Controller extends BaseController
 
         if($data == 0){
             //! CREATE TABLE TEMP_URUTAN_BUAH
-            // sb.AppendLine("CREATE TABLE TEMP_URUTAN_BUAH ")
-            // sb.AppendLine("( ")
-            // sb.AppendLine("  JENIS VARCHAR(20),  ")
-            // sb.AppendLine("  PLU VARCHAR(10), ")
-            // sb.AppendLine("  NoUrut NUMERIC(5),   ")
-            // sb.AppendLine("  IP VARCHAR(30) ")
-            // sb.AppendLine(") ")
+            DB::insert("
+                CREATE TABLE TEMP_URUTAN_BUAH
+                (
+                    JENIS VARCHAR(20),
+                    PLU VARCHAR(10),
+                    NoUrut NUMERIC(5),
+                    IP VARCHAR(30)
+                )
+            ");
         }
 
         $data = DB::table('information_schema.columns')
@@ -217,13 +236,15 @@ class Controller extends BaseController
 
         if($data == 0){
             //! CREATE TABLE URUTAN_JENISPB_BUAH
-            // sb.AppendLine("CREATE TABLE URUTAN_JENISPB_BUAH ")
-            // sb.AppendLine("( ")
-            // sb.AppendLine("  UJB_JenisPB VARCHAR(15), ")
-            // sb.AppendLine("  UJB_NoUrut NUMERIC(1), ")
-            // sb.AppendLine("  UJB_Create_By VARCHAR(3), ")
-            // sb.AppendLine("  UJB_Create_Dt DATE ")
-            // sb.AppendLine(") ")
+            DB::insert("
+                CREATE TABLE URUTAN_JENISPB_BUAH
+                (
+                    UJB_JenisPB VARCHAR(15),
+                    UJB_NoUrut NUMERIC(1),
+                    UJB_Create_By VARCHAR(3),
+                    UJB_Create_Dt DATE
+                )
+            ");
         }
 
         $data = DB::table('information_schema.columns')
@@ -232,17 +253,19 @@ class Controller extends BaseController
 
         if($data == 0){
             //! CREATE TABLE PICKING_ANTRIAN_BUAH
-            // sb.AppendLine("CREATE TABLE PICKING_ANTRIAN_BUAH ")
-            // sb.AppendLine("( ")
-            // sb.AppendLine("  PAB_RecordID VARCHAR(2), ")
-            // sb.AppendLine("  PAB_KodeCluster VARCHAR(10), ")
-            // sb.AppendLine("  PAB_JenisPB VARCHAR(20),   ")
-            // sb.AppendLine("  PAB_DCP VARCHAR(3), ")
-            // sb.AppendLine("  PAB_Create_By VARCHAR(5), ")
-            // sb.AppendLine("  PAB_Create_Dt DATE, ")
-            // sb.AppendLine("  PAB_Modify_By VARCHAR(5), ")
-            // sb.AppendLine("  PAB_Modify_Dt DATE ")
-            // sb.AppendLine(") ")
+            DB::insert("
+                CREATE TABLE PICKING_ANTRIAN_BUAH
+                (
+                    PAB_RecordID VARCHAR(2),
+                    PAB_KodeCluster VARCHAR(10),
+                    PAB_JenisPB VARCHAR(20),
+                    PAB_DCP VARCHAR(3),
+                    PAB_Create_By VARCHAR(5),
+                    PAB_Create_Dt DATE,
+                    PAB_Modify_By VARCHAR(5),
+                    PAB_Modify_Dt DATE
+                )
+            ");
         }
 
         $data = DB::table('information_schema.columns')
@@ -251,19 +274,21 @@ class Controller extends BaseController
 
         if($data == 0){
             //! CREATE TABLE DCP_MASTER_BUAH
-            // sb.AppendLine("CREATE TABLE DCP_MASTER_BUAH ")
-            // sb.AppendLine("( ")
-            // sb.AppendLine("  DMB_RecordID VARCHAR(2), ")
-            // sb.AppendLine("  DMB_UserID VARCHAR(5), ")
-            // sb.AppendLine("  DMB_UserName VARCHAR(40), ")
-            // sb.AppendLine("  DMB_ID VARCHAR(3), ")
-            // sb.AppendLine("  DMB_KodeCluster VARCHAR(10), ")
-            // sb.AppendLine("  DMB_JenisPB VARCHAR(20), ")
-            // sb.AppendLine("  DMB_Create_By VARCHAR(5), ")
-            // sb.AppendLine("  DMB_Create_Dt Date, ")
-            // sb.AppendLine("  DMB_Modify_By VARCHAR(5), ")
-            // sb.AppendLine("  DMB_Modify_Dt Date ")
-            // sb.AppendLine(") ")
+            DB::insert("
+                CREATE TABLE DCP_MASTER_BUAH
+                (
+                    DMB_RecordID VARCHAR(2),
+                    DMB_UserID VARCHAR(5),
+                    DMB_UserName VARCHAR(40),
+                    DMB_ID VARCHAR(3),
+                    DMB_KodeCluster VARCHAR(10),
+                    DMB_JenisPB VARCHAR(20),
+                    DMB_Create_By VARCHAR(5),
+                    DMB_Create_Dt Date,
+                    DMB_Modify_By VARCHAR(5),
+                    DMB_Modify_Dt Date
+                )
+            ");
         }
 
         $data = DB::table('information_schema.columns')
@@ -272,34 +297,36 @@ class Controller extends BaseController
 
         if($data == 0){
             //! CREATE TABLE DCP_DATA_BUAH
-            // sb.AppendLine("CREATE TABLE DCP_DATA_BUAH ")
-            // sb.AppendLine("( ")
-            // sb.AppendLine("  DDB_RecordID VARCHAR(2),  ")
-            // sb.AppendLine("  DDB_ID VARCHAR(3), ")
-            // sb.AppendLine("  DDB_KodeSBU VARCHAR(2),  ")
-            // sb.AppendLine("  DDB_KodeToko VARCHAR(5),    ")
-            // sb.AppendLine("  DDB_NoPB VARCHAR(15),  ")
-            // sb.AppendLine("  DDB_TglPB DATE,   ")
-            // sb.AppendLine("  DDB_PRDCD VARCHAR(10), ")
-            // sb.AppendLine("  DDB_PLUIDM VARCHAR(10), ")
-            // sb.AppendLine("  DDB_Deskripsi VARCHAR(20), ")
-            // sb.AppendLine("  DDB_Unit VARCHAR(10), ")
-            // sb.AppendLine("  DDB_Frac NUMERIC(10),   ")
-            // sb.AppendLine("  DDB_FlagBKP1 VARCHAR(1), ")
-            // sb.AppendLine("  DDB_FlagBKP2 VARCHAR(1), ")
-            // sb.AppendLine("  DDB_QtyOrder NUMERIC(10), ")
-            // sb.AppendLine("  DDB_QtyScan NUMERIC(10), ")
-            // sb.AppendLine("  DDB_TglUpload DATE, ")
-            // sb.AppendLine("  DDB_TglScan DATE, ")
-            // sb.AppendLine("  DDB_UserScan VARCHAR(5), ")
-            // sb.AppendLine("  DDB_IP VARCHAR(30), ")
-            // sb.AppendLine("  DDB_KodeCluster VARCHAR(10), ")
-            // sb.AppendLine("  DDB_JenisPB VARCHAR(20), ")
-            // sb.AppendLine("  DDB_NoUrutJenisPB NUMERIC(1), ")
-            // sb.AppendLine("  DDB_NoUrutPLU NUMERIC(5), ")
-            // sb.AppendLine("  DDB_NoUrutToko NUMERIC(5), ")
-            // sb.AppendLine("  DDB_NoKoli VARCHAR(20) ")
-            // sb.AppendLine(") ")
+            DB::insert("
+                CREATE TABLE DCP_DATA_BUAH
+                (
+                    DDB_RecordID VARCHAR(2),
+                    DDB_ID VARCHAR(3),
+                    DDB_KodeSBU VARCHAR(2),
+                    DDB_KodeToko VARCHAR(5),
+                    DDB_NoPB VARCHAR(15),
+                    DDB_TglPB DATE,
+                    DDB_PRDCD VARCHAR(10),
+                    DDB_PLUIDM VARCHAR(10),
+                    DDB_Deskripsi VARCHAR(20),
+                    DDB_Unit VARCHAR(10),
+                    DDB_Frac NUMERIC(10),
+                    DDB_FlagBKP1 VARCHAR(1),
+                    DDB_FlagBKP2 VARCHAR(1),
+                    DDB_QtyOrder NUMERIC(10),
+                    DDB_QtyScan NUMERIC(10),
+                    DDB_TglUpload DATE,
+                    DDB_TglScan DATE,
+                    DDB_UserScan VARCHAR(5),
+                    DDB_IP VARCHAR(30),
+                    DDB_KodeCluster VARCHAR(10),
+                    DDB_JenisPB VARCHAR(20),
+                    DDB_NoUrutJenisPB NUMERIC(1),
+                    DDB_NoUrutPLU NUMERIC(5),
+                    DDB_NoUrutToko NUMERIC(5),
+                    DDB_NoKoli VARCHAR(20)
+                )
+            ");
         }
 
         $data = DB::table('information_schema.columns')
@@ -308,34 +335,36 @@ class Controller extends BaseController
 
         if($data == 0){
             //! CREATE TABLE HISTORY_DCP_DATA_BUAH
-            // sb.AppendLine("CREATE TABLE HISTORY_DCP_DATA_BUAH ")
-            // sb.AppendLine("( ")
-            // sb.AppendLine("  HDDB_RecordID VARCHAR(2),  ")
-            // sb.AppendLine("  HDDB_ID VARCHAR(3), ")
-            // sb.AppendLine("  HDDB_KodeSBU VARCHAR(2),  ")
-            // sb.AppendLine("  HDDB_KodeToko VARCHAR(5),    ")
-            // sb.AppendLine("  HDDB_NoPB VARCHAR(15),  ")
-            // sb.AppendLine("  HDDB_TglPB DATE,   ")
-            // sb.AppendLine("  HDDB_PRDCD VARCHAR(10), ")
-            // sb.AppendLine("  HDDB_PLUIDM VARCHAR(10), ")
-            // sb.AppendLine("  HDDB_Deskripsi VARCHAR(20), ")
-            // sb.AppendLine("  HDDB_Unit VARCHAR(10), ")
-            // sb.AppendLine("  HDDB_Frac NUMERIC(10),   ")
-            // sb.AppendLine("  HDDB_FlagBKP1 VARCHAR(1), ")
-            // sb.AppendLine("  HDDB_FlagBKP2 VARCHAR(1), ")
-            // sb.AppendLine("  HDDB_QtyOrder NUMERIC(10), ")
-            // sb.AppendLine("  HDDB_QtyScan NUMERIC(10), ")
-            // sb.AppendLine("  HDDB_TglUpload DATE, ")
-            // sb.AppendLine("  HDDB_TglScan DATE, ")
-            // sb.AppendLine("  HDDB_UserScan VARCHAR(5), ")
-            // sb.AppendLine("  HDDB_IP VARCHAR(30), ")
-            // sb.AppendLine("  HDDB_KodeCluster VARCHAR(10), ")
-            // sb.AppendLine("  HDDB_JenisPB VARCHAR(20), ")
-            // sb.AppendLine("  HDDB_NoUrutJenisPB NUMERIC(1), ")
-            // sb.AppendLine("  HDDB_NoUrutPLU NUMERIC(5), ")
-            // sb.AppendLine("  HDDB_NoUrutToko NUMERIC(5), ")
-            // sb.AppendLine("  HDDB_NoKoli VARCHAR(20) ")
-            // sb.AppendLine(") ")
+            DB::insert("
+                CREATE TABLE HISTORY_DCP_DATA_BUAH
+                (
+                    HDDB_RecordID VARCHAR(2),
+                    HDDB_ID VARCHAR(3),
+                    HDDB_KodeSBU VARCHAR(2),
+                    HDDB_KodeToko VARCHAR(5),
+                    HDDB_NoPB VARCHAR(15),
+                    HDDB_TglPB DATE,
+                    HDDB_PRDCD VARCHAR(10),
+                    HDDB_PLUIDM VARCHAR(10),
+                    HDDB_Deskripsi VARCHAR(20),
+                    HDDB_Unit VARCHAR(10),
+                    HDDB_Frac NUMERIC(10),
+                    HDDB_FlagBKP1 VARCHAR(1),
+                    HDDB_FlagBKP2 VARCHAR(1),
+                    HDDB_QtyOrder NUMERIC(10),
+                    HDDB_QtyScan NUMERIC(10),
+                    HDDB_TglUpload DATE,
+                    HDDB_TglScan DATE,
+                    HDDB_UserScan VARCHAR(5),
+                    HDDB_IP VARCHAR(30),
+                    HDDB_KodeCluster VARCHAR(10),
+                    HDDB_JenisPB VARCHAR(20),
+                    HDDB_NoUrutJenisPB NUMERIC(1),
+                    HDDB_NoUrutPLU NUMERIC(5),
+                    HDDB_NoUrutToko NUMERIC(5),
+                    HDDB_NoKoli VARCHAR(20)
+                )
+            ");
         }
 
         $data = DB::table('information_schema.columns')
@@ -344,13 +373,15 @@ class Controller extends BaseController
 
         if($data == 0){
             //! CREATE TABLE TEMP_PB_VALID
-            // sb.AppendLine("CREATE TABLE TEMP_PB_VALID ")
-            // sb.AppendLine("( ")
-            // sb.AppendLine("  KodeToko VARCHAR(5), ")
-            // sb.AppendLine("  NoPB VARCHAR(15), ")
-            // sb.AppendLine("  TglPB DATE, ")
-            // sb.AppendLine("  IP VARCHAR(20) ")
-            // sb.AppendLine(") ")
+            DB::insert("
+                CREATE TABLE TEMP_PB_VALID
+                (
+                    KodeToko VARCHAR(5),
+                    NoPB VARCHAR(15),
+                    TglPB DATE,
+                    IP VARCHAR(20)
+                )
+            ");
         }
 
         $data = DB::table('information_schema.columns')
@@ -359,12 +390,14 @@ class Controller extends BaseController
 
         if($data == 0){
             //! CREATE TABLE DCP_USER_BUAH
-            // sb.AppendLine("CREATE TABLE DCP_User_Buah ")
-            // sb.AppendLine("( ")
-            // sb.AppendLine("  DUB_kodeigr  VARCHAR(2)  DEFAULT NULL, ")
-            // sb.AppendLine("  DUB_kodeuser VARCHAR(5)  DEFAULT NULL, ")
-            // sb.AppendLine("  DUB_nik      VARCHAR(20) DEFAULT NULL ")
-            // sb.AppendLine(") ")
+            DB::insert("
+                CREATE TABLE DCP_User_Buah
+                (
+                    DUB_kodeigr  VARCHAR(2)  DEFAULT NULL,
+                    DUB_kodeuser VARCHAR(5)  DEFAULT NULL,
+                    DUB_nik      VARCHAR(20) DEFAULT NULL
+                )
+            ");
         }
 
         $data = DB::table('information_schema.columns')
@@ -373,12 +406,14 @@ class Controller extends BaseController
 
         if($data == 0){
             //! CREATE TABLE SEQ_NOKOLI_BUAH
-            // sb.AppendLine("CREATE SEQUENCE SEQ_NOKOLI_BUAH ")
-            // sb.AppendLine("  MINVALUE 1 ")
-            // sb.AppendLine("  MAXVALUE 99999999 ")
-            // sb.AppendLine("  INCREMENT 1 ")
-            // sb.AppendLine("  CYCLE ")
-            // sb.AppendLine("  START 1 ")
+            DB::insert("
+                CREATE SEQUENCE SEQ_NOKOLI_BUAH
+                    MINVALUE 1
+                    MAXVALUE 99999999
+                    INCREMENT 1
+                    CYCLE
+                    START 1
+            ");
         }
 
         $data = DB::table('information_schema.columns')
@@ -387,34 +422,45 @@ class Controller extends BaseController
 
         if($data == 0){
             //! CREATE TABLE ALOKASI_BUAH
-            // sb.AppendLine("CREATE TABLE ALOKASI_BUAH ")
-            // sb.AppendLine("( ")
-            // sb.AppendLine("  kd_toko       VARCHAR(5)  DEFAULT NULL, ")
-            // sb.AppendLine("  docno         VARCHAR(12) DEFAULT NULL, ")
-            // sb.AppendLine("  tgl_data_al   DATE         DEFAULT NULL, ")
-            // sb.AppendLine("  pluidm        VARCHAR(10) DEFAULT NULL, ")
-            // sb.AppendLine("  pluigr        VARCHAR(10) DEFAULT NULL, ")
-            // sb.AppendLine("  qty           NUMERIC(12,0) DEFAULT NULL, ")
-            // sb.AppendLine("  dept          VARCHAR(3)  DEFAULT NULL, ")
-            // sb.AppendLine("  katg          VARCHAR(3)  DEFAULT NULL, ")
-            // sb.AppendLine("  create_by     VARCHAR(3)  DEFAULT NULL, ")
-            // sb.AppendLine("  create_dt     DATE         DEFAULT NULL, ")
-            // sb.AppendLine("  flag_proses   VARCHAR(1)  DEFAULT NULL, ")
-            // sb.AppendLine("  userid_proses VARCHAR(5)  DEFAULT NULL, ")
-            // sb.AppendLine("  tgl_proses    DATE     DEFAULT    NULL ")
-            // sb.AppendLine(") ")
+            DB::insert("
+                CREATE TABLE ALOKASI_BUAH
+                (
+                    kd_toko       VARCHAR(5)  DEFAULT NULL,
+                    docno         VARCHAR(12) DEFAULT NULL,
+                    tgl_data_al   DATE         DEFAULT NULL,
+                    pluidm        VARCHAR(10) DEFAULT NULL,
+                    pluigr        VARCHAR(10) DEFAULT NULL,
+                    qty           NUMERIC(12,0) DEFAULT NULL,
+                    dept          VARCHAR(3)  DEFAULT NULL,
+                    katg          VARCHAR(3)  DEFAULT NULL,
+                    create_by     VARCHAR(3)  DEFAULT NULL,
+                    create_dt     DATE         DEFAULT NULL,
+                    flag_proses   VARCHAR(1)  DEFAULT NULL,
+                    userid_proses VARCHAR(5)  DEFAULT NULL,
+                    tgl_proses    DATE     DEFAULT    NULL
+                )
+            ");
 
             // sb = New StringBuilder
             // sb.AppendLine("CREATE INDEX IDX1_ALOKASI_BUAH ON alokasi_buah (PLUIDM) ")
             // ExecQRY(sb.ToString, "CREATE INDEX IDX1_ALOKASI_BUAH")
 
+            //! CREATE INDEX IDX1_ALOKASI_BUAH
+            DB::insert("CREATE INDEX IDX1_ALOKASI_BUAH ON alokasi_buah (PLUIDM)");
+
             // sb = New StringBuilder
             // sb.AppendLine("CREATE INDEX IDX2_ALOKASI_BUAH ON alokasi_buah (PLUIGR) ")
             // ExecQRY(sb.ToString, "CREATE INDEX IDX2_ALOKASI_BUAH")
 
+            //! CREATE INDEX IDX2_ALOKASI_BUAH
+            DB::insert("CREATE INDEX IDX2_ALOKASI_BUAH ON alokasi_buah (PLUIGR)");
+
             // sb = New StringBuilder
             // sb.AppendLine("CREATE INDEX IDX3_ALOKASI_BUAH ON alokasi_buah (Trunc(CREATE_DT)) ")
             // ExecQRY(sb.ToString, "CREATE INDEX IDX3_ALOKASI_BUAH")
+
+            //! CREATE INDEX IDX3_ALOKASI_BUAH
+            DB::insert("CREATE INDEX IDX3_ALOKASI_BUAH ON alokasi_buah (Trunc(CREATE_DT))");
         }
 
         $data = DB::table('information_schema.columns')
@@ -423,22 +469,24 @@ class Controller extends BaseController
 
         if($data == 0){
             //! CREATE TABLE HISTORY_ALOKASI_BUAH
-            // sb.AppendLine("CREATE TABLE HISTORY_ALOKASI_BUAH  ")
-            // sb.AppendLine("( ")
-            // sb.AppendLine("  kd_toko       VARCHAR(5)  DEFAULT NULL, ")
-            // sb.AppendLine("  docno         VARCHAR(12) DEFAULT NULL, ")
-            // sb.AppendLine("  tgl_data_al   DATE         DEFAULT NULL, ")
-            // sb.AppendLine("  pluidm        VARCHAR(10) DEFAULT NULL, ")
-            // sb.AppendLine("  pluigr        VARCHAR(10) DEFAULT NULL, ")
-            // sb.AppendLine("  qty           NUMERIC(12,0) DEFAULT NULL, ")
-            // sb.AppendLine("  dept          VARCHAR(3)  DEFAULT NULL, ")
-            // sb.AppendLine("  katg          VARCHAR(3)  DEFAULT NULL, ")
-            // sb.AppendLine("  create_by     VARCHAR(3)  DEFAULT NULL, ")
-            // sb.AppendLine("  create_dt     DATE         DEFAULT NULL, ")
-            // sb.AppendLine("  flag_proses   VARCHAR(1)  DEFAULT NULL, ")
-            // sb.AppendLine("  userid_proses VARCHAR(5)  DEFAULT NULL, ")
-            // sb.AppendLine("  tgl_proses    DATE     DEFAULT    NULL ")
-            // sb.AppendLine(") ")
+            DB::insert("
+                CREATE TABLE HISTORY_ALOKASI_BUAH
+                (
+                    kd_toko       VARCHAR(5)  DEFAULT NULL,
+                    docno         VARCHAR(12) DEFAULT NULL,
+                    tgl_data_al   DATE         DEFAULT NULL,
+                    pluidm        VARCHAR(10) DEFAULT NULL,
+                    pluigr        VARCHAR(10) DEFAULT NULL,
+                    qty           NUMERIC(12,0) DEFAULT NULL,
+                    dept          VARCHAR(3)  DEFAULT NULL,
+                    katg          VARCHAR(3)  DEFAULT NULL,
+                    create_by     VARCHAR(3)  DEFAULT NULL,
+                    create_dt     DATE         DEFAULT NULL,
+                    flag_proses   VARCHAR(1)  DEFAULT NULL,
+                    userid_proses VARCHAR(5)  DEFAULT NULL,
+                    tgl_proses    DATE     DEFAULT    NULL
+                )
+            ");
 
             // ExecQRY(sb.ToString, "CREATE TABLE HISTORY_ALOKASI_BUAH")
 
@@ -446,60 +494,82 @@ class Controller extends BaseController
             // sb.AppendLine("CREATE INDEX IDX1_HISTORY_ALOKASI_BUAH ON HISTORY_ALOKASI_BUAH (PLUIDM) ")
             // ExecQRY(sb.ToString, "CREATE INDEX IDX1_HISTORY_ALOKASI_BUAH")
 
+            //! CREATE INDEX IDX1_HISTORY_ALOKASI_BUAH
+            DB::insert("CREATE INDEX IDX1_HISTORY_ALOKASI_BUAH ON HISTORY_ALOKASI_BUAH (PLUIDM)");
+
             // sb = New StringBuilder
             // sb.AppendLine("CREATE INDEX IDX2_HISTORY_ALOKASI_BUAH ON HISTORY_ALOKASI_BUAH (PLUIGR) ")
             // ExecQRY(sb.ToString, "CREATE INDEX IDX2_HISTORY_ALOKASI_BUAH")
 
+            //! CREATE CREATE INDEX IDX2_HISTORY_ALOKASI_BUAH
+            DB::insert("CREATE INDEX IDX2_HISTORY_ALOKASI_BUAH ON HISTORY_ALOKASI_BUAH (PLUIGR)");
+
             // sb = New StringBuilder
             // sb.AppendLine("CREATE INDEX IDX3_HISTORY_ALOKASI_BUAH ON HISTORY_ALOKASI_BUAH (Trunc(CREATE_DT)) ")
             // ExecQRY(sb.ToString, "CREATE INDEX IDX3_HISTORY_ALOKASI_BUAH")
+
+            //! CREATE CREATE INDEX IDX3_HISTORY_ALOKASI_BUAH
+            DB::insert("CREATE INDEX IDX3_HISTORY_ALOKASI_BUAH ON HISTORY_ALOKASI_BUAH (Trunc(CREATE_DT))");
         }
 
         //! INSERT INTO history_alokasi_buah
-        // sb.AppendLine("INSERT INTO history_alokasi_buah ")
-        // sb.AppendLine("( ")
-        // sb.AppendLine("  kd_toko, ")
-        // sb.AppendLine("  docno, ")
-        // sb.AppendLine("  tgl_data_al, ")
-        // sb.AppendLine("  pluidm, ")
-        // sb.AppendLine("  pluigr, ")
-        // sb.AppendLine("  qty, ")
-        // sb.AppendLine("  dept, ")
-        // sb.AppendLine("  katg, ")
-        // sb.AppendLine("  create_by, ")
-        // sb.AppendLine("  create_dt, ")
-        // sb.AppendLine("  flag_proses, ")
-        // sb.AppendLine("  userid_proses, ")
-        // sb.AppendLine("  tgl_proses ")
-        // sb.AppendLine(") ")
-        // sb.AppendLine("SELECT kd_toko, ")
-        // sb.AppendLine("       docno, ")
-        // sb.AppendLine("       tgl_data_al, ")
-        // sb.AppendLine("       pluidm, ")
-        // sb.AppendLine("       pluigr, ")
-        // sb.AppendLine("       qty, ")
-        // sb.AppendLine("       dept, ")
-        // sb.AppendLine("       katg, ")
-        // sb.AppendLine("       create_by, ")
-        // sb.AppendLine("       create_dt, ")
-        // sb.AppendLine("       flag_proses, ")
-        // sb.AppendLine("       userid_proses, ")
-        // sb.AppendLine("       tgl_proses ")
-        // sb.AppendLine("  FROM history_alokasi_buah ")
-        // sb.AppendLine(" WHERE DATE_TRUNC('DAY', create_dt) <= CURRENT_DATE - 100 ")
-        // sb.AppendLine("   AND flag_proses IS NOT NULL ")
+        DB::insert("
+            INSERT INTO history_alokasi_buah
+            (
+                kd_toko,
+                docno,
+                tgl_data_al,
+                pluidm,
+                pluigr,
+                qty,
+                dept,
+                katg,
+                create_by,
+                create_dt,
+                flag_proses,
+                userid_proses,
+                tgl_proses
+            )
+            SELECT kd_toko,
+                docno,
+                tgl_data_al,
+                pluidm,
+                pluigr,
+                qty,
+                dept,
+                katg,
+                create_by,
+                create_dt,
+                flag_proses,
+                userid_proses,
+                tgl_proses
+            FROM history_alokasi_buah
+            WHERE DATE_TRUNC('DAY', create_dt) <= CURRENT_DATE - 100
+            AND flag_proses IS NOT NULL
+        ");
 
         //! DELETE FROM alokasi_buah
         // sb.AppendLine("DELETE FROM alokasi_buah ")
         // sb.AppendLine(" WHERE DATE_TRUNC('DAY', create_dt) <= CURRENT_DATE - 100 ")
         // sb.AppendLine("   AND flag_proses IS NOT NULL ")
+
+        DB::table('alokasi_buah')
+            ->whereRaw("DATE_TRUNC('DAY', create_dt) <= CURRENT_DATE - 100")
+            ->whereNotNull('flag_proses')
+            ->delete();
     }
 
     public function getKodeDC($kode_toko){
-        // SELECT msi_kodedc FROM master_supply_idm WHERE msi_kodetoko = '" & kodetoko &
+        return DB::table('master_supply_idm')
+            ->where('msi_kodetoko', $kode_toko)
+            ->first()->msi_kodedc;
     }
 
-    public function prosesPBIdm($kode_toko){
+    public function getIP(){
+        return;
+    }
+
+    public function prosesPBIdm(){
         $jum = 0;
         $CounterKarton = 0;
         $CounterKecil = 0;
@@ -531,8 +601,19 @@ class Controller extends BaseController
         $VolContainer = 0;
         $VolBronjong = 0;
 
+        $ip = '';
+        $KDIGR = '';
+        $KodeToko = '';
+        $noPB = '';
+        $tglPB = '';
+        $JenisPB = '';
+        $NoUrJenisPB = '';
+
         //! DEL TEMP_CETAKPB_TOLAKAN_IDM
         // ExecQRY("DELETE FROM TEMP_CETAKPB_TOLAKAN_IDM WHERE REQ_ID = '" & IP & "' ", "DEL TEMP_CETAKPB_TOLAKAN_IDM")
+        DB::table('temp_cetakpb_tolakan_idm')
+            ->where('req_id', $ip)
+            ->delete();
 
         //! CEK Di TBTR_HEADER_BUAH
         // sb.AppendLine("Select COALESCE(count(1),0) ")
@@ -543,1142 +624,1201 @@ class Controller extends BaseController
         // sb.AppendLine("   AND DATE_TRUNC('DAY', HDB_TglPB) = TO_DATE('" & tglPB & "','DD-MM-YYYY') ")
         // sb.AppendLine(" AND TO_CHAR(HDB_TglPB,'YYYY') = '" & Strings.Right(tglPB, 4) & "' ")
 
-        if($jum > 0){
+        $check = DB::table('tbtr_header_buah')
+            ->where([
+                'hdb_kodeigr' => $KDIGR,
+                'hdb_kodetoko' => $KodeToko,
+                'hdb_nopb' => $noPB,
+            ])
+            ->whereRaw("DATE_TRUNC('DAY', HDB_TglPB) = TO_DATE('" . $tglPB . "','DD-MM-YYYY')")
+            ->where(DB::raw("TO_CHAR(hdb_tglpb,'YYYY')"),Carbon::parse($tglPB)->format('Y'))
+            ->count();
+
+        if($check > 0){
             //* MsgBox("PB Dengan No = " & noPB & ", KodeTOKO = " & KodeToko & ", Tgl PB = " & tglPB & vbNewLine & "Sudah Pernah Diproses !", MsgBoxStyle.Information, "UPLOAD PB IDM")
-            return;
+            $message = "PB Dengan No = $noPB, KodeTOKO = $KodeToko Sudah Pernah Diproses !";
+            throw new HttpResponseException(ApiFormatter::error(400, $message));
         }
 
-        $kodeDCIDM = $this->getKodeDC($kode_toko);
+        $kodeDCIDM = $this->getKodeDC($KodeToko);
 
         //! ISI PLU TIDAK TERDAFTAR DI TBMASTER_PLUIDM
-        // sb.AppendLine("INSERT Into TEMP_CETAKPB_TOLAKAN_IDM ")
-        // sb.AppendLine("( ")
-        // sb.AppendLine("   KOMI, ")
-        // sb.AppendLine("   TGL, ")
-        // sb.AppendLine("   NODOK, ")
-        // sb.AppendLine("   TGLDOK, ")
-        // sb.AppendLine("   PLU, ")
-        // sb.AppendLine("   PLUIGR, ")
-        // sb.AppendLine("   KETA, ")
-        // sb.AppendLine("   TAG, ")
-        // sb.AppendLine("   DESCR, ")
-        // sb.AppendLine("   QTYO, ")
-        // sb.AppendLine("   GROSS, ")
-        // sb.AppendLine("   KCAB, ")
-        // sb.AppendLine("   KODEIGR, ")
-        // sb.AppendLine("   REQ_ID ")
-        // sb.AppendLine(") ")
-        // sb.AppendLine("Select '', ")
-        // sb.AppendLine("       CURRENT_DATE,  ")
-        // sb.AppendLine("	      CPB_NoPB, ")
-        // sb.AppendLine("	      CPB_TglPB, ")
-        // sb.AppendLine("	      CPB_PLUIDM, ")
-        // sb.AppendLine("	      null, ")
-        // sb.AppendLine("	      'PLU TIDAK TERDAFTAR DI TBMASTER_PRODCRM', ")
-        // sb.AppendLine("	      null, ")
-        // sb.AppendLine("	      null, ")
-        // sb.AppendLine("	      CPB_QTY, ")
-        // sb.AppendLine("	      null, ")
-        // sb.AppendLine("	      CPB_KodeToko, ")
-        // sb.AppendLine("	      '" & KDIGR & "', ")
-        // sb.AppendLine("	      '" & IP & "' ")
-        // sb.AppendLine("  From CSV_PB_BUAH ")
-        // sb.AppendLine(" Where not exists ")
-        // sb.AppendLine(" ( ")
-        // If kodeDCIDM <> "" Then
-        //     sb.AppendLine("    Select idm_pluigr ")
-        //     sb.AppendLine("      From tbmaster_pluidm  ")
-        //     sb.AppendLine("     Where idm_pluidm = CPB_PLUIDM  ")
-        //     sb.AppendLine("       AND idm_kodeidm = '" & kodeDCIDM & "' ")
-        //     sb.AppendLine("	      AND idm_kodeigr = '" & KDIGR & "' ")
-        // Else
-        //     sb.AppendLine("    Select prc_pluigr ")
-        //     sb.AppendLine("      From tbmaster_prodcrm  ")
-        //     sb.AppendLine("     Where prc_pluidm = CPB_PLUIDM  ")
-        //     sb.AppendLine("	      AND prc_group = 'I' ")
-        //     sb.AppendLine("	      AND prc_kodeigr = '" & KDIGR & "' ")
-        // End If
-        // sb.AppendLine(" ) ")
-        // sb.AppendLine("   AND CPB_IP = '" & IP & "'")
-        // sb.AppendLine("   AND CPB_NoPB = '" & noPB & "'")
-        // sb.AppendLine("   AND DATE_TRUNC('DAY', CPB_TglPB) = to_date('" & tglPB & "','DD-MM-YYYY') ")
-        // sb.AppendLine("   AND CPB_KodeToko = '" & KodeToko & "' ")
+        $query = "";
+        $query .= "INSERT Into TEMP_CETAKPB_TOLAKAN_IDM ";
+        $query .= "( ";
+        $query .= "   KOMI, ";
+        $query .= "   TGL, ";
+        $query .= "   NODOK, ";
+        $query .= "   TGLDOK, ";
+        $query .= "   PLU, ";
+        $query .= "   PLUIGR, ";
+        $query .= "   KETA, ";
+        $query .= "   TAG, ";
+        $query .= "   DESCR, ";
+        $query .= "   QTYO, ";
+        $query .= "   GROSS, ";
+        $query .= "   KCAB, ";
+        $query .= "   KODEIGR, ";
+        $query .= "   REQ_ID ";
+        $query .= ") ";
+        $query .= "Select '', ";
+        $query .= "       CURRENT_DATE,  ";
+        $query .= "	      CPB_NoPB, ";
+        $query .= "	      CPB_TglPB, ";
+        $query .= "	      CPB_PLUIDM, ";
+        $query .= "	      null, ";
+        $query .= "	      'PLU TIDAK TERDAFTAR DI TBMASTER_PRODCRM', ";
+        $query .= "	      null, ";
+        $query .= "	      null, ";
+        $query .= "	      CPB_QTY, ";
+        $query .= "	      null, ";
+        $query .= "	      CPB_KodeToko, ";
+        $query .= "	      '" . session('KODECABANG') . "', ";
+        $query .= "	      '" . $ip . "' ";
+        $query .= "  From CSV_PB_BUAH ";
+        $query .= " Where not exists ";
+        $query .= " ( ";
+        if($kodeDCIDM <> ""){
+            $query .= "    Select idm_pluigr ";
+            $query .= "      From tbmaster_pluidm  ";
+            $query .= "     Where idm_pluidm = CPB_PLUIDM  ";
+            $query .= "       AND idm_kodeidm = '" . $kodeDCIDM . "' ";
+            $query .= "	      AND idm_kodeigr = '" . session('KODECABANG') . "' ";
+        }else{
+            $query .= "    Select prc_pluigr ";
+            $query .= "      From tbmaster_prodcrm  ";
+            $query .= "     Where prc_pluidm = CPB_PLUIDM  ";
+            $query .= "	      AND prc_group = 'I' ";
+            $query .= "	      AND prc_kodeigr = '" . session('KODECABANG') . "' ";
+        }
+        $query .= " ) ";
+        $query .= "   AND CPB_IP = '" . $ip . "'";
+        $query .= "   AND CPB_NoPB = '" . $noPB . "'";
+        $query .= "   AND DATE_TRUNC('DAY', CPB_TglPB) = to_date('" . $tglPB. "','DD-MM-YYYY') ";
+        $query .= "   AND CPB_KodeToko = '" . $KodeToko . "' ";
 
         //! PLU IDM TIDAK MEMPUNYAI PLU INDOGROSIR
-        // sb.AppendLine("INSERT Into TEMP_CETAKPB_TOLAKAN_IDM ")
-        // sb.AppendLine("( ")
-        // sb.AppendLine("   KOMI, ")
-        // sb.AppendLine("   TGL, ")
-        // sb.AppendLine("   NODOK, ")
-        // sb.AppendLine("   TGLDOK, ")
-        // sb.AppendLine("   PLU, ")
-        // sb.AppendLine("   PLUIGR, ")
-        // sb.AppendLine("   KETA, ")
-        // sb.AppendLine("   TAG, ")
-        // sb.AppendLine("   DESCR, ")
-        // sb.AppendLine("   QTYO, ")
-        // sb.AppendLine("   GROSS, ")
-        // sb.AppendLine("   KCAB, ")
-        // sb.AppendLine("   KODEIGR, ")
-        // sb.AppendLine("   REQ_ID ")
-        // sb.AppendLine(") ")
-        // sb.AppendLine("Select '', ")
-        // sb.AppendLine("       CURRENT_DATE,  ")
-        // sb.AppendLine("	      CPB_NoPB, ")
-        // sb.AppendLine("	      CPB_TglPB, ")
-        // sb.AppendLine("	      CPB_PLUIDM, ")
-        // sb.AppendLine("	      null, ")
-        // sb.AppendLine("	      'PLU IDM TIDAK MEMPUNYAI PLU INDOGROSIR', ")
-        // sb.AppendLine("	      null, ")
-        // sb.AppendLine("	      null, ")
-        // sb.AppendLine("	      CPB_QTY, ")
-        // sb.AppendLine("	      null, ")
-        // sb.AppendLine("	      CPB_KodeToko, ")
-        // sb.AppendLine("	      '" & KDIGR & "', ")
-        // sb.AppendLine("	      '" & IP & "' ")
-        // sb.AppendLine("  From CSV_PB_BUAH ")
-        // sb.AppendLine(" Where exists ")
-        // sb.AppendLine(" ( ")
-        // If kodeDCIDM <> "" Then
-        //     sb.AppendLine("    Select idm_pluigr ")
-        //     sb.AppendLine("      From tbmaster_pluidm  ")
-        //     sb.AppendLine("     Where idm_pluidm = CPB_PLUIDM  ")
-        //     sb.AppendLine("       AND idm_kodeidm = '" & kodeDCIDM & "' ")
-        //     sb.AppendLine("	      AND idm_kodeigr = '" & KDIGR & "' ")
-        //     sb.AppendLine("       AND idm_pluigr IS NULL ")
-        // Else
-        //     sb.AppendLine("    Select prc_pluigr ")
-        //     sb.AppendLine("      From tbmaster_prodcrm  ")
-        //     sb.AppendLine("     Where prc_pluidm = CPB_PLUIDM  ")
-        //     sb.AppendLine("	      AND prc_group = 'I' ")
-        //     sb.AppendLine("	      AND prc_kodeigr = '" & KDIGR & "' ")
-        //     sb.AppendLine("       AND PRC_PLUIGR IS NULL ")
-        // End If
-        // sb.AppendLine(" ) ")
-        // sb.AppendLine("   AND CPB_IP = '" & IP & "'")
-        // sb.AppendLine("   AND CPB_NoPB = '" & noPB & "'")
-        // sb.AppendLine("   AND DATE_TRUNC('DAY', CPB_TglPB) = to_date('" & tglPB & "','DD-MM-YYYY') ")
-        // sb.AppendLine("   AND CPB_KodeToko = '" & KodeToko & "' ")
+        $query = "";
+        $query .= "INSERT Into TEMP_CETAKPB_TOLAKAN_IDM ";
+        $query .= "( ";
+        $query .= "   KOMI, ";
+        $query .= "   TGL, ";
+        $query .= "   NODOK, ";
+        $query .= "   TGLDOK, ";
+        $query .= "   PLU, ";
+        $query .= "   PLUIGR, ";
+        $query .= "   KETA, ";
+        $query .= "   TAG, ";
+        $query .= "   DESCR, ";
+        $query .= "   QTYO, ";
+        $query .= "   GROSS, ";
+        $query .= "   KCAB, ";
+        $query .= "   KODEIGR, ";
+        $query .= "   REQ_ID ";
+        $query .= ") ";
+        $query .= "Select '', ";
+        $query .= "       CURRENT_DATE,  ";
+        $query .= "	      CPB_NoPB, ";
+        $query .= "	      CPB_TglPB, ";
+        $query .= "	      CPB_PLUIDM, ";
+        $query .= "	      null, ";
+        $query .= "	      'PLU IDM TIDAK MEMPUNYAI PLU INDOGROSIR', ";
+        $query .= "	      null, ";
+        $query .= "	      null, ";
+        $query .= "	      CPB_QTY, ";
+        $query .= "	      null, ";
+        $query .= "	      CPB_KodeToko, ";
+        $query .= "	      '" . session('KODECABANG') . "', ";
+        $query .= "	      '" . $ip . "' ";
+        $query .= "  From CSV_PB_BUAH ";
+        $query .= " Where exists ";
+        $query .= " ( ";
+        if($kodeDCIDM <> ""){
+            $query .= "    Select idm_pluigr ";
+            $query .= "      From tbmaster_pluidm  ";
+            $query .= "     Where idm_pluidm = CPB_PLUIDM  ";
+            $query .= "       AND idm_kodeidm = '" . $kodeDCIDM . "' ";
+            $query .= "	      AND idm_kodeigr = '" . session('KODECABANG') . "' ";
+            $query .= "       AND idm_pluigr IS NULL ";
+        }else{
+            $query .= "    Select prc_pluigr ";
+            $query .= "      From tbmaster_prodcrm  ";
+            $query .= "     Where prc_pluidm = CPB_PLUIDM  ";
+            $query .= "	      AND prc_group = 'I' ";
+            $query .= "	      AND prc_kodeigr = '" . session('KODECABANG') . "' ";
+            $query .= "       AND PRC_PLUIGR IS NULL ";
+        }
+        $query .= " ) ";
+        $query .= "   AND CPB_IP = '" . $ip . "'";
+        $query .= "   AND CPB_NoPB = '" . $noPB . "'";
+        $query .= "   AND DATE_TRUNC('DAY', CPB_TglPB) = to_date('" . $tglPB. "','DD-MM-YYYY') ";
+        $query .= "   AND CPB_KodeToko = '" . $KodeToko . "' ";
 
         //! PLUIDM DISCONTINUE Tag:ARNGX
-        // sb.AppendLine("INSERT Into TEMP_CETAKPB_TOLAKAN_IDM ")
-        // sb.AppendLine("( ")
-        // sb.AppendLine("   KOMI, ")
-        // sb.AppendLine("   TGL, ")
-        // sb.AppendLine("   NODOK, ")
-        // sb.AppendLine("   TGLDOK, ")
-        // sb.AppendLine("   PLU, ")
-        // sb.AppendLine("   PLUIGR, ")
-        // sb.AppendLine("   KETA, ")
-        // sb.AppendLine("   TAG, ")
-        // sb.AppendLine("   DESCR, ")
-        // sb.AppendLine("   QTYO, ")
-        // sb.AppendLine("   GROSS, ")
-        // sb.AppendLine("   KCAB, ")
-        // sb.AppendLine("   KODEIGR, ")
-        // sb.AppendLine("   REQ_ID ")
-        // sb.AppendLine(") ")
-        // sb.AppendLine("Select '',  ")
-        // sb.AppendLine("       CURRENT_DATE,   ")
-        // sb.AppendLine("       CPB_NoPB,  ")
-        // sb.AppendLine("       CPB_TglPB,  ")
-        // sb.AppendLine("       CPB_PLUIDM,  ")
-        // If kodeDCIDM <> "" Then
-        //     sb.AppendLine("       idm_pluigr,  ")
-        //     sb.AppendLine("       'PRODCRM DISCONTINUE Tag:ARNGX',  ")
-        //     sb.AppendLine("       IDM_KodeTag,  ")
-        //     sb.AppendLine("       null,  ")
-        //     sb.AppendLine("       CPB_QTY,  ")
-        //     sb.AppendLine("       null,  ")
-        //     sb.AppendLine("       CPB_KodeToko,  ")
-        //     sb.AppendLine("       '" & KDIGR & "',  ")
-        //     sb.AppendLine("       '" & IP & "'  ")
-        //     sb.AppendLine("  From CSV_PB_BUAH, tbmaster_pluidm  ")
-        //     sb.AppendLine(" Where CPB_IP = '" & IP & "' ")
-        //     sb.AppendLine("   AND CPB_NoPB = '" & noPB & "' ")
-        //     sb.AppendLine("   AND DATE_TRUNC('DAY', CPB_TglPB) = to_date('" & tglPB & "','DD-MM-YYYY') ")
-        //     sb.AppendLine("   AND CPB_KodeToko = '" & KodeToko & "' ")
-        //     sb.AppendLine("   And idm_pluidm = CPB_PLUIDM   ")
-        //     sb.AppendLine("   AND idm_kodeidm = '" & kodeDCIDM & "' ")
-        //     sb.AppendLine("   AND idm_kodeigr = '" & KDIGR & "' ")
-        //     sb.AppendLine("   AND COALESCE(idm_kodetag,'0') IN ('A','R','N','G','X') ")
-        // Else
-        //     sb.AppendLine("       prc_pluigr,  ")
-        //     sb.AppendLine("       'PRODCRM DISCONTINUE Tag:ARNGX',  ")
-        //     sb.AppendLine("       PRC_KodeTag,  ")
-        //     sb.AppendLine("       null,  ")
-        //     sb.AppendLine("       CPB_QTY,  ")
-        //     sb.AppendLine("       null,  ")
-        //     sb.AppendLine("       CPB_KodeToko,  ")
-        //     sb.AppendLine("       '" & KDIGR & "',  ")
-        //     sb.AppendLine("       '" & IP & "'  ")
-        //     sb.AppendLine("  From CSV_PB_BUAH, tbmaster_prodcrm  ")
-        //     sb.AppendLine(" Where CPB_IP = '" & IP & "' ")
-        //     sb.AppendLine("   AND CPB_NoPB = '" & noPB & "' ")
-        //     sb.AppendLine("   AND DATE_TRUNC('DAY', CPB_TglPB) = to_date('" & tglPB & "','DD-MM-YYYY') ")
-        //     sb.AppendLine("   AND CPB_KodeToko = '" & KodeToko & "' ")
-        //     sb.AppendLine("   And prc_pluidm = CPB_PLUIDM   ")
-        //     sb.AppendLine("   AND prc_group = 'I'  ")
-        //     sb.AppendLine("   AND prc_kodeigr = '" & KDIGR & "' ")
-        //     sb.AppendLine("   AND COALESCE(prc_KodeTag,'0') IN ('A','R','N','G','X') ")
-        // End If
+        $query = "";
+        $query .= "INSERT Into TEMP_CETAKPB_TOLAKAN_IDM ";
+        $query .= "( ";
+        $query .= "   KOMI, ";
+        $query .= "   TGL, ";
+        $query .= "   NODOK, ";
+        $query .= "   TGLDOK, ";
+        $query .= "   PLU, ";
+        $query .= "   PLUIGR, ";
+        $query .= "   KETA, ";
+        $query .= "   TAG, ";
+        $query .= "   DESCR, ";
+        $query .= "   QTYO, ";
+        $query .= "   GROSS, ";
+        $query .= "   KCAB, ";
+        $query .= "   KODEIGR, ";
+        $query .= "   REQ_ID ";
+        $query .= ") ";
+        $query .= "Select '',  ";
+        $query .= "       CURRENT_DATE,   ";
+        $query .= "       CPB_NoPB,  ";
+        $query .= "       CPB_TglPB,  ";
+        $query .= "       CPB_PLUIDM,  ";
+        if($kodeDCIDM <> ""){
+            $query .= "       idm_pluigr,  ";
+            $query .= "       'PRODCRM DISCONTINUE Tag:ARNGX',  ";
+            $query .= "       IDM_KodeTag,  ";
+            $query .= "       null,  ";
+            $query .= "       CPB_QTY,  ";
+            $query .= "       null,  ";
+            $query .= "       CPB_KodeToko,  ";
+            $query .= "       '" . session('KODECABANG') . "',  ";
+            $query .= "       '" . $ip . "'  ";
+            $query .= "  From CSV_PB_BUAH, tbmaster_pluidm  ";
+            $query .= " Where CPB_IP = '" . $ip . "' ";
+            $query .= "   AND CPB_NoPB = '" . $noPB . "' ";
+            $query .= "   AND DATE_TRUNC('DAY', CPB_TglPB) = to_date('" . $tglPB. "','DD-MM-YYYY') ";
+            $query .= "   AND CPB_KodeToko = '" . $KodeToko . "' ";
+            $query .= "   And idm_pluidm = CPB_PLUIDM   ";
+            $query .= "   AND idm_kodeidm = '" . $kodeDCIDM . "' ";
+            $query .= "   AND idm_kodeigr = '" . session('KODECABANG') . "' ";
+            $query .= "   AND COALESCE(idm_kodetag,'0') IN ('A','R','N','G','X') ";
+        }else{
+            $query .= "       prc_pluigr,  ";
+            $query .= "       'PRODCRM DISCONTINUE Tag:ARNGX',  ";
+            $query .= "       PRC_KodeTag,  ";
+            $query .= "       null,  ";
+            $query .= "       CPB_QTY,  ";
+            $query .= "       null,  ";
+            $query .= "       CPB_KodeToko,  ";
+            $query .= "       '" . session('KODECABANG') . "',  ";
+            $query .= "       '" . $ip . "'  ";
+            $query .= "  From CSV_PB_BUAH, tbmaster_prodcrm  ";
+            $query .= " Where CPB_IP = '" . $ip . "' ";
+            $query .= "   AND CPB_NoPB = '" . $noPB . "' ";
+            $query .= "   AND DATE_TRUNC('DAY', CPB_TglPB) = to_date('" . $tglPB. "','DD-MM-YYYY') ";
+            $query .= "   AND CPB_KodeToko = '" . $KodeToko . "' ";
+            $query .= "   And prc_pluidm = CPB_PLUIDM   ";
+            $query .= "   AND prc_group = 'I'  ";
+            $query .= "   AND prc_kodeigr = '" . session('KODECABANG') . "' ";
+            $query .= "   AND COALESCE(prc_KodeTag,'0') IN ('A','R','N','G','X') ";
+        }
 
         //! PLU IGR PADA TBTEMP_PLUIDM TIDAK ADA DI PRODMAST
-        // sb.AppendLine("INSERT Into TEMP_CETAKPB_TOLAKAN_IDM ")
-        // sb.AppendLine("( ")
-        // sb.AppendLine("   KOMI, ")
-        // sb.AppendLine("   TGL, ")
-        // sb.AppendLine("   NODOK, ")
-        // sb.AppendLine("   TGLDOK, ")
-        // sb.AppendLine("   PLU, ")
-        // sb.AppendLine("   PLUIGR, ")
-        // sb.AppendLine("   KETA, ")
-        // sb.AppendLine("   TAG, ")
-        // sb.AppendLine("   DESCR, ")
-        // sb.AppendLine("   QTYO, ")
-        // sb.AppendLine("   GROSS, ")
-        // sb.AppendLine("   KCAB, ")
-        // sb.AppendLine("   KODEIGR, ")
-        // sb.AppendLine("   REQ_ID ")
-        // sb.AppendLine(") ")
-        // sb.AppendLine("Select '', ")
-        // sb.AppendLine("       CURRENT_DATE,  ")
-        // sb.AppendLine("	      CPB_NoPB, ")
-        // sb.AppendLine("	      CPB_TglPB, ")
-        // sb.AppendLine("	      CPB_PLUIDM, ")
-        // sb.AppendLine("	      IDM_PLUIGR, ")
-        // sb.AppendLine("	      'PLU IGR PADA PLUIDM TIDAK ADA DI PRODMAST', ")
-        // sb.AppendLine("	      null, ")
-        // sb.AppendLine("	      null, ")
-        // sb.AppendLine("	      CPB_QTY, ")
-        // sb.AppendLine("	      null, ")
-        // sb.AppendLine("	      CPB_KodeToko, ")
-        // sb.AppendLine("	      '" & KDIGR & "', ")
-        // sb.AppendLine("	      '" & IP & "' ")
-        // sb.AppendLine("	 FROM csv_pb_BUAH,TBTEMP_PLUIDM  ")
-        // sb.AppendLine(" WHERE CPB_IP = '" & IP & "' ")
-        // sb.AppendLine("   AND CPB_NoPB = '" & noPB & "' ")
-        // sb.AppendLine("   AND DATE_TRUNC('DAY', CPB_TglPB) = to_date('" & tglPB & "','DD-MM-YYYY') ")
-        // sb.AppendLine("   AND CPB_KodeToko = '" & KodeToko & "' ")
-        // sb.AppendLine("   AND NOT EXISTS ")
-        // sb.AppendLine("   ( ")
-        // sb.AppendLine("   SELECT PLUIGR  ")
-        // sb.AppendLine("	    FROM TEMP_CETAKPB_TOLAKAN_IDM ")
-        // sb.AppendLine("	   WHERE REQ_ID = '" & IP & "' ")
-        // sb.AppendLine("		 AND NODOK = '" & noPB & "' ")
-        // sb.AppendLine("		 AND DATE_TRUNC('DAY', TGLDOK) = to_date('" & tglPB & "','DD-MM-YYYY') ")
-        // sb.AppendLine("	     AND KCAB = '" & KodeToko & "' ")
-        // sb.AppendLine("		 AND PLU = CPB_PLUIDM ")
-        // sb.AppendLine("   )    ")
-        // sb.AppendLine("   AND NOT EXISTS ")
-        // sb.AppendLine("   ( ")
-        // sb.AppendLine("      SELECT PRD_PRDCD  ")
-        // sb.AppendLine("        FROM tbMaster_ProdMast ")
-        // sb.AppendLine("       Where PRD_PRDCD = IDM_PLUIGR ")
-        // sb.AppendLine("         And PRD_KodeIGR = '" & KDIGR & "' ")
-        // sb.AppendLine("   )    ")
-        // sb.AppendLine("   AND CPB_PLUIDM = IDM_PLUIDM ")
-        // If kodeDCIDM <> "" Then
-        //     sb.AppendLine("   AND IDM_KDIDM = '" & kodeDCIDM & "' ")
-        // End If
+        $query = "";
+        $query .= "INSERT Into TEMP_CETAKPB_TOLAKAN_IDM ";
+        $query .= "( ";
+        $query .= "   KOMI, ";
+        $query .= "   TGL, ";
+        $query .= "   NODOK, ";
+        $query .= "   TGLDOK, ";
+        $query .= "   PLU, ";
+        $query .= "   PLUIGR, ";
+        $query .= "   KETA, ";
+        $query .= "   TAG, ";
+        $query .= "   DESCR, ";
+        $query .= "   QTYO, ";
+        $query .= "   GROSS, ";
+        $query .= "   KCAB, ";
+        $query .= "   KODEIGR, ";
+        $query .= "   REQ_ID ";
+        $query .= ") ";
+        $query .= "Select '', ";
+        $query .= "       CURRENT_DATE,  ";
+        $query .= "	      CPB_NoPB, ";
+        $query .= "	      CPB_TglPB, ";
+        $query .= "	      CPB_PLUIDM, ";
+        $query .= "	      IDM_PLUIGR, ";
+        $query .= "	      'PLU IGR PADA PLUIDM TIDAK ADA DI PRODMAST', ";
+        $query .= "	      null, ";
+        $query .= "	      null, ";
+        $query .= "	      CPB_QTY, ";
+        $query .= "	      null, ";
+        $query .= "	      CPB_KodeToko, ";
+        $query .= "	      '" . session('KODECABANG') . "', ";
+        $query .= "	      '" . $ip . "' ";
+        $query .= "	 FROM csv_pb_BUAH,TBTEMP_PLUIDM  ";
+        $query .= " WHERE CPB_IP = '" . $ip . "' ";
+        $query .= "   AND CPB_NoPB = '" . $noPB . "' ";
+        $query .= "   AND DATE_TRUNC('DAY', CPB_TglPB) = to_date('" . $tglPB. "','DD-MM-YYYY') ";
+        $query .= "   AND CPB_KodeToko = '" . $KodeToko . "' ";
+        $query .= "   AND NOT EXISTS ";
+        $query .= "   ( ";
+        $query .= "   SELECT PLUIGR  ";
+        $query .= "	    FROM TEMP_CETAKPB_TOLAKAN_IDM ";
+        $query .= "	   WHERE REQ_ID = '" . $ip . "' ";
+        $query .= "		 AND NODOK = '" . $noPB . "' ";
+        $query .= "		 AND DATE_TRUNC('DAY', TGLDOK) = to_date('" . $tglPB. "','DD-MM-YYYY') ";
+        $query .= "	     AND KCAB = '" . $KodeToko . "' ";
+        $query .= "		 AND PLU = CPB_PLUIDM ";
+        $query .= "   )    ";
+        $query .= "   AND NOT EXISTS ";
+        $query .= "   ( ";
+        $query .= "      SELECT PRD_PRDCD  ";
+        $query .= "        FROM tbMaster_ProdMast ";
+        $query .= "       Where PRD_PRDCD = IDM_PLUIGR ";
+        $query .= "         And PRD_KodeIGR = '" . session('KODECABANG') . "' ";
+        $query .= "   )    ";
+        $query .= "   AND CPB_PLUIDM = IDM_PLUIDM ";
+        if($kodeDCIDM <> ""){
+            $query .= "   AND IDM_KDIDM = '" . $kodeDCIDM . "' ";
+        }
 
         //! AVG.COST <= 0 - 1
-        // sb.AppendLine("INSERT Into TEMP_CETAKPB_TOLAKAN_IDM ")
-        // sb.AppendLine("( ")
-        // sb.AppendLine("   KOMI, ")
-        // sb.AppendLine("   TGL, ")
-        // sb.AppendLine("   NODOK, ")
-        // sb.AppendLine("   TGLDOK, ")
-        // sb.AppendLine("   PLU, ")
-        // sb.AppendLine("   PLUIGR, ")
-        // sb.AppendLine("   KETA, ")
-        // sb.AppendLine("   TAG, ")
-        // sb.AppendLine("   DESCR, ")
-        // sb.AppendLine("   QTYO, ")
-        // sb.AppendLine("   GROSS, ")
-        // sb.AppendLine("   KCAB, ")
-        // sb.AppendLine("   KODEIGR, ")
-        // sb.AppendLine("   REQ_ID ")
-        // sb.AppendLine(") ")
-        // sb.AppendLine("Select '', ")
-        // sb.AppendLine("       CURRENT_DATE,  ")
-        // sb.AppendLine("	      CPB_NoPB, ")
-        // sb.AppendLine("	      CPB_TglPB, ")
-        // sb.AppendLine("	      CPB_PLUIDM, ")
-        // If kodeDCIDM <> "" Then
-        //     sb.AppendLine("	      IDM_PLUIGR, ")
-        // Else
-        //     sb.AppendLine("	      PRC_PLUIGR, ")
-        // End If
-        // sb.AppendLine("	      'AVG.COST IS NULL', ")
-        // sb.AppendLine("	      PRD_KodeTag, ")
-        // sb.AppendLine("	      SUBSTR(PRD_DESKRIPSIPANJANG,1,60), ")
-        // sb.AppendLine("	      CPB_QTY, ")
-        // sb.AppendLine("	      null, ")
-        // sb.AppendLine("	      CPB_KodeToko, ")
-        // sb.AppendLine("	      '" & KDIGR & "', ")
-        // sb.AppendLine("	      '" & IP & "' ")
-        // If kodeDCIDM <> "" Then
-        //     sb.AppendLine("	 FROM csv_pb_BUAH, TBMASTER_PRODMAST,tbMaster_Pluidm ")
-        // Else
-        //     sb.AppendLine("	 FROM csv_pb_BUAH, TBMASTER_PRODMAST,tbMaster_Prodcrm ")
-        // End If
-        // sb.AppendLine(" WHERE CPB_IP = '" & IP & "' ")
-        // sb.AppendLine("   AND CPB_NoPB = '" & noPB & "' ")
-        // sb.AppendLine("   AND DATE_TRUNC('DAY', CPB_TglPB) = to_date('" & tglPB & "','DD-MM-YYYY') ")
-        // sb.AppendLine("   AND CPB_KodeToko = '" & KodeToko & "' ")
-        // sb.AppendLine("   AND NOT EXISTS ")
-        // sb.AppendLine("   ( ")
-        // sb.AppendLine("   SELECT PLUIGR  ")
-        // sb.AppendLine("	    FROM TEMP_CETAKPB_TOLAKAN_IDM ")
-        // sb.AppendLine("	   WHERE REQ_ID = '" & IP & "'		  ")
-        // sb.AppendLine("		 AND NODOK = '" & noPB & "' ")
-        // sb.AppendLine("		 AND DATE_TRUNC('DAY', TGLDOK) = to_date('" & tglPB & "','DD-MM-YYYY') ")
-        // sb.AppendLine("	     AND KCAB = '" & KodeToko & "' ")
-        // sb.AppendLine("		 AND PLU = CPB_PLUIDM ")
-        // sb.AppendLine("   )    ")
-        // sb.AppendLine("   AND NOT EXISTS ")
-        // sb.AppendLine("   ( ")
-        // sb.AppendLine("      SELECT ST_AvgCost ")
-        // sb.AppendLine("        FROM tbMaster_Stock ")
-        // If kodeDCIDM <> "" Then
-        //     sb.AppendLine("       Where ST_PRDCD Like SUBSTR(IDM_PLUIGR,1,6)||'%' ")
-        //     sb.AppendLine("         And ST_Lokasi = '01'  ")
-        //     sb.AppendLine("         And ST_KodeIGR = '" & KDIGR & "'  ")
-        //     sb.AppendLine("         And ST_AvgCost IS NOT NULL ")
-        //     sb.AppendLine("   ) ")
-        //     sb.AppendLine("   AND PRD_KODEIGR = IDM_KODEIGR ")
-        //     sb.AppendLine("   AND CPB_PLUIDM = IDM_PLUIDM ")
-        //     sb.AppendLine("   AND IDM_KODEIDM = '" & kodeDCIDM & "' ")
-        //     sb.AppendLine("   AND PRD_PRDCD = IDM_PLUIGR ")
-        //     sb.AppendLine("   AND NOT EXISTS ")
-        //     sb.AppendLine("   ( ")
-        //     sb.AppendLine("    SELECT PHP_PRDCD ")
-        //     sb.AppendLine("      FROM PLU_HADIAH_PERISHABLE ")
-        //     sb.AppendLine("     WHERE PHP_PRDCD Like SUBSTR(IDM_PLUIGR,1,6)||'%' ")
-        //     sb.AppendLine("   )    ")
-        // Else
-        //     sb.AppendLine("       Where ST_PRDCD Like SUBSTR(PRC_PLUIGR,1,6)||'%' ")
-        //     sb.AppendLine("         And ST_Lokasi = '01'  ")
-        //     sb.AppendLine("         And ST_KodeIGR = '" & KDIGR & "'  ")
-        //     sb.AppendLine("         And ST_AvgCost IS NOT NULL ")
-        //     sb.AppendLine("   ) ")
-        //     sb.AppendLine("   AND PRD_KODEIGR = PRC_KODEIGR ")
-        //     sb.AppendLine("   AND CPB_PLUIDM = PRC_PLUIDM ")
-        //     sb.AppendLine("   AND PRC_GROUP = 'I' ")
-        //     sb.AppendLine("   AND PRD_PRDCD = PRC_PLUIGR ")
-        //     sb.AppendLine("   AND NOT EXISTS ")
-        //     sb.AppendLine("   ( ")
-        //     sb.AppendLine("    SELECT PHP_PRDCD ")
-        //     sb.AppendLine("      FROM PLU_HADIAH_PERISHABLE ")
-        //     sb.AppendLine("     WHERE PHP_PRDCD Like SUBSTR(PRC_PLUIGR,1,6)||'%' ")
-        //     sb.AppendLine("   )    ")
-        // End If
+        $query = "";
+        $query .= "INSERT Into TEMP_CETAKPB_TOLAKAN_IDM ";
+        $query .= "( ";
+        $query .= "   KOMI, ";
+        $query .= "   TGL, ";
+        $query .= "   NODOK, ";
+        $query .= "   TGLDOK, ";
+        $query .= "   PLU, ";
+        $query .= "   PLUIGR, ";
+        $query .= "   KETA, ";
+        $query .= "   TAG, ";
+        $query .= "   DESCR, ";
+        $query .= "   QTYO, ";
+        $query .= "   GROSS, ";
+        $query .= "   KCAB, ";
+        $query .= "   KODEIGR, ";
+        $query .= "   REQ_ID ";
+        $query .= ") ";
+        $query .= "Select '', ";
+        $query .= "       CURRENT_DATE,  ";
+        $query .= "	      CPB_NoPB, ";
+        $query .= "	      CPB_TglPB, ";
+        $query .= "	      CPB_PLUIDM, ";
+        if($kodeDCIDM <> ""){
+            $query .= "	      IDM_PLUIGR, ";
+        }else{
+            $query .= "	      PRC_PLUIGR, ";
+        }
+        $query .= "	      'AVG.COST IS NULL', ";
+        $query .= "	      PRD_KodeTag, ";
+        $query .= "	      SUBSTR(PRD_DESKRIPSIPANJANG,1,60), ";
+        $query .= "	      CPB_QTY, ";
+        $query .= "	      null, ";
+        $query .= "	      CPB_KodeToko, ";
+        $query .= "	      '" . session('KODECABANG') . "', ";
+        $query .= "	      '" . $ip . "' ";
+        if($kodeDCIDM <> ""){
+            $query .= "	 FROM csv_pb_BUAH, TBMASTER_PRODMAST,tbMaster_Pluidm ";
+        }else{
+            $query .= "	 FROM csv_pb_BUAH, TBMASTER_PRODMAST,tbMaster_Prodcrm ";
+        }
+        $query .= " WHERE CPB_IP = '" . $ip . "' ";
+        $query .= "   AND CPB_NoPB = '" . $noPB . "' ";
+        $query .= "   AND DATE_TRUNC('DAY', CPB_TglPB) = to_date('" . $tglPB. "','DD-MM-YYYY') ";
+        $query .= "   AND CPB_KodeToko = '" . $KodeToko . "' ";
+        $query .= "   AND NOT EXISTS ";
+        $query .= "   ( ";
+        $query .= "   SELECT PLUIGR  ";
+        $query .= "	    FROM TEMP_CETAKPB_TOLAKAN_IDM ";
+        $query .= "	   WHERE REQ_ID = '" . $ip . "'		  ";
+        $query .= "		 AND NODOK = '" . $noPB . "' ";
+        $query .= "		 AND DATE_TRUNC('DAY', TGLDOK) = to_date('" . $tglPB. "','DD-MM-YYYY') ";
+        $query .= "	     AND KCAB = '" . $KodeToko . "' ";
+        $query .= "		 AND PLU = CPB_PLUIDM ";
+        $query .= "   )    ";
+        $query .= "   AND NOT EXISTS ";
+        $query .= "   ( ";
+        $query .= "      SELECT ST_AvgCost ";
+        $query .= "        FROM tbMaster_Stock ";
+        if($kodeDCIDM <> ""){
+            $query .= "       Where ST_PRDCD Like SUBSTR(IDM_PLUIGR,1,6)||'%' ";
+            $query .= "         And ST_Lokasi = '01'  ";
+            $query .= "         And ST_KodeIGR = '" . session('KODECABANG') . "'  ";
+            $query .= "         And ST_AvgCost IS NOT NULL ";
+            $query .= "   ) ";
+            $query .= "   AND PRD_KODEIGR = IDM_KODEIGR ";
+            $query .= "   AND CPB_PLUIDM = IDM_PLUIDM ";
+            $query .= "   AND IDM_KODEIDM = '" . $kodeDCIDM . "' ";
+            $query .= "   AND PRD_PRDCD = IDM_PLUIGR ";
+            $query .= "   AND NOT EXISTS ";
+            $query .= "   ( ";
+            $query .= "    SELECT PHP_PRDCD ";
+            $query .= "      FROM PLU_HADIAH_PERISHABLE ";
+            $query .= "     WHERE PHP_PRDCD Like SUBSTR(IDM_PLUIGR,1,6)||'%' ";
+            $query .= "   )    ";
+        }else{
+            $query .= "       Where ST_PRDCD Like SUBSTR(PRC_PLUIGR,1,6)||'%' ";
+            $query .= "         And ST_Lokasi = '01'  ";
+            $query .= "         And ST_KodeIGR = '" . session('KODECABANG') . "'  ";
+            $query .= "         And ST_AvgCost IS NOT NULL ";
+            $query .= "   ) ";
+            $query .= "   AND PRD_KODEIGR = PRC_KODEIGR ";
+            $query .= "   AND CPB_PLUIDM = PRC_PLUIDM ";
+            $query .= "   AND PRC_GROUP = 'I' ";
+            $query .= "   AND PRD_PRDCD = PRC_PLUIGR ";
+            $query .= "   AND NOT EXISTS ";
+            $query .= "   ( ";
+            $query .= "    SELECT PHP_PRDCD ";
+            $query .= "      FROM PLU_HADIAH_PERISHABLE ";
+            $query .= "     WHERE PHP_PRDCD Like SUBSTR(PRC_PLUIGR,1,6)||'%' ";
+            $query .= "   )    ";
+        }
 
         //! AVG.COST <= 0 - 2
-        // sb.AppendLine("INSERT Into TEMP_CETAKPB_TOLAKAN_IDM ")
-        // sb.AppendLine("( ")
-        // sb.AppendLine("   KOMI, ")
-        // sb.AppendLine("   TGL, ")
-        // sb.AppendLine("   NODOK, ")
-        // sb.AppendLine("   TGLDOK, ")
-        // sb.AppendLine("   PLU, ")
-        // sb.AppendLine("   PLUIGR, ")
-        // sb.AppendLine("   KETA, ")
-        // sb.AppendLine("   TAG, ")
-        // sb.AppendLine("   DESCR, ")
-        // sb.AppendLine("   QTYO, ")
-        // sb.AppendLine("   GROSS, ")
-        // sb.AppendLine("   KCAB, ")
-        // sb.AppendLine("   KODEIGR, ")
-        // sb.AppendLine("   REQ_ID ")
-        // sb.AppendLine(") ")
-        // sb.AppendLine("Select '', ")
-        // sb.AppendLine("       CURRENT_DATE,  ")
-        // sb.AppendLine("	      CPB_NoPB, ")
-        // sb.AppendLine("	      CPB_TglPB, ")
-        // sb.AppendLine("	      CPB_PLUIDM, ")
-        // If kodeDCIDM <> "" Then
-        //     sb.AppendLine("	      IDM_PLUIGR, ")
-        // Else
-        //     sb.AppendLine("	      PRC_PLUIGR, ")
-        // End If
-        // sb.AppendLine("	      'AVG.COST <= 100', ")
-        // sb.AppendLine("	      PRD_KodeTag, ")
-        // sb.AppendLine("	      SUBSTR(PRD_DESKRIPSIPANJANG,1,60), ")
-        // sb.AppendLine("	      CPB_QTY, ")
-        // sb.AppendLine("	      null, ")
-        // sb.AppendLine("	      CPB_KodeToko, ")
-        // sb.AppendLine("	      '" & KDIGR & "', ")
-        // sb.AppendLine("	      '" & IP & "' ")
-        // If kodeDCIDM <> "" Then
-        //     sb.AppendLine("	 FROM csv_pb_BUAH, TBMASTER_PRODMAST,tbMaster_Pluidm ")
-        // Else
-        //     sb.AppendLine("	 FROM csv_pb_BUAH, TBMASTER_PRODMAST,tbMaster_Prodcrm ")
-        // End If
-        // sb.AppendLine(" WHERE CPB_IP = '" & IP & "' ")
-        // sb.AppendLine("   AND CPB_NoPB = '" & noPB & "' ")
-        // sb.AppendLine("   AND DATE_TRUNC('DAY', CPB_TglPB) = to_date('" & tglPB & "','DD-MM-YYYY') ")
-        // sb.AppendLine("   AND CPB_KodeToko = '" & KodeToko & "' ")
-        // sb.AppendLine("   AND NOT EXISTS ")
-        // sb.AppendLine("   ( ")
-        // sb.AppendLine("   SELECT PLUIGR  ")
-        // sb.AppendLine("	    FROM TEMP_CETAKPB_TOLAKAN_IDM ")
-        // sb.AppendLine("	   WHERE REQ_ID = '" & IP & "'		  ")
-        // sb.AppendLine("		 AND NODOK = '" & noPB & "' ")
-        // sb.AppendLine("		 AND DATE_TRUNC('DAY', TGLDOK) = to_date('" & tglPB & "','DD-MM-YYYY') ")
-        // sb.AppendLine("	     AND KCAB = '" & KodeToko & "' ")
-        // sb.AppendLine("		 AND PLU = CPB_PLUIDM ")
-        // sb.AppendLine("   )    ")
-        // sb.AppendLine("   AND EXISTS ")
-        // sb.AppendLine("   ( ")
-        // sb.AppendLine("      SELECT ST_AvgCost  ")
-        // sb.AppendLine("        FROM tbMaster_Stock  ")
-        // If kodeDCIDM <> "" Then
-        //     sb.AppendLine("       Where ST_PRDCD Like SUBSTR(IDM_PLUIGR,1,6)||'%' ")
-        //     sb.AppendLine("         And ST_Lokasi = '01'  ")
-        //     sb.AppendLine("         And ST_KodeIGR = '" & KDIGR & "'  ")
-        //     sb.AppendLine("         And COALESCE(ST_AvgCost,0) <= 100 ")
-        //     sb.AppendLine("   )    ")
-        //     sb.AppendLine("   AND PRD_KODEIGR = IDM_KODEIGR ")
-        //     sb.AppendLine("   AND CPB_PLUIDM = IDM_PLUIDM ")
-        //     sb.AppendLine("   AND IDM_KODEIDM = '" & kodeDCIDM & "' ")
-        //     sb.AppendLine("   AND PRD_PRDCD = IDM_PLUIGR ")
-        // Else
-        //     sb.AppendLine("       Where ST_PRDCD Like SUBSTR(PRC_PLUIGR,1,6)||'%' ")
-        //     sb.AppendLine("         And ST_Lokasi = '01'  ")
-        //     sb.AppendLine("         And ST_KodeIGR = '" & KDIGR & "'  ")
-        //     sb.AppendLine("         And COALESCE(ST_AvgCost,0) <= 100 ")
-        //     sb.AppendLine("   )    ")
-        //     sb.AppendLine("   AND PRD_KODEIGR = PRC_KODEIGR ")
-        //     sb.AppendLine("   AND CPB_PLUIDM = PRC_PLUIDM ")
-        //     sb.AppendLine("   AND PRC_GROUP = 'I' ")
-        //     sb.AppendLine("   AND PRD_PRDCD = PRC_PLUIGR ")
-        // End If
+        $query = "";
+        $query .= "INSERT Into TEMP_CETAKPB_TOLAKAN_IDM ";
+        $query .= "( ";
+        $query .= "   KOMI, ";
+        $query .= "   TGL, ";
+        $query .= "   NODOK, ";
+        $query .= "   TGLDOK, ";
+        $query .= "   PLU, ";
+        $query .= "   PLUIGR, ";
+        $query .= "   KETA, ";
+        $query .= "   TAG, ";
+        $query .= "   DESCR, ";
+        $query .= "   QTYO, ";
+        $query .= "   GROSS, ";
+        $query .= "   KCAB, ";
+        $query .= "   KODEIGR, ";
+        $query .= "   REQ_ID ";
+        $query .= ") ";
+        $query .= "Select '', ";
+        $query .= "       CURRENT_DATE,  ";
+        $query .= "	      CPB_NoPB, ";
+        $query .= "	      CPB_TglPB, ";
+        $query .= "	      CPB_PLUIDM, ";
+        if($kodeDCIDM <> ""){
+            $query .= "	      IDM_PLUIGR, ";
+        }else{
+            $query .= "	      PRC_PLUIGR, ";
+        }
+        $query .= "	      'AVG.COST <= 100', ";
+        $query .= "	      PRD_KodeTag, ";
+        $query .= "	      SUBSTR(PRD_DESKRIPSIPANJANG,1,60), ";
+        $query .= "	      CPB_QTY, ";
+        $query .= "	      null, ";
+        $query .= "	      CPB_KodeToko, ";
+        $query .= "	      '" . session('KODECABANG') . "', ";
+        $query .= "	      '" . $ip . "' ";
+        if($kodeDCIDM <> ""){
+            $query .= "	 FROM csv_pb_BUAH, TBMASTER_PRODMAST,tbMaster_Pluidm ";
+        }else{
+            $query .= "	 FROM csv_pb_BUAH, TBMASTER_PRODMAST,tbMaster_Prodcrm ";
+        }
+        $query .= " WHERE CPB_IP = '" . $ip . "' ";
+        $query .= "   AND CPB_NoPB = '" . $noPB . "' ";
+        $query .= "   AND DATE_TRUNC('DAY', CPB_TglPB) = to_date('" . $tglPB. "','DD-MM-YYYY') ";
+        $query .= "   AND CPB_KodeToko = '" . $KodeToko . "' ";
+        $query .= "   AND NOT EXISTS ";
+        $query .= "   ( ";
+        $query .= "   SELECT PLUIGR  ";
+        $query .= "	    FROM TEMP_CETAKPB_TOLAKAN_IDM ";
+        $query .= "	   WHERE REQ_ID = '" . $ip . "'		  ";
+        $query .= "		 AND NODOK = '" . $noPB . "' ";
+        $query .= "		 AND DATE_TRUNC('DAY', TGLDOK) = to_date('" . $tglPB. "','DD-MM-YYYY') ";
+        $query .= "	     AND KCAB = '" . $KodeToko . "' ";
+        $query .= "		 AND PLU = CPB_PLUIDM ";
+        $query .= "   )    ";
+        $query .= "   AND EXISTS ";
+        $query .= "   ( ";
+        $query .= "      SELECT ST_AvgCost  ";
+        $query .= "        FROM tbMaster_Stock  ";
+        if($kodeDCIDM <> ""){
+            $query .= "       Where ST_PRDCD Like SUBSTR(IDM_PLUIGR,1,6)||'%' ";
+            $query .= "         And ST_Lokasi = '01'  ";
+            $query .= "         And ST_KodeIGR = '" . session('KODECABANG') . "'  ";
+            $query .= "         And COALESCE(ST_AvgCost,0) <= 100 ";
+            $query .= "   )    ";
+            $query .= "   AND PRD_KODEIGR = IDM_KODEIGR ";
+            $query .= "   AND CPB_PLUIDM = IDM_PLUIDM ";
+            $query .= "   AND IDM_KODEIDM = '" . $kodeDCIDM . "' ";
+            $query .= "   AND PRD_PRDCD = IDM_PLUIGR ";
+        }else{
+            $query .= "       Where ST_PRDCD Like SUBSTR(PRC_PLUIGR,1,6)||'%' ";
+            $query .= "         And ST_Lokasi = '01'  ";
+            $query .= "         And ST_KodeIGR = '" . session('KODECABANG') . "'  ";
+            $query .= "         And COALESCE(ST_AvgCost,0) <= 100 ";
+            $query .= "   )    ";
+            $query .= "   AND PRD_KODEIGR = PRC_KODEIGR ";
+            $query .= "   AND CPB_PLUIDM = PRC_PLUIDM ";
+            $query .= "   AND PRC_GROUP = 'I' ";
+            $query .= "   AND PRD_PRDCD = PRC_PLUIGR ";
+        }
 
         //! CEK TABLE
         // sb.AppendLine("Select COALESCE(COUNT(1),0)  ")
         // sb.AppendLine("  FROM information_schema.columns ")
         // sb.AppendLine(" Where UPPER(table_name) = 'TEMP_CETAKPB_TOLAKAN_IDM2' ")
 
-        if($jum = 0){
+        $count = DB::table('information_schema.columns')
+            ->whereRaw("upper(table_name) = 'TEMP_CETAKPB_TOLAKAN_IDM2'")
+            ->count();
+
+        if($count == 0){
             //! CREATE TABLE TEMP_CETAKPB_TOLAKAN_IDM2-PRODMAST-NXQ
-            // sb.AppendLine("CREATE TABLE TEMP_CETAKPB_TOLAKAN_IDM2 ")
-            // sb.AppendLine("AS ")
-            // sb.AppendLine("SELECT KOMI, ")
-            // sb.AppendLine("       TGL, ")
-            // sb.AppendLine("       NODOK, ")
-            // sb.AppendLine("       TGLDOK, ")
-            // sb.AppendLine("       PLU, ")
-            // sb.AppendLine("       PLUIGR, ")
-            // sb.AppendLine("       KETA, ")
-            // sb.AppendLine("       PRD_KODETAG AS TAG, ")
-            // sb.AppendLine("       DESCR, ")
-            // sb.AppendLine("       QTYO, ")
-            // sb.AppendLine("       KCAB, ")
-            // sb.AppendLine("       KODEIGR, ")
-            // sb.AppendLine("       REQ_ID ")
-            // sb.AppendLine("FROM ")
-            // sb.AppendLine("( ")
-            // sb.AppendLine("Select '' as KOMI,  ")
-            // sb.AppendLine("       CURRENT_DATE as TGL,   ")
-            // sb.AppendLine("	      CPB_NoPB as NODOK,  ")
-            // sb.AppendLine("	      CPB_TglPB as TGLDOK,  ")
-            // sb.AppendLine("	      CPB_PLUIDM as PLU,  ")
-            // If kodeDCIDM <> "" Then
-            //     sb.AppendLine("	      IDM_PLUIGR as PLUIGR,  ")
-            // Else
-            //     sb.AppendLine("	      PRC_PLUIGR as PLUIGR,  ")
-            // End If
-            // sb.AppendLine("	      'PRODMAST IGR DISCONTINUE Tag:NXQ' as KETA, ")
-            // sb.AppendLine("	      SUBSTR(PRD_DESKRIPSIPANJANG,1,60) as DESCR,  ")
-            // sb.AppendLine("	      CPB_QTY as QTYO,  ")
-            // sb.AppendLine("	      CPB_KodeToko as KCAB,  ")
-            // sb.AppendLine("	      '" & KDIGR & "' as KODEIGR,  ")
-            // sb.AppendLine("	      '" & IP & "' as REQ_ID, ")
-            // sb.AppendLine("        Min(PRD_PRDCD) AS PLUKECIL  ")
-            // If kodeDCIDM <> "" Then
-            //     sb.AppendLine("	 FROM CSV_PB_BUAH, TBMASTER_PRODMAST,tbMaster_Pluidm ")
-            // Else
-            //     sb.AppendLine("	 FROM CSV_PB_BUAH, TBMASTER_PRODMAST,tbMaster_Prodcrm ")
-            // End If
-            // sb.AppendLine(" WHERE CPB_IP = '" & IP & "'  ")
-            // sb.AppendLine("   AND CPB_NoPB = '" & noPB & "' ")
-            // sb.AppendLine("   AND CPB_TglPB = to_date('" & tglPB & "','DD-MM-YYYY') ")
-            // sb.AppendLine("   AND CPB_KodeToko = '" & KodeToko & "' ")
-            // sb.AppendLine("   AND NOT EXISTS  ")
-            // sb.AppendLine("   (  ")
-            // sb.AppendLine("   SELECT PLUIGR   ")
-            // sb.AppendLine("	    FROM TEMP_CETAKPB_TOLAKAN_IDM  ")
-            // sb.AppendLine("	   WHERE REQ_ID = '" & IP & "' ")
-            // sb.AppendLine("		 AND NODOK = '" & noPB & "'  ")
-            // sb.AppendLine("		 AND DATE_TRUNC('DAY', TGLDOK) = to_date('" & tglPB & "','DD-MM-YYYY')  ")
-            // sb.AppendLine("		 AND PLU = CPB_PLUIDM  ")
-            // sb.AppendLine("	     AND KCAB = '" & KodeToko & "' ")
-            // sb.AppendLine("   )     ")
-            // If kodeDCIDM <> "" Then
-            //     sb.AppendLine("   AND PRD_KODEIGR = IDM_KODEIGR  ")
-            //     sb.AppendLine("   AND CPB_PLUIDM = IDM_PLUIDM  ")
-            //     sb.AppendLine("   AND IDM_KODEIDM = '" & kodeDCIDM & "' ")
-            //     sb.AppendLine("   AND PRD_PRDCD like SubStr(IDM_PLUIGR,1,6)||'%'  ")
-            //     sb.AppendLine("   AND SubStr(PRD_PRDCD,-1,1) <> '0'    ")
-            //     sb.AppendLine(" GROUP BY CPB_NoPB,  ")
-            //     sb.AppendLine("	         CPB_TglPB,  ")
-            //     sb.AppendLine("	         CPB_PLUIDM,  ")
-            //     sb.AppendLine("	         IDM_PLUIGR,  ")
-            // Else
-            //     sb.AppendLine("   AND PRD_KODEIGR = PRC_KODEIGR  ")
-            //     sb.AppendLine("   AND CPB_PLUIDM = PRC_PLUIDM  ")
-            //     sb.AppendLine("   AND PRC_GROUP = 'I'  ")
-            //     sb.AppendLine("   AND PRD_PRDCD like SubStr(PRC_PLUIGR,1,6)||'%'  ")
-            //     sb.AppendLine("   AND SubStr(PRD_PRDCD,-1,1) <> '0'    ")
-            //     sb.AppendLine(" GROUP BY CPB_NoPB,  ")
-            //     sb.AppendLine("	         CPB_TglPB,  ")
-            //     sb.AppendLine("	         CPB_PLUIDM,  ")
-            //     sb.AppendLine("	         PRC_PLUIGR,  ")
-            // End If
-            // sb.AppendLine("	         SUBSTR(PRD_DESKRIPSIPANJANG,1,60),  ")
-            // sb.AppendLine("	         CPB_QTY,  ")
-            // sb.AppendLine("	         CPB_KodeToko ")
-            // sb.AppendLine(") X,tbMaster_Prodmast ")
-            // sb.AppendLine("WHERE PRD_PRDCD = PLUKECIL ")
-            // sb.AppendLine("  AND PRD_KodeTag IN ('N','X','Q') ")
+            $query = "";
+            $query .= "CREATE TABLE TEMP_CETAKPB_TOLAKAN_IDM2 ";
+            $query .= "AS ";
+            $query .= "SELECT KOMI, ";
+            $query .= "       TGL, ";
+            $query .= "       NODOK, ";
+            $query .= "       TGLDOK, ";
+            $query .= "       PLU, ";
+            $query .= "       PLUIGR, ";
+            $query .= "       KETA, ";
+            $query .= "       PRD_KODETAG AS TAG, ";
+            $query .= "       DESCR, ";
+            $query .= "       QTYO, ";
+            $query .= "       KCAB, ";
+            $query .= "       KODEIGR, ";
+            $query .= "       REQ_ID ";
+            $query .= "FROM ";
+            $query .= "( ";
+            $query .= "Select '' as KOMI,  ";
+            $query .= "       CURRENT_DATE as TGL,   ";
+            $query .= "	      CPB_NoPB as NODOK,  ";
+            $query .= "	      CPB_TglPB as TGLDOK,  ";
+            $query .= "	      CPB_PLUIDM as PLU,  ";
+            if($kodeDCIDM <> ""){
+                $query .= "	      IDM_PLUIGR as PLUIGR,  ";
+            }else{
+                $query .= "	      PRC_PLUIGR as PLUIGR,  ";
+            }
+            $query .= "	      'PRODMAST IGR DISCONTINUE Tag:NXQ' as KETA, ";
+            $query .= "	      SUBSTR(PRD_DESKRIPSIPANJANG,1,60) as DESCR,  ";
+            $query .= "	      CPB_QTY as QTYO,  ";
+            $query .= "	      CPB_KodeToko as KCAB,  ";
+            $query .= "	      '" . session('KODECABANG') . "' as KODEIGR,  ";
+            $query .= "	      '" . $ip . "' as REQ_ID, ";
+            $query .= "        Min(PRD_PRDCD) AS PLUKECIL  ";
+            if($kodeDCIDM <> ""){
+                $query .= "	 FROM CSV_PB_BUAH, TBMASTER_PRODMAST,tbMaster_Pluidm ";
+            }else{
+                $query .= "	 FROM CSV_PB_BUAH, TBMASTER_PRODMAST,tbMaster_Prodcrm ";
+            }
+            $query .= " WHERE CPB_IP = '" . $ip . "'  ";
+            $query .= "   AND CPB_NoPB = '" . $noPB . "' ";
+            $query .= "   AND CPB_TglPB = to_date('" . $tglPB. "','DD-MM-YYYY') ";
+            $query .= "   AND CPB_KodeToko = '" . $KodeToko . "' ";
+            $query .= "   AND NOT EXISTS  ";
+            $query .= "   (  ";
+            $query .= "   SELECT PLUIGR   ";
+            $query .= "	    FROM TEMP_CETAKPB_TOLAKAN_IDM  ";
+            $query .= "	   WHERE REQ_ID = '" . $ip . "' ";
+            $query .= "		 AND NODOK = '" . $noPB . "'  ";
+            $query .= "		 AND DATE_TRUNC('DAY', TGLDOK) = to_date('" . $tglPB. "','DD-MM-YYYY')  ";
+            $query .= "		 AND PLU = CPB_PLUIDM  ";
+            $query .= "	     AND KCAB = '" . $KodeToko . "' ";
+            $query .= "   )     ";
+            if($kodeDCIDM <> ""){
+                $query .= "   AND PRD_KODEIGR = IDM_KODEIGR  ";
+                $query .= "   AND CPB_PLUIDM = IDM_PLUIDM  ";
+                $query .= "   AND IDM_KODEIDM = '" . $kodeDCIDM . "' ";
+                $query .= "   AND PRD_PRDCD like SubStr(IDM_PLUIGR,1,6)||'%'  ";
+                $query .= "   AND SubStr(PRD_PRDCD,-1,1) <> '0'    ";
+                $query .= " GROUP BY CPB_NoPB,  ";
+                $query .= "	         CPB_TglPB,  ";
+                $query .= "	         CPB_PLUIDM,  ";
+                $query .= "	         IDM_PLUIGR,  ";
+            }else{
+                $query .= "   AND PRD_KODEIGR = PRC_KODEIGR  ";
+                $query .= "   AND CPB_PLUIDM = PRC_PLUIDM  ";
+                $query .= "   AND PRC_GROUP = 'I'  ";
+                $query .= "   AND PRD_PRDCD like SubStr(PRC_PLUIGR,1,6)||'%'  ";
+                $query .= "   AND SubStr(PRD_PRDCD,-1,1) <> '0'    ";
+                $query .= " GROUP BY CPB_NoPB,  ";
+                $query .= "	         CPB_TglPB,  ";
+                $query .= "	         CPB_PLUIDM,  ";
+                $query .= "	         PRC_PLUIGR,  ";
+            }
+            $query .= "	         SUBSTR(PRD_DESKRIPSIPANJANG,1,60),  ";
+            $query .= "	         CPB_QTY,  ";
+            $query .= "	         CPB_KodeToko ";
+            $query .= ") X,tbMaster_Prodmast ";
+            $query .= "WHERE PRD_PRDCD = PLUKECIL ";
+            $query .= "  AND PRD_KodeTag IN ('N','X','Q') ";
         }else{
             //! DELETE FROM TEMP_CETAKPB_TOLAKAN_IDM2
             // sb.AppendLine("DELETE FROM TEMP_CETAKPB_TOLAKAN_IDM2 ")
             // sb.AppendLine(" WHERE REQ_ID = '" & IP & "' ")
 
+            DB::table('temp_cetakpb_tolakan_idm2')
+                ->where('req_id', $ip)
+                ->delete();
+
             //! INSERT INTO TEMP_CETAKPB_TOLAKAN_IDM2 - 1-PRODMAST-NXQ
-            // sb.AppendLine("INSERT INTO TEMP_CETAKPB_TOLAKAN_IDM2 ")
-            // sb.AppendLine("SELECT KOMI, ")
-            // sb.AppendLine("       TGL, ")
-            // sb.AppendLine("       NODOK, ")
-            // sb.AppendLine("       TGLDOK, ")
-            // sb.AppendLine("       PLU, ")
-            // sb.AppendLine("       PLUIGR, ")
-            // sb.AppendLine("       KETA, ")
-            // sb.AppendLine("       PRD_KODETAG AS TAG, ")
-            // sb.AppendLine("       DESCR, ")
-            // sb.AppendLine("       QTYO, ")
-            // sb.AppendLine("       KCAB, ")
-            // sb.AppendLine("       KODEIGR, ")
-            // sb.AppendLine("       REQ_ID ")
-            // sb.AppendLine("FROM ")
-            // sb.AppendLine("( ")
-            // sb.AppendLine("Select '' as KOMI,  ")
-            // sb.AppendLine("       CURRENT_DATE as TGL,   ")
-            // sb.AppendLine("	      CPB_NoPB as NODOK,  ")
-            // sb.AppendLine("	      CPB_TglPB as TGLDOK,  ")
-            // sb.AppendLine("	      CPB_PLUIDM as PLU,  ")
-            // If kodeDCIDM <> "" Then
-            //     sb.AppendLine("	      IDM_PLUIGR as PLUIGR,  ")
-            // Else
-            //     sb.AppendLine("	      PRC_PLUIGR as PLUIGR,  ")
-            // End If
-            // sb.AppendLine("	      'PRODMAST IGR DISCONTINUE Tag:NXQ' as KETA, ")
-            // sb.AppendLine("	      SUBSTR(PRD_DESKRIPSIPANJANG,1,60) as DESCR,  ")
-            // sb.AppendLine("	      CPB_QTY as QTYO,  ")
-            // sb.AppendLine("	      CPB_KodeToko as KCAB,  ")
-            // sb.AppendLine("	      '" & KDIGR & "' as KODEIGR,  ")
-            // sb.AppendLine("	      '" & IP & "' as REQ_ID, ")
-            // sb.AppendLine("        Min(PRD_PRDCD) AS PLUKECIL  ")
-            // If kodeDCIDM <> "" Then
-            //     sb.AppendLine("	 FROM CSV_PB_BUAH, TBMASTER_PRODMAST,tbMaster_Pluidm  ")
-            // Else
-            //     sb.AppendLine("	 FROM CSV_PB_BUAH, TBMASTER_PRODMAST,tbMaster_Prodcrm  ")
-            // End If
-            // sb.AppendLine(" WHERE CPB_IP = '" & IP & "'  ")
-            // sb.AppendLine("   AND CPB_KodeToko = '" & KodeToko & "'  ")
-            // sb.AppendLine("   AND CPB_NoPB = '" & noPB & "' ")
-            // sb.AppendLine("   AND DATE_TRUNC('DAY', CPB_TglPB) = to_date('" & tglPB & "','DD-MM-YYYY')  ")
-            // sb.AppendLine("   AND CPB_KodeToko = '" & KodeToko & "' ")
-            // sb.AppendLine("   AND NOT EXISTS  ")
-            // sb.AppendLine("   (  ")
-            // sb.AppendLine("   SELECT PLUIGR   ")
-            // sb.AppendLine("	    FROM TEMP_CETAKPB_TOLAKAN_IDM  ")
-            // sb.AppendLine("	   WHERE REQ_ID = '" & IP & "' ")
-            // sb.AppendLine("		 AND NODOK = '" & noPB & "'  ")
-            // sb.AppendLine("		 AND DATE_TRUNC('DAY', TGLDOK) = to_date('" & tglPB & "','DD-MM-YYYY')  ")
-            // sb.AppendLine("		 AND PLU = CPB_PLUIDM  ")
-            // sb.AppendLine("	     AND KCAB = '" & KodeToko & "' ")
-            // sb.AppendLine("   )     ")
-            // sb.AppendLine("   AND NOT EXISTS  ")
-            // sb.AppendLine("   (  ")
-            // sb.AppendLine("   SELECT PLUIGR   ")
-            // sb.AppendLine("	    FROM TEMP_CETAKPB_TOLAKAN_IDM2  ")
-            // sb.AppendLine("	   WHERE REQ_ID = '" & IP & "' ")
-            // sb.AppendLine("		 AND NODOK = '" & noPB & "'  ")
-            // sb.AppendLine("		 AND DATE_TRUNC('DAY', TGLDOK) = to_date('" & tglPB & "','DD-MM-YYYY')  ")
-            // sb.AppendLine("		 AND PLU = CPB_PLUIDM  ")
-            // sb.AppendLine("	     AND KCAB = '" & KodeToko & "' ")
-            // sb.AppendLine("   )     ")
-            // If kodeDCIDM <> "" Then
-            //     sb.AppendLine("   AND PRD_KODEIGR = IDM_KODEIGR  ")
-            //     sb.AppendLine("   AND CPB_PLUIDM = IDM_PLUIDM  ")
-            //     sb.AppendLine("   AND IDM_KODEIDM = '" & kodeDCIDM & "' ")
-            //     sb.AppendLine("   AND PRD_PRDCD like SubStr(IDM_PLUIGR,1,6)||'%'  ")
-            //     sb.AppendLine("   AND SubStr(PRD_PRDCD,-1,1) <> '0'    ")
-            //     sb.AppendLine(" GROUP BY CPB_NoPB,  ")
-            //     sb.AppendLine("	        CPB_TglPB,  ")
-            //     sb.AppendLine("	        CPB_PLUIDM,  ")
-            //     sb.AppendLine("	        IDM_PLUIGR,  ")
-            // Else
-            //     sb.AppendLine("   AND PRD_KODEIGR = PRC_KODEIGR  ")
-            //     sb.AppendLine("   AND CPB_PLUIDM = PRC_PLUIDM  ")
-            //     sb.AppendLine("   AND PRC_GROUP = 'I'  ")
-            //     sb.AppendLine("   AND PRD_PRDCD like SubStr(PRC_PLUIGR,1,6)||'%'  ")
-            //     sb.AppendLine("   AND SubStr(PRD_PRDCD,-1,1) <> '0'    ")
-            //     sb.AppendLine(" GROUP BY CPB_NoPB,  ")
-            //     sb.AppendLine("	        CPB_TglPB,  ")
-            //     sb.AppendLine("	        CPB_PLUIDM,  ")
-            //     sb.AppendLine("	        PRC_PLUIGR,	 ")
-            // End If
-            // sb.AppendLine("	        SUBSTR(PRD_DESKRIPSIPANJANG,1,60),  ")
-            // sb.AppendLine("	        CPB_QTY,  ")
-            // sb.AppendLine("	        CPB_KodeToko ")
-            // sb.AppendLine(") X,tbMaster_Prodmast ")
-            // sb.AppendLine("WHERE PRD_PRDCD = PLUKECIL ")
-            // sb.AppendLine("  AND PRD_KodeTag IN ('N','X','Q') ")
+            $query = "";
+            $query .= "INSERT INTO TEMP_CETAKPB_TOLAKAN_IDM2 ";
+            $query .= "SELECT KOMI, ";
+            $query .= "       TGL, ";
+            $query .= "       NODOK, ";
+            $query .= "       TGLDOK, ";
+            $query .= "       PLU, ";
+            $query .= "       PLUIGR, ";
+            $query .= "       KETA, ";
+            $query .= "       PRD_KODETAG AS TAG, ";
+            $query .= "       DESCR, ";
+            $query .= "       QTYO, ";
+            $query .= "       KCAB, ";
+            $query .= "       KODEIGR, ";
+            $query .= "       REQ_ID ";
+            $query .= "FROM ";
+            $query .= "( ";
+            $query .= "Select '' as KOMI,  ";
+            $query .= "       CURRENT_DATE as TGL,   ";
+            $query .= "	      CPB_NoPB as NODOK,  ";
+            $query .= "	      CPB_TglPB as TGLDOK,  ";
+            $query .= "	      CPB_PLUIDM as PLU,  ";
+            if($kodeDCIDM <> ""){
+                $query .= "	      IDM_PLUIGR as PLUIGR,  ";
+            }else{
+                $query .= "	      PRC_PLUIGR as PLUIGR,  ";
+            }
+            $query .= "	      'PRODMAST IGR DISCONTINUE Tag:NXQ' as KETA, ";
+            $query .= "	      SUBSTR(PRD_DESKRIPSIPANJANG,1,60) as DESCR,  ";
+            $query .= "	      CPB_QTY as QTYO,  ";
+            $query .= "	      CPB_KodeToko as KCAB,  ";
+            $query .= "	      '" . session('KODECABANG') . "' as KODEIGR,  ";
+            $query .= "	      '" . $ip . "' as REQ_ID, ";
+            $query .= "        Min(PRD_PRDCD) AS PLUKECIL  ";
+            if($kodeDCIDM <> ""){
+                $query .= "	 FROM CSV_PB_BUAH, TBMASTER_PRODMAST,tbMaster_Pluidm  ";
+            }else{
+                $query .= "	 FROM CSV_PB_BUAH, TBMASTER_PRODMAST,tbMaster_Prodcrm  ";
+            }
+            $query .= " WHERE CPB_IP = '" . $ip . "'  ";
+            $query .= "   AND CPB_KodeToko = '" . $KodeToko . "'  ";
+            $query .= "   AND CPB_NoPB = '" . $noPB . "' ";
+            $query .= "   AND DATE_TRUNC('DAY', CPB_TglPB) = to_date('" . $tglPB. "','DD-MM-YYYY')  ";
+            $query .= "   AND CPB_KodeToko = '" . $KodeToko . "' ";
+            $query .= "   AND NOT EXISTS  ";
+            $query .= "   (  ";
+            $query .= "   SELECT PLUIGR   ";
+            $query .= "	    FROM TEMP_CETAKPB_TOLAKAN_IDM  ";
+            $query .= "	   WHERE REQ_ID = '" . $ip . "' ";
+            $query .= "		 AND NODOK = '" . $noPB . "'  ";
+            $query .= "		 AND DATE_TRUNC('DAY', TGLDOK) = to_date('" . $tglPB. "','DD-MM-YYYY')  ";
+            $query .= "		 AND PLU = CPB_PLUIDM  ";
+            $query .= "	     AND KCAB = '" . $KodeToko . "' ";
+            $query .= "   )     ";
+            $query .= "   AND NOT EXISTS  ";
+            $query .= "   (  ";
+            $query .= "   SELECT PLUIGR   ";
+            $query .= "	    FROM TEMP_CETAKPB_TOLAKAN_IDM2  ";
+            $query .= "	   WHERE REQ_ID = '" . $ip . "' ";
+            $query .= "		 AND NODOK = '" . $noPB . "'  ";
+            $query .= "		 AND DATE_TRUNC('DAY', TGLDOK) = to_date('" . $tglPB. "','DD-MM-YYYY')  ";
+            $query .= "		 AND PLU = CPB_PLUIDM  ";
+            $query .= "	     AND KCAB = '" . $KodeToko . "' ";
+            $query .= "   )     ";
+            if($kodeDCIDM <> ""){
+                $query .= "   AND PRD_KODEIGR = IDM_KODEIGR  ";
+                $query .= "   AND CPB_PLUIDM = IDM_PLUIDM  ";
+                $query .= "   AND IDM_KODEIDM = '" . $kodeDCIDM . "' ";
+                $query .= "   AND PRD_PRDCD like SubStr(IDM_PLUIGR,1,6)||'%'  ";
+                $query .= "   AND SubStr(PRD_PRDCD,-1,1) <> '0'    ";
+                $query .= " GROUP BY CPB_NoPB,  ";
+                $query .= "	        CPB_TglPB,  ";
+                $query .= "	        CPB_PLUIDM,  ";
+                $query .= "	        IDM_PLUIGR,  ";
+            }else{
+                $query .= "   AND PRD_KODEIGR = PRC_KODEIGR  ";
+                $query .= "   AND CPB_PLUIDM = PRC_PLUIDM  ";
+                $query .= "   AND PRC_GROUP = 'I'  ";
+                $query .= "   AND PRD_PRDCD like SubStr(PRC_PLUIGR,1,6)||'%'  ";
+                $query .= "   AND SubStr(PRD_PRDCD,-1,1) <> '0'    ";
+                $query .= " GROUP BY CPB_NoPB,  ";
+                $query .= "	        CPB_TglPB,  ";
+                $query .= "	        CPB_PLUIDM,  ";
+                $query .= "	        PRC_PLUIGR,	 ";
+            }
+            $query .= "	        SUBSTR(PRD_DESKRIPSIPANJANG,1,60),  ";
+            $query .= "	        CPB_QTY,  ";
+            $query .= "	        CPB_KodeToko ";
+            $query .= ") X,tbMaster_Prodmast ";
+            $query .= "WHERE PRD_PRDCD = PLUKECIL ";
+            $query .= "  AND PRD_KodeTag IN ('N','X','Q') ";
 
             //! INSERT INTO TEMP_CETAKPB_TOLAKAN_IDM2 - 1-FLAGAKTIVASI-X
-            // sb.AppendLine("INSERT INTO TEMP_CETAKPB_TOLAKAN_IDM2 ")
-            // sb.AppendLine("SELECT KOMI, ")
-            // sb.AppendLine("       TGL, ")
-            // sb.AppendLine("       NODOK, ")
-            // sb.AppendLine("       TGLDOK, ")
-            // sb.AppendLine("       PLU, ")
-            // sb.AppendLine("       PLUIGR, ")
-            // sb.AppendLine("       KETA, ")
-            // sb.AppendLine("       PRD_KODETAG AS TAG, ")
-            // sb.AppendLine("       DESCR, ")
-            // sb.AppendLine("       QTYO, ")
-            // sb.AppendLine("       KCAB, ")
-            // sb.AppendLine("       KODEIGR, ")
-            // sb.AppendLine("       REQ_ID ")
-            // sb.AppendLine("FROM ")
-            // sb.AppendLine("( ")
-            // sb.AppendLine("Select '' as KOMI,  ")
-            // sb.AppendLine("       CURRENT_DATE as TGL,   ")
-            // sb.AppendLine("	      CPB_NoPB as NODOK,  ")
-            // sb.AppendLine("	      CPB_TglPB as TGLDOK,  ")
-            // sb.AppendLine("	      CPB_PLUIDM as PLU,  ")
-            // If kodeDCIDM <> "" Then
-            //     sb.AppendLine("	      IDM_PLUIGR as PLUIGR,  ")
-            // Else
-            //     sb.AppendLine("	      PRC_PLUIGR as PLUIGR,  ")
-            // End If
-            // sb.AppendLine("	      'PRODMAST IGR FLAG AKTIVASI:X' as KETA, ")
-            // sb.AppendLine("	      SUBSTR(PRD_DESKRIPSIPANJANG,1,60) as DESCR,  ")
-            // sb.AppendLine("	      CPB_QTY as QTYO,  ")
-            // sb.AppendLine("	      CPB_KodeToko as KCAB,  ")
-            // sb.AppendLine("	      '" & KDIGR & "' as KODEIGR,  ")
-            // sb.AppendLine("	      '" & IP & "' as REQ_ID, ")
-            // sb.AppendLine("        Min(PRD_PRDCD) AS PLUKECIL  ")
-            // If kodeDCIDM <> "" Then
-            //     sb.AppendLine("	 FROM CSV_PB_BUAH, TBMASTER_PRODMAST,tbMaster_Pluidm  ")
-            // Else
-            //     sb.AppendLine("	 FROM CSV_PB_BUAH, TBMASTER_PRODMAST,tbMaster_Prodcrm  ")
-            // End If
-            // sb.AppendLine(" WHERE CPB_IP = '" & IP & "'  ")
-            // sb.AppendLine("   AND CPB_KodeToko = '" & KodeToko & "'  ")
-            // sb.AppendLine("   AND CPB_NoPB = '" & noPB & "' ")
-            // sb.AppendLine("   AND DATE_TRUNC('DAY', CPB_TglPB) = to_date('" & tglPB & "','DD-MM-YYYY')  ")
-            // sb.AppendLine("   AND CPB_KodeToko = '" & KodeToko & "' ")
-            // sb.AppendLine("   AND NOT EXISTS  ")
-            // sb.AppendLine("   (  ")
-            // sb.AppendLine("   SELECT PLUIGR   ")
-            // sb.AppendLine("	    FROM TEMP_CETAKPB_TOLAKAN_IDM  ")
-            // sb.AppendLine("	   WHERE REQ_ID = '" & IP & "' ")
-            // sb.AppendLine("		 AND NODOK = '" & noPB & "'  ")
-            // sb.AppendLine("		 AND DATE_TRUNC('DAY', TGLDOK) = to_date('" & tglPB & "','DD-MM-YYYY')  ")
-            // sb.AppendLine("		 AND PLU = CPB_PLUIDM  ")
-            // sb.AppendLine("	     AND KCAB = '" & KodeToko & "' ")
-            // sb.AppendLine("   )     ")
-            // sb.AppendLine("   AND NOT EXISTS  ")
-            // sb.AppendLine("   (  ")
-            // sb.AppendLine("   SELECT PLUIGR   ")
-            // sb.AppendLine("	    FROM TEMP_CETAKPB_TOLAKAN_IDM2  ")
-            // sb.AppendLine("	   WHERE REQ_ID = '" & IP & "' ")
-            // sb.AppendLine("		 AND NODOK = '" & noPB & "'  ")
-            // sb.AppendLine("		 AND DATE_TRUNC('DAY', TGLDOK) = to_date('" & tglPB & "','DD-MM-YYYY')  ")
-            // sb.AppendLine("		 AND PLU = CPB_PLUIDM  ")
-            // sb.AppendLine("	     AND KCAB = '" & KodeToko & "' ")
-            // sb.AppendLine("   )     ")
-            // If kodeDCIDM <> "" Then
-            //     sb.AppendLine("   AND PRD_KODEIGR = IDM_KODEIGR  ")
-            //     sb.AppendLine("   AND CPB_PLUIDM = IDM_PLUIDM  ")
-            //     sb.AppendLine("   AND IDM_KODEIDM = '" & kodeDCIDM & "' ")
-            //     sb.AppendLine("   AND PRD_PRDCD like SubStr(IDM_PLUIGR,1,6)||'%'  ")
-            //     sb.AppendLine("   AND SubStr(PRD_PRDCD,-1,1) <> '0'    ")
-            //     sb.AppendLine(" GROUP BY CPB_NoPB,  ")
-            //     sb.AppendLine("	        CPB_TglPB,  ")
-            //     sb.AppendLine("	        CPB_PLUIDM,  ")
-            //     sb.AppendLine("	        IDM_PLUIGR,  ")
-            // Else
-            //     sb.AppendLine("   AND PRD_KODEIGR = PRC_KODEIGR  ")
-            //     sb.AppendLine("   AND CPB_PLUIDM = PRC_PLUIDM  ")
-            //     sb.AppendLine("   AND PRC_GROUP = 'I'  ")
-            //     sb.AppendLine("   AND PRD_PRDCD like SubStr(PRC_PLUIGR,1,6)||'%'  ")
-            //     sb.AppendLine("   AND SubStr(PRD_PRDCD,-1,1) <> '0'    ")
-            //     sb.AppendLine(" GROUP BY CPB_NoPB,  ")
-            //     sb.AppendLine("	        CPB_TglPB,  ")
-            //     sb.AppendLine("	        CPB_PLUIDM,  ")
-            //     sb.AppendLine("	        PRC_PLUIGR,	 ")
-            // End If
-            // sb.AppendLine("	        SUBSTR(PRD_DESKRIPSIPANJANG,1,60),  ")
-            // sb.AppendLine("	        CPB_QTY,  ")
-            // sb.AppendLine("	        CPB_KodeToko ")
-            // sb.AppendLine(") X,tbMaster_Prodmast ")
-            // sb.AppendLine(", TBMASTER_FLAGAKT ")
-            // sb.AppendLine("WHERE PRD_PRDCD = PLUKECIL ")
-            // sb.AppendLine("  AND prd_flag_aktivasi IN ('X') ")
-            // sb.AppendLine("  AND prd_flag_aktivasi = AKT_KODEFLAG ")
+            $query = "";
+            $query .= "INSERT INTO TEMP_CETAKPB_TOLAKAN_IDM2 ";
+            $query .= "SELECT KOMI, ";
+            $query .= "       TGL, ";
+            $query .= "       NODOK, ";
+            $query .= "       TGLDOK, ";
+            $query .= "       PLU, ";
+            $query .= "       PLUIGR, ";
+            $query .= "       KETA, ";
+            $query .= "       PRD_KODETAG AS TAG, ";
+            $query .= "       DESCR, ";
+            $query .= "       QTYO, ";
+            $query .= "       KCAB, ";
+            $query .= "       KODEIGR, ";
+            $query .= "       REQ_ID ";
+            $query .= "FROM ";
+            $query .= "( ";
+            $query .= "Select '' as KOMI,  ";
+            $query .= "       CURRENT_DATE as TGL,   ";
+            $query .= "	      CPB_NoPB as NODOK,  ";
+            $query .= "	      CPB_TglPB as TGLDOK,  ";
+            $query .= "	      CPB_PLUIDM as PLU,  ";
+            if($kodeDCIDM <> ""){
+                $query .= "	      IDM_PLUIGR as PLUIGR,  ";
+            }else{
+                $query .= "	      PRC_PLUIGR as PLUIGR,  ";
+            }
+            $query .= "	      'PRODMAST IGR FLAG AKTIVASI:X' as KETA, ";
+            $query .= "	      SUBSTR(PRD_DESKRIPSIPANJANG,1,60) as DESCR,  ";
+            $query .= "	      CPB_QTY as QTYO,  ";
+            $query .= "	      CPB_KodeToko as KCAB,  ";
+            $query .= "	      '" . session('KODECABANG') . "' as KODEIGR,  ";
+            $query .= "	      '" . $ip . "' as REQ_ID, ";
+            $query .= "        Min(PRD_PRDCD) AS PLUKECIL  ";
+            if($kodeDCIDM <> ""){
+                $query .= "	 FROM CSV_PB_BUAH, TBMASTER_PRODMAST,tbMaster_Pluidm  ";
+            }else{
+                $query .= "	 FROM CSV_PB_BUAH, TBMASTER_PRODMAST,tbMaster_Prodcrm  ";
+            }
+            $query .= " WHERE CPB_IP = '" . $ip . "'  ";
+            $query .= "   AND CPB_KodeToko = '" . $KodeToko . "'  ";
+            $query .= "   AND CPB_NoPB = '" . $noPB . "' ";
+            $query .= "   AND DATE_TRUNC('DAY', CPB_TglPB) = to_date('" . $tglPB. "','DD-MM-YYYY')  ";
+            $query .= "   AND CPB_KodeToko = '" . $KodeToko . "' ";
+            $query .= "   AND NOT EXISTS  ";
+            $query .= "   (  ";
+            $query .= "   SELECT PLUIGR   ";
+            $query .= "	    FROM TEMP_CETAKPB_TOLAKAN_IDM  ";
+            $query .= "	   WHERE REQ_ID = '" . $ip . "' ";
+            $query .= "		 AND NODOK = '" . $noPB . "'  ";
+            $query .= "		 AND DATE_TRUNC('DAY', TGLDOK) = to_date('" . $tglPB. "','DD-MM-YYYY')  ";
+            $query .= "		 AND PLU = CPB_PLUIDM  ";
+            $query .= "	     AND KCAB = '" . $KodeToko . "' ";
+            $query .= "   )     ";
+            $query .= "   AND NOT EXISTS  ";
+            $query .= "   (  ";
+            $query .= "   SELECT PLUIGR   ";
+            $query .= "	    FROM TEMP_CETAKPB_TOLAKAN_IDM2  ";
+            $query .= "	   WHERE REQ_ID = '" . $ip . "' ";
+            $query .= "		 AND NODOK = '" . $noPB . "'  ";
+            $query .= "		 AND DATE_TRUNC('DAY', TGLDOK) = to_date('" . $tglPB. "','DD-MM-YYYY')  ";
+            $query .= "		 AND PLU = CPB_PLUIDM  ";
+            $query .= "	     AND KCAB = '" . $KodeToko . "' ";
+            $query .= "   )     ";
+            if($kodeDCIDM <> ""){
+                $query .= "   AND PRD_KODEIGR = IDM_KODEIGR  ";
+                $query .= "   AND CPB_PLUIDM = IDM_PLUIDM  ";
+                $query .= "   AND IDM_KODEIDM = '" . $kodeDCIDM . "' ";
+                $query .= "   AND PRD_PRDCD like SubStr(IDM_PLUIGR,1,6)||'%'  ";
+                $query .= "   AND SubStr(PRD_PRDCD,-1,1) <> '0'    ";
+                $query .= " GROUP BY CPB_NoPB,  ";
+                $query .= "	        CPB_TglPB,  ";
+                $query .= "	        CPB_PLUIDM,  ";
+                $query .= "	        IDM_PLUIGR,  ";
+            }else{
+                $query .= "   AND PRD_KODEIGR = PRC_KODEIGR  ";
+                $query .= "   AND CPB_PLUIDM = PRC_PLUIDM  ";
+                $query .= "   AND PRC_GROUP = 'I'  ";
+                $query .= "   AND PRD_PRDCD like SubStr(PRC_PLUIGR,1,6)||'%'  ";
+                $query .= "   AND SubStr(PRD_PRDCD,-1,1) <> '0'    ";
+                $query .= " GROUP BY CPB_NoPB,  ";
+                $query .= "	        CPB_TglPB,  ";
+                $query .= "	        CPB_PLUIDM,  ";
+                $query .= "	        PRC_PLUIGR,	 ";
+            }
+            $query .= "	        SUBSTR(PRD_DESKRIPSIPANJANG,1,60),  ";
+            $query .= "	        CPB_QTY,  ";
+            $query .= "	        CPB_KodeToko ";
+            $query .= ") X,tbMaster_Prodmast ";
+            $query .= ", TBMASTER_FLAGAKT ";
+            $query .= "WHERE PRD_PRDCD = PLUKECIL ";
+            $query .= "  AND prd_flag_aktivasi IN ('X') ";
+            $query .= "  AND prd_flag_aktivasi = AKT_KODEFLAG ";
         }
 
         //! MERGE INTO TEMP_CETAKPB_TOLAKAN_IDM2 - KOMI
-        // sb.AppendLine("MERGE INTO ")
-        // sb.AppendLine("    TEMP_CETAKPB_TOLAKAN_IDM2 a ")
-        // sb.AppendLine("USING  ")
-        // sb.AppendLine("( ")
-        // sb.AppendLine("  SELECT *  ")
-        // sb.AppendLine("    FROM TBMASTER_TOKOIGR ")
-        // sb.AppendLine("   WHERE COALESCE(TKO_TGLTUTUP,CURRENT_DATE+1) > CURRENT_DATE ")
-        // sb.AppendLine(") b ")
-        // sb.AppendLine("ON ")
-        // sb.AppendLine("( ")
-        // sb.AppendLine("  a.KCAB = b.TKO_KODEOMI ")
-        // sb.AppendLine("  and REQ_ID = '" & IP & "' ")
-        // sb.AppendLine("    AND NODOK = '" & noPB & "' ")
-        // sb.AppendLine("    AND DATE_TRUNC('DAY', TGLDOK) = to_date('" & tglPB & "','DD-MM-YYYY')  ")
-        // sb.AppendLine("	     AND KCAB = '" & KodeToko & "' ")
-        // sb.AppendLine(") ")
-        // sb.AppendLine("WHEN MATCHED THEN  ")
-        // sb.AppendLine("  UPDATE SET KOMI = b.TKO_KodeCustomer ")
+        DB::insert("
+            MERGE INTO
+                TEMP_CETAKPB_TOLAKAN_IDM2 a
+            USING
+            (
+            SELECT *
+                FROM TBMASTER_TOKOIGR
+            WHERE COALESCE(TKO_TGLTUTUP,CURRENT_DATE+1) > CURRENT_DATE
+            ) b
+            ON
+            (
+            a.KCAB = b.TKO_KODEOMI
+            and REQ_ID = '" . $ip . "'
+                AND NODOK = '" . $noPB . "'
+                AND DATE_TRUNC('DAY', TGLDOK) = to_date('" . $tglPB. "','DD-MM-YYYY')
+                    AND KCAB = '" . $KodeToko . "'
+            )
+            WHEN MATCHED THEN
+            UPDATE SET KOMI = b.TKO_KodeCustomer
+        ");
 
         //! INSERT Into TEMP_CETAKPB_TOLAKAN_IDM
-        // sb.AppendLine("INSERT Into TEMP_CETAKPB_TOLAKAN_IDM ")
-        // sb.AppendLine("( ")
-        // sb.AppendLine("   KOMI, ")
-        // sb.AppendLine("   TGL, ")
-        // sb.AppendLine("   NODOK, ")
-        // sb.AppendLine("   TGLDOK, ")
-        // sb.AppendLine("   PLU, ")
-        // sb.AppendLine("   PLUIGR, ")
-        // sb.AppendLine("   KETA, ")
-        // sb.AppendLine("   TAG, ")
-        // sb.AppendLine("   DESCR, ")
-        // sb.AppendLine("   QTYO, ")
-        // sb.AppendLine("   GROSS, ")
-        // sb.AppendLine("   KCAB, ")
-        // sb.AppendLine("   KODEIGR, ")
-        // sb.AppendLine("   REQ_ID ")
-        // sb.AppendLine(") ")
-        // sb.AppendLine("Select KOMI, ")
-        // sb.AppendLine("       TGL, ")
-        // sb.AppendLine("       NODOK, ")
-        // sb.AppendLine("       TGLDOK, ")
-        // sb.AppendLine("       PLU, ")
-        // sb.AppendLine("       PLUIGR, ")
-        // sb.AppendLine("       KETA, ")
-        // sb.AppendLine("       TAG, ")
-        // sb.AppendLine("       DESCR, ")
-        // sb.AppendLine("       QTYO, ")
-        // sb.AppendLine("       ST_AVGCOST * QTYO as GROSS, ")
-        // sb.AppendLine("       KCAB, ")
-        // sb.AppendLine("       KODEIGR, ")
-        // sb.AppendLine("       REQ_ID ")
-        // sb.AppendLine("  FROM TEMP_CETAKPB_TOLAKAN_IDM2 IDM2,tbMaster_Stock ")
-        // sb.AppendLine(" Where ST_PRDCD Like SUBSTR(PLUIGR,1,6)||'%' ")
-        // sb.AppendLine("   And ST_Lokasi = '01' ")
-        // sb.AppendLine("   And COALESCE(ST_RecordID,'0') <> '1' ")
-        // sb.AppendLine("   And REQ_ID = '" & IP & "' ")
-        // sb.AppendLine("   AND KCAB = '" & KodeToko & "' ")
-        // sb.AppendLine("   AND NODOK = '" & noPB & "' ")
-        // sb.AppendLine("   AND DATE_TRUNC('DAY', TGLDOK) = to_date('" & tglPB & "','DD-MM-YYYY') ")
-        // sb.AppendLine("	     AND KCAB = '" & KodeToko & "' ")
-        // sb.AppendLine("   AND NOT EXISTS ")
-        // sb.AppendLine("   ( ")
-        // sb.AppendLine("   SELECT PLUIGR  ")
-        // sb.AppendLine("	    FROM TEMP_CETAKPB_TOLAKAN_IDM IDM ")
-        // sb.AppendLine("	   WHERE REQ_ID = '" & IP & "'		  ")
-        // sb.AppendLine("		 AND NODOK = '" & noPB & "' ")
-        // sb.AppendLine("		 AND DATE_TRUNC('DAY', TGLDOK) = to_date('" & tglPB & "','DD-MM-YYYY') ")
-        // sb.AppendLine("		 AND IDM.PLU = IDM2.PLU ")
-        // sb.AppendLine("	     AND KCAB = '" & KodeToko & "' ")
-        // sb.AppendLine("   )    ")
+        DB::insert("
+            INSERT Into TEMP_CETAKPB_TOLAKAN_IDM
+            (
+                KOMI,
+                TGL,
+                NODOK,
+                TGLDOK,
+                PLU,
+                PLUIGR,
+                KETA,
+                TAG,
+                DESCR,
+                QTYO,
+                GROSS,
+                KCAB,
+                KODEIGR,
+                REQ_ID
+            )
+            Select KOMI,
+                TGL,
+                NODOK,
+                TGLDOK,
+                PLU,
+                PLUIGR,
+                KETA,
+                TAG,
+                DESCR,
+                QTYO,
+                ST_AVGCOST * QTYO as GROSS,
+                KCAB,
+                KODEIGR,
+                REQ_ID
+            FROM TEMP_CETAKPB_TOLAKAN_IDM2 IDM2,tbMaster_Stock
+            Where ST_PRDCD Like SUBSTR(PLUIGR,1,6)||'%'
+            And ST_Lokasi = '01'
+            And COALESCE(ST_RecordID,'0') <> '1'
+            And REQ_ID = '" . $ip . "'
+            AND KCAB = '" . $KodeToko . "'
+            AND NODOK = '" . $noPB . "'
+            AND DATE_TRUNC('DAY', TGLDOK) = to_date('" . $tglPB. "','DD-MM-YYYY')
+                    AND KCAB = '" . $KodeToko . "'
+            AND NOT EXISTS
+            (
+            SELECT PLUIGR
+                    FROM TEMP_CETAKPB_TOLAKAN_IDM IDM
+                WHERE REQ_ID = '" . $ip . "'
+                    AND NODOK = '" . $noPB . "'
+                    AND DATE_TRUNC('DAY', TGLDOK) = to_date('" . $tglPB. "','DD-MM-YYYY')
+                    AND IDM.PLU = IDM2.PLU
+                    AND KCAB = '" . $KodeToko . "'
+            )
+        ");
 
         //! DELETE FROM TEMP_PBIDM_READY2
         // sb.AppendLine("DELETE FROM TEMP_PBIDM_READY2 ")
         // sb.AppendLine(" WHERE REQ_ID = '" & IP & "' ")
 
+        DB::table('temp_pbidm_ready2')
+            ->where('req_id', $ip)
+            ->delete();
+
         //! INSERT INTO TEMP_PBIDM_READY2
-        // sb.AppendLine("INSERT INTO TEMP_PBIDM_READY2 ( ")
-        // sb.AppendLine("  FDRCID, ")
-        // sb.AppendLine("  FDNOUO, ")
-        // sb.AppendLine("  FDKODE, ")
-        // sb.AppendLine("  FDQTYB, ")
-        // sb.AppendLine("  FDKCAB, ")
-        // sb.AppendLine("  FDTGPB, ")
-        // sb.AppendLine("  FDKSUP, ")
-        // sb.AppendLine("  REQ_ID, ")
-        // sb.AppendLine("  NAMA_FILE, ")
-        // sb.AppendLine("  PRC_PLUIGR ")
-        // sb.AppendLine(")")
-        // sb.AppendLine("Select '', ")
-        // sb.AppendLine("	      CPB_NoPB, ")
-        // sb.AppendLine("	      CPB_PLUIDM, ")
-        // sb.AppendLine("	      CPB_QTY, ")
-        // sb.AppendLine("	      CPB_KodeToko, ")
-        // sb.AppendLine("	      CPB_TglPB, ")
-        // sb.AppendLine("	      '', ")
-        // sb.AppendLine("	      CPB_IP, ")
-        // sb.AppendLine("	      CPB_FILENAME, ")
-        // If kodeDCIDM <> "" Then
-        //     sb.AppendLine("	      IDM_PLUIGR ")
-        //     sb.AppendLine("  From CSV_PB_BUAH A, tbMaster_pluidm ")
-        // Else
-        //     sb.AppendLine("	      PRC_PLUIGR ")
-        //     sb.AppendLine("  From CSV_PB_BUAH A, tbMaster_prodcrm ")
-        // End If
-        // sb.AppendLine(" Where CPB_IP = '" & IP & "'   ")
-        // sb.AppendLine("   AND CPB_NoPB = '" & noPB & "'   ")
-        // sb.AppendLine("   AND DATE_TRUNC('DAY', CPB_TglPB) = to_date('" & tglPB & "','DD-MM-YYYY') ")
-        // sb.AppendLine("   AND CPB_KodeToko = '" & KodeToko & "' ")
-        // sb.AppendLine("   AND NOT EXISTS   ")
-        // sb.AppendLine("           (   ")
-        // sb.AppendLine("              SELECT PLUIGR    ")
-        // sb.AppendLine("                FROM TEMP_CETAKPB_TOLAKAN_IDM   ")
-        // sb.AppendLine("               WHERE REQ_ID = '" & IP & "' ")
-        // sb.AppendLine("                 AND NODOK = '" & noPB & "'   ")
-        // sb.AppendLine("                 AND DATE_TRUNC('DAY', TGLDOK) = to_date('" & tglPB & "','DD-MM-YYYY')  ")
-        // sb.AppendLine("                 AND PLU = CPB_PLUIDM  ")
-        // sb.AppendLine("	                AND KCAB = '" & KodeToko & "' ")
-        // sb.AppendLine("           )  ")
-        // If kodeDCIDM <> "" Then
-        //     sb.AppendLine("    AND IDM_KODEIDM = '" & kodeDCIDM & "' ")
-        //     sb.AppendLine("    AND IDM_pluidm = CPB_PLUIDM ")
-        // Else
-        //     sb.AppendLine("    AND PRC_GROUP = 'I'  ")
-        //     sb.AppendLine("    AND PRC_pluidm = CPB_PLUIDM ")
-        // End If
-        // sb.AppendLine("    AND (CPB_Flag IS NULL OR CPB_Flag = '') ")
+        $query = "";
+        $query .= "INSERT INTO TEMP_PBIDM_READY2 ( ";
+        $query .= "  FDRCID, ";
+        $query .= "  FDNOUO, ";
+        $query .= "  FDKODE, ";
+        $query .= "  FDQTYB, ";
+        $query .= "  FDKCAB, ";
+        $query .= "  FDTGPB, ";
+        $query .= "  FDKSUP, ";
+        $query .= "  REQ_ID, ";
+        $query .= "  NAMA_FILE, ";
+        $query .= "  PRC_PLUIGR ";
+        $query .= ")";
+        $query .= "Select '', ";
+        $query .= "	      CPB_NoPB, ";
+        $query .= "	      CPB_PLUIDM, ";
+        $query .= "	      CPB_QTY, ";
+        $query .= "	      CPB_KodeToko, ";
+        $query .= "	      CPB_TglPB, ";
+        $query .= "	      '', ";
+        $query .= "	      CPB_IP, ";
+        $query .= "	      CPB_FILENAME, ";
+        if($kodeDCIDM <> ""){
+            $query .= "	      IDM_PLUIGR ";
+            $query .= "  From CSV_PB_BUAH A, tbMaster_pluidm ";
+        }else{
+            $query .= "	      PRC_PLUIGR ";
+            $query .= "  From CSV_PB_BUAH A, tbMaster_prodcrm ";
+        }
+        $query .= " Where CPB_IP = '" . $ip . "'   ";
+        $query .= "   AND CPB_NoPB = '" . $noPB . "'   ";
+        $query .= "   AND DATE_TRUNC('DAY', CPB_TglPB) = to_date('" . $tglPB. "','DD-MM-YYYY') ";
+        $query .= "   AND CPB_KodeToko = '" . $KodeToko . "' ";
+        $query .= "   AND NOT EXISTS   ";
+        $query .= "           (   ";
+        $query .= "              SELECT PLUIGR    ";
+        $query .= "                FROM TEMP_CETAKPB_TOLAKAN_IDM   ";
+        $query .= "               WHERE REQ_ID = '" . $ip . "' ";
+        $query .= "                 AND NODOK = '" . $noPB . "'   ";
+        $query .= "                 AND DATE_TRUNC('DAY', TGLDOK) = to_date('" . $tglPB. "','DD-MM-YYYY')  ";
+        $query .= "                 AND PLU = CPB_PLUIDM  ";
+        $query .= "	                AND KCAB = '" . $KodeToko . "' ";
+        $query .= "           )  ";
+        if($kodeDCIDM <> ""){
+            $query .= "    AND IDM_KODEIDM = '" . $kodeDCIDM . "' ";
+            $query .= "    AND IDM_pluidm = CPB_PLUIDM ";
+        }else{
+            $query .= "    AND PRC_GROUP = 'I'  ";
+            $query .= "    AND PRC_pluidm = CPB_PLUIDM ";
+        }
+        $query .= "    AND (CPB_Flag IS NULL OR CPB_Flag = '') ";
 
         //! CEK TABLE
         // sb.AppendLine("Select COALESCE(COUNT(1),0)  ")
         // sb.AppendLine("  FROM information_schema.columns ")
         // sb.AppendLine(" Where UPPER(table_name) = 'TEMP_PBIDM_READY' ")
 
-        if($jum = 0){
+        $count = DB::table('information_schema.columns')
+            ->whereRaw("upper(table_name) = 'TEMP_PBIDM_READY'")
+            ->count();
+
+        if($count == 0){
             //! CREATE TABLE TEMP_PBIDM_READY
-            // sb.AppendLine("CREATE TABLE TEMP_PBIDM_READY ")
-            // sb.AppendLine("AS     ")
-            // sb.AppendLine("Select E.*,ST_AvgCost as AVGCOST, 0 QTY_EKONOMIS ")
-            // sb.AppendLine("  From  ")
-            // sb.AppendLine("(     ")
-            // sb.AppendLine("    Select D.*,   ")
-            // sb.AppendLine("           0 as QTYB,  ")
-            // sb.AppendLine("           FDQTYB as QTYK,  ")
-            // sb.AppendLine("           CASE WHEN     ")
-            // sb.AppendLine("             CASE WHEN FracKarton = 1 THEN FDQTYB ELSE DATE_TRUNC('DAY', FDQTYB / FracKecil) END < PRD_MinJual  ")
-            // sb.AppendLine("           THEN 'T'  ")
-            // sb.AppendLine("           ELSE '' END AS TolakMinJ ")
-            // sb.AppendLine("      From  ")
-            // sb.AppendLine("    ( ")
-            // sb.AppendLine("    Select C.*,PRD_Unit as UnitKecil,PRD_Frac as FracKecil,PRD_MinJual ")
-            // sb.AppendLine("      From ")
-            // sb.AppendLine("    (         ")
-            // sb.AppendLine("        Select B.*, CASE WHEN min(prd_prdcd) IS NULL THEN PluKarton ELSE min(prd_prdcd) END as PLUKecil  ")
-            // sb.AppendLine("          From  ")
-            // sb.AppendLine("        (   ")
-            // sb.AppendLine("        Select A.FDRCID, ")
-            // sb.AppendLine("               A.FDNOUO, ")
-            // sb.AppendLine("               A.FDKODE, ")
-            // sb.AppendLine("               MAX(A.FDQTYB) as FDQTYB, ")
-            // sb.AppendLine("               A.FDKCAB, ")
-            // sb.AppendLine("               A.FDTGPB, ")
-            // sb.AppendLine("               A.FDKSUP, ")
-            // sb.AppendLine("               A.REQ_ID, ")
-            // sb.AppendLine("               A.NAMA_FILE, ")
-            // sb.AppendLine("               prd_deskripsipanjang as DESK, ")
-            // sb.AppendLine("               prd_flagbkp1 as BKP, ")
-            // sb.AppendLine("               prd_prdcd as PluKarton, ")
-            // sb.AppendLine("               prd_unit as UnitKarton, ")
-            // sb.AppendLine("               prd_frac as FracKarton ")
-            // sb.AppendLine("          From temp_pbidm_ready2 A, tbmaster_prodmast  ")
-            // sb.AppendLine("         Where REQ_ID = '" & IP & "'   ")
-            // sb.AppendLine("           AND FDNOUO = '" & noPB & "'   ")
-            // sb.AppendLine("           AND DATE_TRUNC('DAY', FDTGPB) = to_date('" & tglPB & "','DD-MM-YYYY')   ")
-            // sb.AppendLine("           AND prd_prdcd = prc_pluigr  ")
-            // sb.AppendLine("         GROUP By A.FDRCID,  ")
-            // sb.AppendLine("		          A.FDNOUO,  ")
-            // sb.AppendLine("				  A.FDKODE,  ")
-            // sb.AppendLine("				  A.FDTGPB,  ")
-            // sb.AppendLine("				  A.FDKCAB,  ")
-            // sb.AppendLine("				  A.FDKSUP,  ")
-            // sb.AppendLine("				  A.REQ_ID, ")
-            // sb.AppendLine("				  A.NAMA_FILE,  ")
-            // sb.AppendLine("				  prd_deskripsipanjang,  ")
-            // sb.AppendLine("				  prd_flagbkp1,  ")
-            // sb.AppendLine("				  prd_prdcd, ")
-            // sb.AppendLine("				  prd_unit, ")
-            // sb.AppendLine("				  prd_frac ")
-            // sb.AppendLine("        ) B, tbMaster_Prodmast  ")
-            // sb.AppendLine("         Where PRD_PRDCD(+) <> SUBSTR(PLUKarton,1,6)||'0'  ")
-            // sb.AppendLine("           And PRD_PRDCD(+) Like SUBSTR(PLUKarton,1,6)||'%'  ")
-            // sb.AppendLine("           AND COALESCE(prd_KodeTag,'A') NOT IN ('N','X','Q') ")
-            // sb.AppendLine("         Group By fdrcid,  ")
-            // sb.AppendLine("               FDNOUO, ")
-            // sb.AppendLine("               FDKODE, ")
-            // sb.AppendLine("               FDQTYB, ")
-            // sb.AppendLine("               FDKCAB, ")
-            // sb.AppendLine("               FDTGPB, ")
-            // sb.AppendLine("               fdksup, ")
-            // sb.AppendLine("               REQ_ID, ")
-            // sb.AppendLine("               nama_file, ")
-            // sb.AppendLine("               Desk, ")
-            // sb.AppendLine("               PluKarton,  ")
-            // sb.AppendLine("               UnitKarton,  ")
-            // sb.AppendLine("               FracKarton,  ")
-            // sb.AppendLine("               BKP  ")
-            // sb.AppendLine("    ) C, tbMaster_prodmast  ")
-            // sb.AppendLine("    Where PRD_PRDCD = PluKecil ")
-            // sb.AppendLine("    )D         ")
-            // sb.AppendLine(") E, tbMaster_Stock  ")
-            // sb.AppendLine("Where ST_PRDCD = PLUKARTON  ")
-            // sb.AppendLine("  And ST_Lokasi = '01'  ")
-            // sb.AppendLine("  And COALESCE(ST_RecordID,'0') <> '1' ")
+            DB::insert("
+                CREATE TABLE TEMP_PBIDM_READY
+                AS
+                Select E.*,ST_AvgCost as AVGCOST, 0 QTY_EKONOMIS
+                From
+                (
+                    Select D.*,
+                        0 as QTYB,
+                        FDQTYB as QTYK,
+                        CASE WHEN
+                            CASE WHEN FracKarton = 1 THEN FDQTYB ELSE DATE_TRUNC('DAY', FDQTYB / FracKecil) END < PRD_MinJual
+                        THEN 'T'
+                        ELSE '' END AS TolakMinJ
+                    From
+                    (
+                    Select C.*,PRD_Unit as UnitKecil,PRD_Frac as FracKecil,PRD_MinJual
+                    From
+                    (
+                        Select B.*, CASE WHEN min(prd_prdcd) IS NULL THEN PluKarton ELSE min(prd_prdcd) END as PLUKecil
+                        From
+                        (
+                        Select A.FDRCID,
+                            A.FDNOUO,
+                            A.FDKODE,
+                            MAX(A.FDQTYB) as FDQTYB,
+                            A.FDKCAB,
+                            A.FDTGPB,
+                            A.FDKSUP,
+                            A.REQ_ID,
+                            A.NAMA_FILE,
+                            prd_deskripsipanjang as DESK,
+                            prd_flagbkp1 as BKP,
+                            prd_prdcd as PluKarton,
+                            prd_unit as UnitKarton,
+                            prd_frac as FracKarton
+                        From temp_pbidm_ready2 A, tbmaster_prodmast
+                        Where REQ_ID = '" . $ip . "'
+                        AND FDNOUO = '" . $noPB . "'
+                        AND DATE_TRUNC('DAY', FDTGPB) = to_date('" . $tglPB. "','DD-MM-YYYY')
+                        AND prd_prdcd = prc_pluigr
+                        GROUP By A.FDRCID,
+                                A.FDNOUO,
+                                A.FDKODE,
+                                A.FDTGPB,
+                                A.FDKCAB,
+                                A.FDKSUP,
+                                A.REQ_ID,
+                                A.NAMA_FILE,
+                                prd_deskripsipanjang,
+                                prd_flagbkp1,
+                                prd_prdcd,
+                                prd_unit,
+                                prd_frac
+                        ) B, tbMaster_Prodmast
+                        Where PRD_PRDCD(+) <> SUBSTR(PLUKarton,1,6)||'0'
+                        And PRD_PRDCD(+) Like SUBSTR(PLUKarton,1,6)||'%'
+                        AND COALESCE(prd_KodeTag,'A') NOT IN ('N','X','Q')
+                        Group By fdrcid,
+                            FDNOUO,
+                            FDKODE,
+                            FDQTYB,
+                            FDKCAB,
+                            FDTGPB,
+                            fdksup,
+                            REQ_ID,
+                            nama_file,
+                            Desk,
+                            PluKarton,
+                            UnitKarton,
+                            FracKarton,
+                            BKP
+                    ) C, tbMaster_prodmast
+                    Where PRD_PRDCD = PluKecil
+                    )D
+                ) E, tbMaster_Stock
+                Where ST_PRDCD = PLUKARTON
+                And ST_Lokasi = '01'
+                And COALESCE(ST_RecordID,'0') <> '1'
+            ");
         }else{
             //! DELETE FROM TEMP_PBIDM_READY
             // sb.AppendLine("DELETE FROM TEMP_PBIDM_READY ")
             // sb.AppendLine(" WHERE REQ_ID = '" & IP & "' ")
+            DB::table('temp_pbidm_ready')
+                ->where('req_id', $ip)
+                ->delete();
 
             //! INSERT INTO TEMP_PBIDM_READY
-            // sb.AppendLine("INSERT INTO TEMP_PBIDM_READY ( ")
-            // sb.AppendLine("  FDRCID, ")
-            // sb.AppendLine("  FDNOUO, ")
-            // sb.AppendLine("  FDKODE, ")
-            // sb.AppendLine("  FDQTYB, ")
-            // sb.AppendLine("  FDKCAB, ")
-            // sb.AppendLine("  FDTGPB, ")
-            // sb.AppendLine("  FDKSUP, ")
-            // sb.AppendLine("  REQ_ID, ")
-            // sb.AppendLine("  NAMA_FILE, ")
-            // sb.AppendLine("  DESK, ")
-            // sb.AppendLine("  BKP, ")
-            // sb.AppendLine("  PLUKARTON, ")
-            // sb.AppendLine("  UNITKARTON, ")
-            // sb.AppendLine("  FRACKARTON, ")
-            // sb.AppendLine("  PLUKECIL, ")
-            // sb.AppendLine("  UNITKECIL, ")
-            // sb.AppendLine("  FRACKECIL, ")
-            // sb.AppendLine("  PRD_MINJUAL, ")
-            // sb.AppendLine("  QTYB, ")
-            // sb.AppendLine("  QTYK, ")
-            // sb.AppendLine("  TOLAKMINJ, ")
-            // sb.AppendLine("  AVGCOST ")
-            // sb.AppendLine(") ")
-            // sb.AppendLine(" SELECT E.*, st_avgcost as avgcost ")
-            // sb.AppendLine(" FROM ( ")
-            // sb.AppendLine("   SELECT D.*, 0 as qtyb, ")
-            // sb.AppendLine(" 	     fdqtyb as qtyk, ")
-            // sb.AppendLine(" 	     CASE WHEN ")
-            // sb.AppendLine("            CASE WHEN FracKarton = 1 THEN FDQTYB ELSE FLOOR(FDQTYB / FracKecil) END < PRD_MinJual ")
-            // sb.AppendLine("            THEN 'T' ")
-            // sb.AppendLine("            ELSE '' ")
-            // sb.AppendLine(" 	     END AS TolakMinJ ")
-            // sb.AppendLine("   FROM ( ")
-            // sb.AppendLine("     SELECT C.*, PRD_Unit as UnitKecil, ")
-            // sb.AppendLine(" 	       PRD_Frac as FracKecil, ")
-            // sb.AppendLine(" 	       PRD_MinJual ")
-            // sb.AppendLine("     FROM ( ")
-            // sb.AppendLine("       SELECT B.*, ")
-            // sb.AppendLine(" 		     CASE WHEN (MIN(prd_prdcd) IS NULL OR MIN(prd_prdcd) = '') ")
-            // sb.AppendLine(" 		       THEN PluKarton ")
-            // sb.AppendLine(" 		       ELSE MIN(prd_prdcd) ")
-            // sb.AppendLine(" 		     END as PLUKecil ")
-            // sb.AppendLine(" 	  FROM ( ")
-            // sb.AppendLine("         SELECT A.FDRCID, ")
-            // sb.AppendLine("                A.FDNOUO, ")
-            // sb.AppendLine("                A.FDKODE, ")
-            // sb.AppendLine("                MAX(A.FDQTYB) as FDQTYB, ")
-            // sb.AppendLine("                A.FDKCAB, ")
-            // sb.AppendLine("                A.FDTGPB, ")
-            // sb.AppendLine("                A.FDKSUP, ")
-            // sb.AppendLine("                A.REQ_ID, ")
-            // sb.AppendLine("                A.NAMA_FILE, ")
-            // sb.AppendLine("                prd_deskripsipanjang as DESK, ")
-            // sb.AppendLine("                prd_flagbkp1 as BKP, ")
-            // sb.AppendLine("                prd_prdcd as PluKarton, ")
-            // sb.AppendLine("                prd_unit as UnitKarton, ")
-            // sb.AppendLine("                prd_frac as FracKarton ")
-            // sb.AppendLine("         FROM temp_pbidm_ready2 A ")
-            // sb.AppendLine(" 		JOIN tbmaster_prodmast ")
-            // sb.AppendLine(" 		  ON prd_prdcd = prc_pluigr ")
-            // sb.AppendLine("         WHERE REQ_ID = '" & IP & "' ")
-            // sb.AppendLine("           AND FDNOUO = '" & noPB & "' ")
-            // sb.AppendLine("           AND DATE_TRUNC('DAY', FDTGPB) = TO_DATE('" & tglPB & "','DD-MM-YYYY') ")
-            // sb.AppendLine("         GROUP BY A.FDRCID, A.FDNOUO, A.FDKODE, A.FDTGPB, A.FDKCAB, A.FDKSUP, A.REQ_ID, A.NAMA_FILE, ")
-            // sb.AppendLine(" 		         prd_deskripsipanjang, prd_flagbkp1, prd_prdcd, prd_unit, prd_frac ")
-            // sb.AppendLine("         ) B ")
-            // sb.AppendLine(" 	  LEFT JOIN tbMaster_Prodmast ")
-            // sb.AppendLine(" 		ON PRD_PRDCD <> SUBSTR(pluKarton,1,6)||'0' ")
-            // sb.AppendLine("        AND PRD_PRDCD LIKE SUBSTR(PLUKarton,1,6)||'%' ")
-            // sb.AppendLine("       WHERE COALESCE(prd_KodeTag,'A') NOT IN ('N','X','Q') ")
-            // sb.AppendLine("       GROUP BY fdrcid, FDNOUO, FDKODE, FDQTYB, FDKCAB, FDTGPB, fdksup, REQ_ID, nama_file, ")
-            // sb.AppendLine("                Desk, PluKarton, UnitKarton, FracKarton, BKP ")
-            // sb.AppendLine("     ) C ")
-            // sb.AppendLine("   JOIN tbMaster_prodmast ")
-            // sb.AppendLine("     ON PRD_PRDCD = PluKecil ")
-            // sb.AppendLine("   ) D ")
-            // sb.AppendLine(" ) E ")
-            // sb.AppendLine(" JOIN tbMaster_Stock ")
-            // sb.AppendLine("   ON ST_PRDCD = PLUKARTON ")
-            // sb.AppendLine("  AND ST_Lokasi = '01' ")
-            // sb.AppendLine("  AND COALESCE(ST_RecordID,'0') <> '1' ")
+            DB::insert("
+                INSERT INTO TEMP_PBIDM_READY (
+                    FDRCID,
+                    FDNOUO,
+                    FDKODE,
+                    FDQTYB,
+                    FDKCAB,
+                    FDTGPB,
+                    FDKSUP,
+                    REQ_ID,
+                    NAMA_FILE,
+                    DESK,
+                    BKP,
+                    PLUKARTON,
+                    UNITKARTON,
+                    FRACKARTON,
+                    PLUKECIL,
+                    UNITKECIL,
+                    FRACKECIL,
+                    PRD_MINJUAL,
+                    QTYB,
+                    QTYK,
+                    TOLAKMINJ,
+                    AVGCOST
+                )
+                SELECT E.*, st_avgcost as avgcost
+                FROM
+                (
+                    SELECT D.*, 0 as qtyb,
+                            fdqtyb as qtyk,
+                            CASE WHEN
+                                CASE WHEN FracKarton = 1 THEN FDQTYB ELSE FLOOR(FDQTYB / FracKecil) END < PRD_MinJual
+                                THEN 'T'
+                                ELSE ''
+                            END AS TolakMinJ
+                    FROM
+                    (
+                        SELECT C.*, PRD_Unit as UnitKecil,
+                            PRD_Frac as FracKecil,
+                            PRD_MinJual
+                        FROM
+                        (
+                            SELECT B.*,
+                                    CASE WHEN (MIN(prd_prdcd) IS NULL OR MIN(prd_prdcd) = '')
+                                    THEN PluKarton
+                                    ELSE MIN(prd_prdcd)
+                                    END as PLUKecil
+                            FROM
+                            (
+                                SELECT A.FDRCID,
+                                        A.FDNOUO,
+                                        A.FDKODE,
+                                        MAX(A.FDQTYB) as FDQTYB,
+                                        A.FDKCAB,
+                                        A.FDTGPB,
+                                        A.FDKSUP,
+                                        A.REQ_ID,
+                                        A.NAMA_FILE,
+                                        prd_deskripsipanjang as DESK,
+                                        prd_flagbkp1 as BKP,
+                                        prd_prdcd as PluKarton,
+                                        prd_unit as UnitKarton,
+                                        prd_frac as FracKarton
+                                FROM temp_pbidm_ready2 A
+                                JOIN tbmaster_prodmast
+                                ON prd_prdcd = prc_pluigr
+                                WHERE REQ_ID = '" . $ip . "'
+                                AND FDNOUO = '" . $noPB . "'
+                                AND DATE_TRUNC('DAY', FDTGPB) = TO_DATE('" . $tglPB. "','DD-MM-YYYY')
+                                GROUP BY A.FDRCID, A.FDNOUO, A.FDKODE, A.FDTGPB, A.FDKCAB, A.FDKSUP, A.REQ_ID, A.NAMA_FILE,
+                                        prd_deskripsipanjang, prd_flagbkp1, prd_prdcd, prd_unit, prd_frac
+                            ) B
+                            LEFT JOIN tbMaster_Prodmast
+                                ON PRD_PRDCD <> SUBSTR(pluKarton,1,6)||'0'
+                                AND PRD_PRDCD LIKE SUBSTR(PLUKarton,1,6)||'%'
+                            WHERE COALESCE(prd_KodeTag,'A') NOT IN ('N','X','Q')
+                            GROUP BY fdrcid, FDNOUO, FDKODE, FDQTYB, FDKCAB, FDTGPB, fdksup, REQ_ID, nama_file,
+                                Desk, PluKarton, UnitKarton, FracKarton, BKP
+                        ) C
+                        JOIN tbMaster_prodmast
+                        ON PRD_PRDCD = PluKecil
+                    ) D
+                ) E
+                JOIN tbMaster_Stock
+                ON ST_PRDCD = PLUKARTON
+                AND ST_Lokasi = '01'
+                AND COALESCE(ST_RecordID,'0') <> '1'
+            ");
         }
 
         //! INSERT INTO TBTR_TOLAKANPBOMI
-        // sb.AppendLine("INSERT INTO TBTR_TolakanPBOMI ")
-        // sb.AppendLine("( ")
-        // sb.AppendLine(" TLKO_KodeIGR, ")
-        // sb.AppendLine(" TLKO_KodeOMI, ")
-        // sb.AppendLine(" TLKO_TglPB, ")
-        // sb.AppendLine(" TLKO_NoPB, ")
-        // sb.AppendLine(" TLKO_PluIGR, ")
-        // sb.AppendLine(" TLKO_PluOMI, ")
-        // sb.AppendLine(" TLKO_PTAG, ")
-        // sb.AppendLine(" TLKO_DESC, ")
-        // sb.AppendLine(" TLKO_KetTolakan, ")
-        // sb.AppendLine(" TLKO_QtyOrder, ")
-        // sb.AppendLine(" TLKO_LastCost, ")
-        // sb.AppendLine(" TLKO_Nilai, ")
-        // sb.AppendLine(" TLKO_Create_By, ")
-        // sb.AppendLine(" TLKO_Create_Dt ")
-        // sb.AppendLine(") ")
-        // sb.AppendLine("Select KODEIGR, ")
-        // sb.AppendLine("       KCAB, ")
-        // sb.AppendLine("       TGLDOK, ")
-        // sb.AppendLine("       NODOK, ")
-        // sb.AppendLine("       PLUIGR, ")
-        // sb.AppendLine("       PLU, ")
-        // sb.AppendLine("       TAG, ")
-        // sb.AppendLine("       DESCR, ")
-        // sb.AppendLine("       KETA, ")
-        // sb.AppendLine("       QTYO, ")
-        // sb.AppendLine("       ST_AVGCOST, ")
-        // sb.AppendLine("       GROSS, ")
-        // sb.AppendLine("       '" & UserID & "', ")
-        // sb.AppendLine("       CURRENT_TIMESTAMP ")
-        // sb.AppendLine("  From TEMP_CETAKPB_TOLAKAN_IDM LEFT OUTER JOIN tbMaster_Stock ON ")
-        // sb.AppendLine("   ( ST_PRDCD = SUBSTR(PLUIGR,1,6)||'0' ")
-        // sb.AppendLine("   And ST_Lokasi = '01') ")
-        // sb.AppendLine(" Where REQ_ID = '" & IP & "' ")
+        DB::insert("
+            INSERT INTO TBTR_TolakanPBOMI
+            (
+                TLKO_KodeIGR,
+                TLKO_KodeOMI,
+                TLKO_TglPB,
+                TLKO_NoPB,
+                TLKO_PluIGR,
+                TLKO_PluOMI,
+                TLKO_PTAG,
+                TLKO_DESC,
+                TLKO_KetTolakan,
+                TLKO_QtyOrder,
+                TLKO_LastCost,
+                TLKO_Nilai,
+                TLKO_Create_By,
+                TLKO_Create_Dt
+            )
+            Select KODEIGR,
+                KCAB,
+                TGLDOK,
+                NODOK,
+                PLUIGR,
+                PLU,
+                TAG,
+                DESCR,
+                KETA,
+                QTYO,
+                ST_AVGCOST,
+                GROSS,
+                '" . session('userid') . "',
+                CURRENT_TIMESTAMP
+            From TEMP_CETAKPB_TOLAKAN_IDM LEFT OUTER JOIN tbMaster_Stock ON
+                ( ST_PRDCD = SUBSTR(PLUIGR,1,6)||'0'
+                And ST_Lokasi = '01')
+            Where REQ_ID = '" . $ip . "'
+        ");
 
         //! MERGE INTO TBTR_TOLAKANPBOMI-IDM_Tag
-        // sb.AppendLine("MERGE INTO ")
-        // sb.AppendLine("    TBTR_TOLAKANPBOMI a ")
-        // sb.AppendLine("USING ")
-        // sb.AppendLine("( ")
-        // If kodeDCIDM <> "" Then
-        //     sb.AppendLine("  SELECT IDM_PLUIDM, ")
-        //     sb.AppendLine("         IDM_KodeTag ")
-        //     sb.AppendLine("    FROM tbMaster_Pluidm ")
-        //     sb.AppendLine("   Where IDM_KodeIDM = '" & kodeDCIDM & "' ")
-        //     sb.AppendLine("     And Exists ( ")
-        //     sb.AppendLine("      Select tlko_pluomi ")
-        //     sb.AppendLine("	       From tbtr_TolakanPbOMI ")
-        //     sb.AppendLine("	      Where tlko_PluOMI = IDM_PLUIDM ")
-        //     sb.AppendLine("		    And tlko_NoPB = '" & noPB & "' ")
-        //     sb.AppendLine("		    And tlko_TglPB = to_date('" & tglPB & "','DD-MM-YYYY') ")
-        //     sb.AppendLine("		    AND tlko_KodeOmi = '" & KodeToko & "' ")
-        //     sb.AppendLine("   ) ")
-        //     sb.AppendLine(") b ")
-        //     sb.AppendLine("ON(a.TLKO_PLUOMI = b.IDM_PLUIDM ")
-        //     sb.AppendLine("	  and tlko_NoPB = '" & noPB & "' ")
-        //     sb.AppendLine("		 And DATE_TRUNC('DAY', tlko_TglPB) = to_date('" & tglPB & "','DD-MM-YYYY') ")
-        //     sb.AppendLine("		 AND tlko_KodeOmi = '" & KodeToko & "') ")
-        //     sb.AppendLine("WHEN MATCHED THEN ")
-        //     sb.AppendLine("UPDATE SET TLKO_TAG_MD = b.IDM_KodeTag ")
-        // Else
-        //     sb.AppendLine("  SELECT PRC_PLUIDM, ")
-        //     sb.AppendLine("         PRC_KodeTag ")
-        //     sb.AppendLine("    FROM tbMaster_Prodcrm ")
-        //     sb.AppendLine("   Where Exists ")
-        //     sb.AppendLine("   ( ")
-        //     sb.AppendLine("      Select tlko_pluomi ")
-        //     sb.AppendLine("	       From tbtr_TolakanPbOMI ")
-        //     sb.AppendLine("	      Where tlko_PluOMI = PRC_PLUIDM ")
-        //     sb.AppendLine("		    And tlko_NoPB = '" & noPB & "' ")
-        //     sb.AppendLine("		    And tlko_TglPB = to_date('" & tglPB & "','DD-MM-YYYY') ")
-        //     sb.AppendLine("		    AND tlko_KodeOmi = '" & KodeToko & "' ")
-        //     sb.AppendLine("   ) ")
-        //     sb.AppendLine(") b ")
-        //     sb.AppendLine("ON(a.TLKO_PLUOMI = b.PRC_PLUIDM ")
-        //     sb.AppendLine("	  and tlko_NoPB = '" & noPB & "' ")
-        //     sb.AppendLine("		 And DATE_TRUNC('DAY', tlko_TglPB) = to_date('" & tglPB & "','DD-MM-YYYY') ")
-        //     sb.AppendLine("		 AND tlko_KodeOmi = '" & KodeToko & "') ")
-        //     sb.AppendLine("WHEN MATCHED THEN ")
-        //     sb.AppendLine("UPDATE SET TLKO_TAG_MD = b.PRC_KodeTag ")
-        // End If
+        $query = "";
+        $query .= "MERGE INTO ";
+        $query .= "    TBTR_TOLAKANPBOMI a ";
+        $query .= "USING ";
+        $query .= "( ";
+        if($kodeDCIDM <> ""){
+            $query .= "  SELECT IDM_PLUIDM, ";
+            $query .= "         IDM_KodeTag ";
+            $query .= "    FROM tbMaster_Pluidm ";
+            $query .= "   Where IDM_KodeIDM = '" . $kodeDCIDM . "' ";
+            $query .= "     And Exists ( ";
+            $query .= "      Select tlko_pluomi ";
+            $query .= "	       From tbtr_TolakanPbOMI ";
+            $query .= "	      Where tlko_PluOMI = IDM_PLUIDM ";
+            $query .= "		    And tlko_NoPB = '" . $noPB . "' ";
+            $query .= "		    And tlko_TglPB = to_date('" . $tglPB. "','DD-MM-YYYY') ";
+            $query .= "		    AND tlko_KodeOmi = '" . $KodeToko . "' ";
+            $query .= "   ) ";
+            $query .= ") b ";
+            $query .= "ON(a.TLKO_PLUOMI = b.IDM_PLUIDM ";
+            $query .= "	  and tlko_NoPB = '" . $noPB . "' ";
+            $query .= "		 And DATE_TRUNC('DAY', tlko_TglPB) = to_date('" . $tglPB. "','DD-MM-YYYY') ";
+            $query .= "		 AND tlko_KodeOmi = '" . $KodeToko . "') ";
+            $query .= "WHEN MATCHED THEN ";
+            $query .= "UPDATE SET TLKO_TAG_MD = b.IDM_KodeTag ";
+        }else{
+            $query .= "  SELECT PRC_PLUIDM, ";
+            $query .= "         PRC_KodeTag ";
+            $query .= "    FROM tbMaster_Prodcrm ";
+            $query .= "   Where Exists ";
+            $query .= "   ( ";
+            $query .= "      Select tlko_pluomi ";
+            $query .= "	       From tbtr_TolakanPbOMI ";
+            $query .= "	      Where tlko_PluOMI = PRC_PLUIDM ";
+            $query .= "		    And tlko_NoPB = '" . $noPB . "' ";
+            $query .= "		    And tlko_TglPB = to_date('" . $tglPB. "','DD-MM-YYYY') ";
+            $query .= "		    AND tlko_KodeOmi = '" . $KodeToko . "' ";
+            $query .= "   ) ";
+            $query .= ") b ";
+            $query .= "ON(a.TLKO_PLUOMI = b.PRC_PLUIDM ";
+            $query .= "	  and tlko_NoPB = '" . $noPB . "' ";
+            $query .= "		 And DATE_TRUNC('DAY', tlko_TglPB) = to_date('" . $tglPB. "','DD-MM-YYYY') ";
+            $query .= "		 AND tlko_KodeOmi = '" . $KodeToko . "') ";
+            $query .= "WHEN MATCHED THEN ";
+            $query .= "UPDATE SET TLKO_TAG_MD = b.PRC_KodeTag ";
+        }
 
         //! MERGE INTO TBTR_TOLAKANPBOMI-PRD_KodeTag
-        // sb.AppendLine("MERGE INTO ")
-        // sb.AppendLine("    TBTR_TOLAKANPBOMI a ")
-        // sb.AppendLine("USING ")
-        // sb.AppendLine("( ")
-        // sb.AppendLine("   SELECT PRD_PRDCD, ")
-        // sb.AppendLine("          PRD_KodeTAG ")
-        // sb.AppendLine("	    FROM TbMaster_Prodmast ")
-        // sb.AppendLine("	   Where Exists ")
-        // sb.AppendLine("   ( ")
-        // sb.AppendLine("    Select tlko_pluomi ")
-        // sb.AppendLine("	     From tbtr_TolakanPbOMI ")
-        // sb.AppendLine("	    Where tlko_PluIGR = PRD_PRDCD ")
-        // sb.AppendLine("		  And tlko_NoPB = '" & noPB & "' ")
-        // sb.AppendLine("		  And tlko_TglPB = to_date('" & tglPB & "','DD-MM-YYYY') ")
-        // sb.AppendLine("		  AND tlko_KodeOmi = '" & KodeToko & "' ")
-        // sb.AppendLine("   ) ")
-        // sb.AppendLine(") b ")
-        // sb.AppendLine("ON(a.TLKO_PLUOMI = b.PRD_PRDCD ")
-        // sb.AppendLine("	  and tlko_NoPB = '" & noPB & "' ")
-        // sb.AppendLine("	    And tlko_TglPB = to_date('" & tglPB & "','DD-MM-YYYY') ")
-        // sb.AppendLine("		AND tlko_KodeOmi = '" & KodeToko & "') ")
-        // sb.AppendLine("WHEN MATCHED THEN ")
-        // sb.AppendLine("UPDATE SET TLKO_TAG_IGR = b.PRD_KodeTag ")
+        DB::insert("
+            MERGE INTO
+                TBTR_TOLAKANPBOMI a
+            USING
+            (
+                SELECT PRD_PRDCD,
+                        PRD_KodeTAG
+                FROM TbMaster_Prodmast
+                Where Exists
+                (
+                    Select tlko_pluomi
+                    From tbtr_TolakanPbOMI
+                    Where tlko_PluIGR = PRD_PRDCD
+                        And tlko_NoPB = '" . $noPB . "'
+                        And tlko_TglPB = to_date('" . $tglPB. "','DD-MM-YYYY')
+                        AND tlko_KodeOmi = '" . $KodeToko . "'
+                )
+            ) b
+            ON(a.TLKO_PLUOMI = b.PRD_PRDCD
+                and tlko_NoPB = '" . $noPB . "'
+                And tlko_TglPB = to_date('" . $tglPB. "','DD-MM-YYYY')
+                AND tlko_KodeOmi = '" . $KodeToko . "')
+            WHEN MATCHED THEN
+            UPDATE SET TLKO_TAG_IGR = b.PRD_KodeTag
+        ");
 
         //! MERGE INTO TBTR_TOLAKANPBOMI-ST_AvgCost
-        // sb.AppendLine("MERGE INTO ")
-        // sb.AppendLine("    TBTR_TOLAKANPBOMI a ")
-        // sb.AppendLine("USING ")
-        // sb.AppendLine("( ")
-        // sb.AppendLine("SELECT ST_PRDCD, ")
-        // sb.AppendLine("       round(st_avgcost / CASE WHEN PRD_UNIT = 'KG' THEN 1000 ELSE 1 END * (1 + COALESCE(MPI_MARGIN,3)/100)) as RUPIAH, ")
-        // sb.AppendLine("       round(st_avgcost / CASE WHEN PRD_UNIT = 'KG' THEN 1000 ELSE 1 END * (COALESCE(MPI_MARGIN,3)/100)) as MARGIN, ")
-        // sb.AppendLine("       COALESCE(ST_SALDOAKHIR,0) as LPP ")
-        // sb.AppendLine("	 FROM TbMaster_Stock LEFT OUTER JOIN ")
-        // sb.AppendLine("       TbMaster_MarginPluIDM ON  ")
-        // sb.AppendLine("   (ST_PRDCD = MPI_PluIGR) ")
-        // sb.AppendLine("     LEFT OUTER JOIN  TbMaster_Prodmast ON ")
-        // sb.AppendLine("   ( ST_PRDCD = PRD_PRDCD) ")
-        // sb.AppendLine("	Where Exists ")
-        // sb.AppendLine("   ( ")
-        // sb.AppendLine("   Select tlko_pluomi ")
-        // sb.AppendLine("	    From tbtr_TolakanPbOMI ")
-        // sb.AppendLine("	   Where tlko_PluIGR = ST_PRDCD ")
-        // sb.AppendLine("		 And tlko_NoPB = '" & noPB & "' ")
-        // sb.AppendLine("		 And DATE_TRUNC('DAY', tlko_TglPB) = to_date('" & tglPB & "','DD-MM-YYYY') ")
-        // sb.AppendLine("		 AND tlko_KodeOmi = '" & KodeToko & "' ")
-        // sb.AppendLine("   ) ")
-        // sb.AppendLine("   And ST_Lokasi = '01' ")
-        // sb.AppendLine(") b ")
-        // sb.AppendLine("ON(a.TLKO_PLUIGR = b.ST_PRDCD ")
-        // sb.AppendLine("	 and tlko_NoPB = '" & noPB & "' ")
-        // sb.AppendLine("	   And DATE_TRUNC('DAY', tlko_TglPB) = to_date('" & tglPB & "','DD-MM-YYYY') ")
-        // sb.AppendLine("	   AND tlko_KodeOmi = '" & KodeToko & "') ")
-        // sb.AppendLine("WHEN MATCHED THEN ")
-        // sb.AppendLine("UPDATE SET TLKO_NILAI = TLKO_QTYORDER *  b.RUPIAH, ")
-        // sb.AppendLine("           TLKO_MARGIN = TLKO_QTYORDER * b.MARGIN, ")
-        // sb.AppendLine("           TLKO_LPP = b.LPP ")
+        DB::insert("
+            MERGE INTO
+                TBTR_TOLAKANPBOMI a
+            USING
+            (
+                SELECT ST_PRDCD,
+                    round(st_avgcost / CASE WHEN PRD_UNIT = 'KG' THEN 1000 ELSE 1 END * (1 + COALESCE(MPI_MARGIN,3)/100)) as RUPIAH,
+                    round(st_avgcost / CASE WHEN PRD_UNIT = 'KG' THEN 1000 ELSE 1 END * (COALESCE(MPI_MARGIN,3)/100)) as MARGIN,
+                    COALESCE(ST_SALDOAKHIR,0) as LPP
+                FROM TbMaster_Stock LEFT OUTER JOIN
+                    TbMaster_MarginPluIDM ON
+                    (ST_PRDCD = MPI_PluIGR)
+                    LEFT OUTER JOIN  TbMaster_Prodmast ON
+                    (ST_PRDCD = PRD_PRDCD)
+                Where Exists
+                (
+                    Select tlko_pluomi
+                    From tbtr_TolakanPbOMI
+                    Where tlko_PluIGR = ST_PRDCD
+                        And tlko_NoPB = '" . $noPB . "'
+                        And DATE_TRUNC('DAY', tlko_TglPB) = to_date('" . $tglPB. "','DD-MM-YYYY')
+                        AND tlko_KodeOmi = '" . $KodeToko . "'
+                )
+                And ST_Lokasi = '01'
+            ) b
+            ON(a.TLKO_PLUIGR = b.ST_PRDCD
+                and tlko_NoPB = '" . $noPB . "'
+                And DATE_TRUNC('DAY', tlko_TglPB) = to_date('" . $tglPB. "','DD-MM-YYYY')
+                AND tlko_KodeOmi = '" . $KodeToko . "')
+            WHEN MATCHED THEN
+            UPDATE SET TLKO_NILAI = TLKO_QTYORDER *  b.RUPIAH,
+                TLKO_MARGIN = TLKO_QTYORDER * b.MARGIN,
+                TLKO_LPP = b.LPP
+        ");
 
         //! FORCE VARIABLE
         $CounterKecil = 1;
@@ -1690,131 +1830,138 @@ class Controller extends BaseController
         // sb.AppendLine("Select COALESCE(COUNT(1),0)  ")
         // sb.AppendLine("  FROM information_schema.columns ")
         // sb.AppendLine(" Where UPPER(table_name) = 'TBMASTER_MARGINPLUIDM' ")
+        $count = DB::table('information_schema.columns')
+            ->whereRaw("upper(table_name) = 'TBMASTER_MARGINPLUIDM'")
+            ->count();
 
-        if($jum > 0){
+        if($count > 0){
             //! INSERT KE MASDPB BULKY
-            // sb.AppendLine("Insert Into tbMaster_PBOmi ")
-            // sb.AppendLine("( ")
-            // sb.AppendLine(" pbo_kodeigr, ")
-            // sb.AppendLine(" pbo_recordid, ")
-            // sb.AppendLine(" pbo_nourut, ")
-            // sb.AppendLine(" pbo_batch, ")
-            // sb.AppendLine(" pbo_tglpb, ")
-            // sb.AppendLine(" pbo_nopb, ")
-            // sb.AppendLine(" pbo_kodesbu, ")
-            // sb.AppendLine(" pbo_kodemember, ")
-            // sb.AppendLine(" pbo_kodeomi, ")
-            // sb.AppendLine(" pbo_kodedivisi, ")
-            // sb.AppendLine(" pbo_kodedepartemen, ")
-            // sb.AppendLine(" pbo_kodekategoribrg, ")
-            // sb.AppendLine(" pbo_pluomi, ")
-            // sb.AppendLine(" pbo_pluigr, ")
-            // sb.AppendLine(" pbo_hrgsatuan, ")
-            // sb.AppendLine(" pbo_qtyorder, ")
-            // sb.AppendLine(" pbo_qtyrealisasi, ")
-            // sb.AppendLine(" pbo_nilaiorder, ")
-            // sb.AppendLine(" pbo_ppnorder, ")
-            // sb.AppendLine(" pbo_distributionfee, ")
-            // sb.AppendLine(" pbo_create_by, ")
-            // sb.AppendLine(" pbo_create_dt,  ")
-            // sb.AppendLine(" pbo_TglStruk  ")
-            // sb.AppendLine(") ")
-            // sb.AppendLine(" Select '" & KDIGR & "', ")
-            // sb.AppendLine("        '2', ")
-            // sb.AppendLine("        row_number() OVER () ROWNUM, ")
-            // sb.AppendLine("        '" & CounterKarton & "', ")
-            // sb.AppendLine("        FDTGPB, ")
-            // sb.AppendLine("        FDNOUO, ")
-            // sb.AppendLine("        '" & KodeSBU & "', ")
-            // sb.AppendLine("        '', ")
-            // sb.AppendLine("        FDKCAB, ")
-            // sb.AppendLine("        prd_kodedivisi, ")
-            // sb.AppendLine("        prd_kodedepartement, ")
-            // sb.AppendLine("        prd_kodekategoribarang, ")
-            // sb.AppendLine("        FDKODE, ")
-            // sb.AppendLine("        plukecil, ")
-            // sb.AppendLine("        round(avgcost / CASE WHEN UnitKarton = 'KG' THEN 1000 ELSE 1 END * (1 + (COALESCE(MPI_MARGIN,3)/100) )), ")
-            // sb.AppendLine("        QtyB * CASE WHEN UnitKarton = 'KG' THEN 1000 ELSE FracKarton END, ")
-            // sb.AppendLine("        QtyB * CASE WHEN UnitKarton = 'KG' THEN 1000 ELSE FracKarton END, ")
-            // sb.AppendLine("        QtyB * round(avgcost / CASE WHEN UnitKarton = 'KG' THEN 1000 ELSE 1 END * (1 + " & PersenMargin & ")), ")
-            // sb.AppendLine("        QtyB * round(avgcost / CASE WHEN UnitKarton = 'KG' THEN 1000 ELSE 1 END * (1 + " & PersenMargin & ")) * (COALESCE(PRD_PPN,0)/100) * CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN 1 ELSE 0 END, ")
-            // sb.AppendLine("        0, ")
-            // sb.AppendLine("        '" & UserID & "', ")
-            // sb.AppendLine("        CURRENT_TIMESTAMP, ")
-            // sb.AppendLine("        CURRENT_TIMESTAMP ")
-            // sb.AppendLine("   From temp_pbidm_ready ")
-            // sb.AppendLine("   JOIN tbmaster_prodmast ")
-            // sb.AppendLine("     ON prd_prdcd = PLUKarton ")
-            // sb.AppendLine("   LEFT JOIN tbMaster_MarginPluIDM ")
-            // sb.AppendLine("     ON MPI_PluIGR = PLUKARTON ")
-            // sb.AppendLine("  Where REQ_ID = '" & IP & "' ")
-            // sb.AppendLine("    and FDNOUO = '" & noPB & "' ")
-            // sb.AppendLine("    and DATE_TRUNC('DAY', FDTGPB) = to_date('" & tglPB & "','DD-MM-YYYY') ")
-            // sb.AppendLine("    and FDKCAB = '" & KodeToko & "' ")
-            // sb.AppendLine("    and qtyb > 0 ")
-            // sb.AppendLine("    and COALESCE(TolakMinJ,'X') <> 'T' ")
+            DB::insert("
+                Insert Into tbMaster_PBOmi
+                (
+                    pbo_kodeigr,
+                    pbo_recordid,
+                    pbo_nourut,
+                    pbo_batch,
+                    pbo_tglpb,
+                    pbo_nopb,
+                    pbo_kodesbu,
+                    pbo_kodemember,
+                    pbo_kodeomi,
+                    pbo_kodedivisi,
+                    pbo_kodedepartemen,
+                    pbo_kodekategoribrg,
+                    pbo_pluomi,
+                    pbo_pluigr,
+                    pbo_hrgsatuan,
+                    pbo_qtyorder,
+                    pbo_qtyrealisasi,
+                    pbo_nilaiorder,
+                    pbo_ppnorder,
+                    pbo_distributionfee,
+                    pbo_create_by,
+                    pbo_create_dt,
+                    pbo_TglStruk
+                )
+                Select '" . session('KODECABANG') . "',
+                    '2',
+                    row_number() OVER () ROWNUM,
+                    '" . $CounterKarton . "',
+                    FDTGPB,
+                    FDNOUO,
+                    '" . $KodeSBU . "',
+                    '',
+                    FDKCAB,
+                    prd_kodedivisi,
+                    prd_kodedepartement,
+                    prd_kodekategoribarang,
+                    FDKODE,
+                    plukecil,
+                    round(avgcost / CASE WHEN UnitKarton = 'KG' THEN 1000 ELSE 1 END * (1 + (COALESCE(MPI_MARGIN,3)/100) )),
+                    QtyB * CASE WHEN UnitKarton = 'KG' THEN 1000 ELSE FracKarton END,
+                    QtyB * CASE WHEN UnitKarton = 'KG' THEN 1000 ELSE FracKarton END,
+                    QtyB * round(avgcost / CASE WHEN UnitKarton = 'KG' THEN 1000 ELSE 1 END * (1 + " . $PersenMargin . ")),
+                    QtyB * round(avgcost / CASE WHEN UnitKarton = 'KG' THEN 1000 ELSE 1 END * (1 + " . $PersenMargin . ")) * (COALESCE(PRD_PPN,0)/100) * CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN 1 ELSE 0 END,
+                    0,
+                    '" . session('userid') . "',
+                    CURRENT_TIMESTAMP,
+                    CURRENT_TIMESTAMP
+                From temp_pbidm_ready
+                JOIN tbmaster_prodmast
+                    ON prd_prdcd = PLUKarton
+                LEFT JOIN tbMaster_MarginPluIDM
+                    ON MPI_PluIGR = PLUKARTON
+                Where REQ_ID = '" . $ip . "'
+                    and FDNOUO = '" . $noPB . "'
+                    and DATE_TRUNC('DAY', FDTGPB) = to_date('" . $tglPB. "','DD-MM-YYYY')
+                    and FDKCAB = '" . $KodeToko . "'
+                    and qtyb > 0
+                    and COALESCE(TolakMinJ,'X') <> 'T'
+            ");
         }else{
             //! INSERT KE MASDPB BULKY
-            // sb.AppendLine("Insert Into tbMaster_PBOmi ")
-            // sb.AppendLine("( ")
-            // sb.AppendLine(" pbo_kodeigr, ")
-            // sb.AppendLine(" pbo_recordid, ")
-            // sb.AppendLine(" pbo_nourut, ")
-            // sb.AppendLine(" pbo_batch, ")
-            // sb.AppendLine(" pbo_tglpb, ")
-            // sb.AppendLine(" pbo_nopb, ")
-            // sb.AppendLine(" pbo_kodesbu, ")
-            // sb.AppendLine(" pbo_kodemember, ")
-            // sb.AppendLine(" pbo_kodeomi, ")
-            // sb.AppendLine(" pbo_kodedivisi, ")
-            // sb.AppendLine(" pbo_kodedepartemen, ")
-            // sb.AppendLine(" pbo_kodekategoribrg, ")
-            // sb.AppendLine(" pbo_pluomi, ")
-            // sb.AppendLine(" pbo_pluigr, ")
-            // sb.AppendLine(" pbo_hrgsatuan, ")
-            // sb.AppendLine(" pbo_qtyorder, ")
-            // sb.AppendLine(" pbo_qtyrealisasi, ")
-            // sb.AppendLine(" pbo_nilaiorder, ")
-            // sb.AppendLine(" pbo_ppnorder, ")
-            // sb.AppendLine(" pbo_distributionfee, ")
-            // sb.AppendLine(" pbo_create_by, ")
-            // sb.AppendLine(" pbo_create_dt,  ")
-            // sb.AppendLine(" pbo_TglStruk  ")
-            // sb.AppendLine(") ")
-            // sb.AppendLine(" Select '" & KDIGR & "', ")
-            // sb.AppendLine("        NULL, ")
-            // sb.AppendLine("        ROW_NUMBER() OVER() + " & PBO_NoUrut & " AS rownum, ")
-            // sb.AppendLine("        '" & CounterKecil & "', ")
-            // sb.AppendLine("        FDTGPB, ")
-            // sb.AppendLine("        FDNOUO, ")
-            // sb.AppendLine("        '" & KodeSBU & "', ")
-            // sb.AppendLine("        '', ")
-            // sb.AppendLine("        FDKCAB, ")
-            // sb.AppendLine("        prd_kodedivisi, ")
-            // sb.AppendLine("        prd_kodedepartement, ")
-            // sb.AppendLine("        prd_kodekategoribarang, ")
-            // sb.AppendLine("        FDKODE, ")
-            // sb.AppendLine("        plukecil, ")
-            // sb.AppendLine("        round(avgcost / CASE WHEN UnitKarton = 'KG' THEN 1000 ELSE 1 END * (1 + (COALESCE(MPI_MARGIN,3) / 100))), ")
-            // sb.AppendLine("        QtyK * CASE WHEN UnitKecil = 'KG' THEN 1 ELSE FracKecil END, ")
-            // sb.AppendLine("        QtyK * CASE WHEN UnitKecil = 'KG' THEN 1 ELSE FracKecil END, ")
-            // sb.AppendLine("        QtyK * round(avgcost / CASE WHEN UnitKarton = 'KG' THEN 1000 ELSE 1 END * (1 + (COALESCE(MPI_MARGIN,3) / 100))), ")
-            // sb.AppendLine("        QtyK * round(avgcost / CASE WHEN UnitKarton = 'KG' THEN 1000 ELSE 1 END * (1 + (COALESCE(MPI_MARGIN,3) / 100))) * (COALESCE(PRD_PPN,0)/100) * CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN 1 ELSE 0 END, ")
-            // sb.AppendLine("        0, ")
-            // sb.AppendLine("        '" & UserID & "', ")
-            // sb.AppendLine("        CURRENT_DATE, ")
-            // sb.AppendLine("        CURRENT_DATE ")
-            // sb.AppendLine("   From temp_pbidm_ready ")
-            // sb.AppendLine("   JOIN tbmaster_prodmast ")
-            // sb.AppendLine("     ON prd_prdcd = PLUKarton ")
-            // sb.AppendLine("   LEFT JOIN tbMaster_MarginPluIDM ")
-            // sb.AppendLine("     ON MPI_PLUIGR = PLUKARTON ")
-            // sb.AppendLine("  Where REQ_ID = '" & IP & "' ")
-            // sb.AppendLine("    and FDNOUO = '" & noPB & "' ")
-            // sb.AppendLine("    and DATE_TRUNC('DAY', FDTGPB) = to_date('" & tglPB & "','DD-MM-YYYY') ")
-            // sb.AppendLine("    and FDKCAB = '" & KodeToko & "' ")
-            // sb.AppendLine("    and qtyK > 0 ")
-            // sb.AppendLine("    and COALESCE(TolakMinJ,'X') <> 'T' ")
+            DB::insert("
+                Insert Into tbMaster_PBOmi
+                (
+                    pbo_kodeigr,
+                    pbo_recordid,
+                    pbo_nourut,
+                    pbo_batch,
+                    pbo_tglpb,
+                    pbo_nopb,
+                    pbo_kodesbu,
+                    pbo_kodemember,
+                    pbo_kodeomi,
+                    pbo_kodedivisi,
+                    pbo_kodedepartemen,
+                    pbo_kodekategoribrg,
+                    pbo_pluomi,
+                    pbo_pluigr,
+                    pbo_hrgsatuan,
+                    pbo_qtyorder,
+                    pbo_qtyrealisasi,
+                    pbo_nilaiorder,
+                    pbo_ppnorder,
+                    pbo_distributionfee,
+                    pbo_create_by,
+                    pbo_create_dt,
+                    pbo_TglStruk
+                )
+                Select '" . session('KODECABANG') . "',
+                    NULL,
+                    ROW_NUMBER() OVER() + " . $PBO_NoUrut . " AS rownum,
+                    '" . $CounterKecil . "',
+                    FDTGPB,
+                    FDNOUO,
+                    '" . $KodeSBU . "',
+                    '',
+                    FDKCAB,
+                    prd_kodedivisi,
+                    prd_kodedepartement,
+                    prd_kodekategoribarang,
+                    FDKODE,
+                    plukecil,
+                    round(avgcost / CASE WHEN UnitKarton = 'KG' THEN 1000 ELSE 1 END * (1 + (COALESCE(MPI_MARGIN,3) / 100))),
+                    QtyK * CASE WHEN UnitKecil = 'KG' THEN 1 ELSE FracKecil END,
+                    QtyK * CASE WHEN UnitKecil = 'KG' THEN 1 ELSE FracKecil END,
+                    QtyK * round(avgcost / CASE WHEN UnitKarton = 'KG' THEN 1000 ELSE 1 END * (1 + (COALESCE(MPI_MARGIN,3) / 100))),
+                    QtyK * round(avgcost / CASE WHEN UnitKarton = 'KG' THEN 1000 ELSE 1 END * (1 + (COALESCE(MPI_MARGIN,3) / 100))) * (COALESCE(PRD_PPN,0)/100) * CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN 1 ELSE 0 END,
+                    0,
+                    '" . session('userid') . "',
+                    CURRENT_DATE,
+                    CURRENT_DATE
+                From temp_pbidm_ready
+                JOIN tbmaster_prodmast
+                    ON prd_prdcd = PLUKarton
+                LEFT JOIN tbMaster_MarginPluIDM
+                    ON MPI_PLUIGR = PLUKARTON
+                Where REQ_ID = '" . $ip . "'
+                    and FDNOUO = '" . $noPB . "'
+                    and DATE_TRUNC('DAY', FDTGPB) = to_date('" . $tglPB. "','DD-MM-YYYY')
+                    and FDKCAB = '" . $KodeToko . "'
+                    and qtyK > 0
+                    and COALESCE(TolakMinJ,'X') <> 'T'
+            ");
         }
 
         //! VARIABLE PBO_NoUrut
@@ -1825,148 +1972,168 @@ class Controller extends BaseController
         // sb.AppendLine("   And DATE_TRUNC('DAY', PBO_TglPB) = to_date('" & tglPB & "','DD-MM-YYYY')")
         // sb.AppendLine("   And PBO_KodeOMI = '" & KodeToko & "' ")
 
+        $PBO_NoUrut = DB::table('tbmaster_pbomi')
+            ->select('COALESCE(Max(pbo_nourut),1) as count')
+            ->where([
+                'pbo_kodeigr' => $KDIGR,
+                'pbo_nopb' => $noPB,
+                'pbo_kodeomi' => $KodeToko,
+            ])
+            ->whereRaw("DATE_TRUNC('DAY', pbo_tglpb) = to_date('" . $tglPB . "','DD-MM-YYYY')")
+            ->first()->count;
+
         //! CEK TABLE
         // sb.AppendLine("Select COALESCE(COUNT(1),0)  ")
         // sb.AppendLine("  FROM information_schema.columns ")
         // sb.AppendLine(" Where UPPER(table_name) = 'TBMASTER_MARGINPLUIDM' ")
 
-        if($jum > 0){
+        $count = DB::table('information_schema.columns')
+            ->whereRaw("upper(table_name) = 'TBMASTER_MARGINPLUIDM'")
+            ->count();
+
+        if($count > 0){
             //! INSERT KE MASDPB PIECES
-            // sb.AppendLine("Insert Into tbMaster_PBOmi ")
-            // sb.AppendLine("( ")
-            // sb.AppendLine(" pbo_kodeigr, ")
-            // sb.AppendLine(" pbo_recordid, ")
-            // sb.AppendLine(" pbo_nourut, ")
-            // sb.AppendLine(" pbo_batch, ")
-            // sb.AppendLine(" pbo_tglpb, ")
-            // sb.AppendLine(" pbo_nopb, ")
-            // sb.AppendLine(" pbo_kodesbu, ")
-            // sb.AppendLine(" pbo_kodemember, ")
-            // sb.AppendLine(" pbo_kodeomi, ")
-            // sb.AppendLine(" pbo_kodedivisi, ")
-            // sb.AppendLine(" pbo_kodedepartemen, ")
-            // sb.AppendLine(" pbo_kodekategoribrg, ")
-            // sb.AppendLine(" pbo_pluomi, ")
-            // sb.AppendLine(" pbo_pluigr, ")
-            // sb.AppendLine(" pbo_hrgsatuan, ")
-            // sb.AppendLine(" pbo_qtyorder, ")
-            // sb.AppendLine(" pbo_qtyrealisasi, ")
-            // sb.AppendLine(" pbo_nilaiorder, ")
-            // sb.AppendLine(" pbo_ppnorder, ")
-            // sb.AppendLine(" pbo_distributionfee, ")
-            // sb.AppendLine(" pbo_create_by, ")
-            // sb.AppendLine(" pbo_create_dt, ")
-            // sb.AppendLine(" pbo_TglStruk  ")
-            // sb.AppendLine(") ")
-            // sb.AppendLine("Select '" & KDIGR & "', ")
-            // sb.AppendLine("       NULL, ")
-            // sb.AppendLine("       rownum + " & PBO_NoUrut & ", ")
-            // sb.AppendLine("       '" & CounterKecil & "', ")
-            // sb.AppendLine("       FDTGPB, ")
-            // sb.AppendLine("       FDNOUO, ")
-            // sb.AppendLine("       '" & KodeSBU & "', ")
-            // sb.AppendLine("       '', ")
-            // sb.AppendLine("       FDKCAB, ")
-            // sb.AppendLine("       prd_kodedivisi, ")
-            // sb.AppendLine("       prd_kodedepartement, ")
-            // sb.AppendLine("       prd_kodekategoribarang, ")
-            // sb.AppendLine("       FDKODE, ")
-            // sb.AppendLine("       plukecil, ")
-            // sb.AppendLine("       round(avgcost / CASE WHEN UnitKarton = 'KG' THEN 1000 ELSE 1 END * (1 + (COALESCE(MPI_MARGIN,3) / 100)),0), ")
-            // sb.AppendLine("       QtyK * CASE WHEN UnitKecil = 'KG' THEN 1 ELSE FracKecil END, ")
-            // sb.AppendLine("       QtyK * CASE WHEN UnitKecil = 'KG' THEN 1 ELSE FracKecil END, ")
-            // sb.AppendLine("       QtyK * round(avgcost / CASE WHEN UnitKarton = 'KG' THEN 1000 ELSE 1 END * (1 + (COALESCE(MPI_MARGIN,3) / 100)),0), ")
-            // sb.AppendLine("       QtyK * round(avgcost / CASE WHEN UnitKarton = 'KG' THEN 1000 ELSE 1 END * (1 + (COALESCE(MPI_MARGIN,3) / 100)),0) * (COALESCE(PRD_PPN,0)/100) * CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN 1 ELSE 0 END, ")
-            // sb.AppendLine("       0, ")
-            // sb.AppendLine("       '" & UserID & "', ")
-            // sb.AppendLine("       CURRENT_DATE, ")
-            // sb.AppendLine("       CURRENT_DATE  ")
-            // sb.AppendLine("  From temp_pbidm_ready,tbmaster_prodmast LEFT OUTER JOIN tbMaster_MarginPluIDM  ON ")
-            // sb.AppendLine("   (MPI_PLUIGR = PLUKARTON) ")
-            // sb.AppendLine(" Where REQ_ID = '" & IP & "' ")
-            // sb.AppendLine("   and FDNOUO = '" & noPB & "' ")
-            // sb.AppendLine("   and DATE_TRUNC('DAY', FDTGPB) = to_date('" & tglPB & "','DD-MM-YYYY') ")
-            // sb.AppendLine("   and FDKCAB = '" & KodeToko & "' ")
-            // sb.AppendLine("   and qtyK > 0 ")
-            // sb.AppendLine("   and prd_prdcd = PLUKarton ")
-            // sb.AppendLine("   and COALESCE(TolakMinJ,'X') <> 'T' ")
+            DB::insert("
+                Insert Into tbMaster_PBOmi
+                (
+                    pbo_kodeigr,
+                    pbo_recordid,
+                    pbo_nourut,
+                    pbo_batch,
+                    pbo_tglpb,
+                    pbo_nopb,
+                    pbo_kodesbu,
+                    pbo_kodemember,
+                    pbo_kodeomi,
+                    pbo_kodedivisi,
+                    pbo_kodedepartemen,
+                    pbo_kodekategoribrg,
+                    pbo_pluomi,
+                    pbo_pluigr,
+                    pbo_hrgsatuan,
+                    pbo_qtyorder,
+                    pbo_qtyrealisasi,
+                    pbo_nilaiorder,
+                    pbo_ppnorder,
+                    pbo_distributionfee,
+                    pbo_create_by,
+                    pbo_create_dt,
+                    pbo_TglStruk
+                )
+                Select '" . session('KODECABANG') . "',
+                    NULL,
+                    rownum + " . $PBO_NoUrut . ",
+                    '" . $CounterKecil . "',
+                    FDTGPB,
+                    FDNOUO,
+                    '" . $KodeSBU . "',
+                    '',
+                    FDKCAB,
+                    prd_kodedivisi,
+                    prd_kodedepartement,
+                    prd_kodekategoribarang,
+                    FDKODE,
+                    plukecil,
+                    round(avgcost / CASE WHEN UnitKarton = 'KG' THEN 1000 ELSE 1 END * (1 + (COALESCE(MPI_MARGIN,3) / 100)),0),
+                    QtyK * CASE WHEN UnitKecil = 'KG' THEN 1 ELSE FracKecil END,
+                    QtyK * CASE WHEN UnitKecil = 'KG' THEN 1 ELSE FracKecil END,
+                    QtyK * round(avgcost / CASE WHEN UnitKarton = 'KG' THEN 1000 ELSE 1 END * (1 + (COALESCE(MPI_MARGIN,3) / 100)),0),
+                    QtyK * round(avgcost / CASE WHEN UnitKarton = 'KG' THEN 1000 ELSE 1 END * (1 + (COALESCE(MPI_MARGIN,3) / 100)),0) * (COALESCE(PRD_PPN,0)/100) * CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN 1 ELSE 0 END,
+                    0,
+                    '" . session('userid') . "',
+                    CURRENT_DATE,
+                    CURRENT_DATE
+                From temp_pbidm_ready,tbmaster_prodmast LEFT OUTER JOIN tbMaster_MarginPluIDM
+                    ON (MPI_PLUIGR = PLUKARTON)
+                Where REQ_ID = '" . $ip . "'
+                    and FDNOUO = '" . $noPB . "'
+                    and DATE_TRUNC('DAY', FDTGPB) = to_date('" . $tglPB. "','DD-MM-YYYY')
+                    and FDKCAB = '" . $KodeToko . "'
+                    and qtyK > 0
+                    and prd_prdcd = PLUKarton
+                    and COALESCE(TolakMinJ,'X') <> 'T'
+            ");
         }else{
             //! INSERT KE MASDPB PIECES
-            // sb.AppendLine("Insert Into tbMaster_PBOmi ")
-            // sb.AppendLine("( ")
-            // sb.AppendLine(" pbo_kodeigr, ")
-            // sb.AppendLine(" pbo_recordid, ")
-            // sb.AppendLine(" pbo_nourut, ")
-            // sb.AppendLine(" pbo_batch, ")
-            // sb.AppendLine(" pbo_tglpb, ")
-            // sb.AppendLine(" pbo_nopb, ")
-            // sb.AppendLine(" pbo_kodesbu, ")
-            // sb.AppendLine(" pbo_kodemember, ")
-            // sb.AppendLine(" pbo_kodeomi, ")
-            // sb.AppendLine(" pbo_kodedivisi, ")
-            // sb.AppendLine(" pbo_kodedepartemen, ")
-            // sb.AppendLine(" pbo_kodekategoribrg, ")
-            // sb.AppendLine(" pbo_pluomi, ")
-            // sb.AppendLine(" pbo_pluigr, ")
-            // sb.AppendLine(" pbo_hrgsatuan, ")
-            // sb.AppendLine(" pbo_qtyorder, ")
-            // sb.AppendLine(" pbo_qtyrealisasi, ")
-            // sb.AppendLine(" pbo_nilaiorder, ")
-            // sb.AppendLine(" pbo_ppnorder, ")
-            // sb.AppendLine(" pbo_distributionfee, ")
-            // sb.AppendLine(" pbo_create_by, ")
-            // sb.AppendLine(" pbo_create_dt, ")
-            // sb.AppendLine(" pbo_TglStruk  ")
-            // sb.AppendLine(") ")
-            // sb.AppendLine("Select '" & KDIGR & "', ")
-            // sb.AppendLine("       NULL, ")
-            // sb.AppendLine("       rownum + " & PBO_NoUrut & ", ")
-            // sb.AppendLine("       '" & CounterKecil & "', ")
-            // sb.AppendLine("       FDTGPB, ")
-            // sb.AppendLine("       FDNOUO, ")
-            // sb.AppendLine("       '" & KodeSBU & "', ")
-            // sb.AppendLine("       '', ")
-            // sb.AppendLine("       FDKCAB, ")
-            // sb.AppendLine("       prd_kodedivisi, ")
-            // sb.AppendLine("       prd_kodedepartement, ")
-            // sb.AppendLine("       prd_kodekategoribarang, ")
-            // sb.AppendLine("       FDKODE, ")
-            // sb.AppendLine("       plukecil, ")
-            // sb.AppendLine("       round(avgcost / CASE WHEN UnitKarton = 'KG' THEN 1000 ELSE 1 END * (1 + " & PersenMargin & "),0), ")
-            // sb.AppendLine("       QtyK * CASE WHEN UnitKecil = 'KG' THEN 1 ELSE FracKecil END, ")
-            // sb.AppendLine("       QtyK * CASE WHEN UnitKecil = 'KG' THEN 1 ELSE FracKecil END, ")
-            // sb.AppendLine("       QtyK * round(avgcost / CASE WHEN UnitKarton = 'KG' THEN 1000 ELSE 1 END * (1 + " & PersenMargin & "),0), ")
-            // sb.AppendLine("       QtyK * CASE WHEN UnitKecil = 'KG' THEN 1 ELSE FracKecil END * round(avgcost * (1 + " & PersenMargin & "),0) * (COALESCE(PRD_PPN,0)/100) * CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN 1 ELSE 0 END, ")
-            // sb.AppendLine("       0, ")
-            // sb.AppendLine("       '" & UserID & "', ")
-            // sb.AppendLine("       CURRENT_TIMESTAMP, ")
-            // sb.AppendLine("       CURRENT_TIMESTAMP  ")
-            // sb.AppendLine("  From temp_pbidm_ready,tbmaster_prodmast ")
-            // sb.AppendLine(" Where REQ_ID = '" & IP & "' ")
-            // sb.AppendLine("   and FDNOUO = '" & noPB & "' ")
-            // sb.AppendLine("   and DATE_TRUNC('DAY', FDTGPB) = to_date('" & tglPB & "','DD-MM-YYYY') ")
-            // sb.AppendLine("   and FDKCAB = '" & KodeToko & "' ")
-            // sb.AppendLine("   and qtyK > 0 ")
-            // sb.AppendLine("   and prd_prdcd = PLUKarton ")
-            // sb.AppendLine("   and COALESCE(TolakMinJ,'X') <> 'T' ")
+            DB::insert("
+                Insert Into tbMaster_PBOmi
+                (
+                    pbo_kodeigr,
+                    pbo_recordid,
+                    pbo_nourut,
+                    pbo_batch,
+                    pbo_tglpb,
+                    pbo_nopb,
+                    pbo_kodesbu,
+                    pbo_kodemember,
+                    pbo_kodeomi,
+                    pbo_kodedivisi,
+                    pbo_kodedepartemen,
+                    pbo_kodekategoribrg,
+                    pbo_pluomi,
+                    pbo_pluigr,
+                    pbo_hrgsatuan,
+                    pbo_qtyorder,
+                    pbo_qtyrealisasi,
+                    pbo_nilaiorder,
+                    pbo_ppnorder,
+                    pbo_distributionfee,
+                    pbo_create_by,
+                    pbo_create_dt,
+                    pbo_TglStruk
+                )
+                Select '" . session('KODECABANG') . "',
+                    NULL,
+                    rownum + " . $PBO_NoUrut . ",
+                    '" . $CounterKecil . "',
+                    FDTGPB,
+                    FDNOUO,
+                    '" . $KodeSBU . "',
+                    '',
+                    FDKCAB,
+                    prd_kodedivisi,
+                    prd_kodedepartement,
+                    prd_kodekategoribarang,
+                    FDKODE,
+                    plukecil,
+                    round(avgcost / CASE WHEN UnitKarton = 'KG' THEN 1000 ELSE 1 END * (1 + " . $PersenMargin . "),0),
+                    QtyK * CASE WHEN UnitKecil = 'KG' THEN 1 ELSE FracKecil END,
+                    QtyK * CASE WHEN UnitKecil = 'KG' THEN 1 ELSE FracKecil END,
+                    QtyK * round(avgcost / CASE WHEN UnitKarton = 'KG' THEN 1000 ELSE 1 END * (1 + " . $PersenMargin . "),0),
+                    QtyK * CASE WHEN UnitKecil = 'KG' THEN 1 ELSE FracKecil END * round(avgcost * (1 + " . $PersenMargin . "),0) * (COALESCE(PRD_PPN,0)/100) * CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN 1 ELSE 0 END,
+                    0,
+                    '" . session('userid') . "',
+                    CURRENT_TIMESTAMP,
+                    CURRENT_TIMESTAMP
+                From temp_pbidm_ready,tbmaster_prodmast
+                Where REQ_ID = '" . $ip . "'
+                    and FDNOUO = '" . $noPB . "'
+                    and DATE_TRUNC('DAY', FDTGPB) = to_date('" . $tglPB. "','DD-MM-YYYY')
+                    and FDKCAB = '" . $KodeToko . "'
+                    and qtyK > 0
+                    and prd_prdcd = PLUKarton
+                    and COALESCE(TolakMinJ,'X') <> 'T'
+            ");
         }
 
         //! UPDATE PBO_KodeMember
-        // sb.AppendLine("MERGE INTO  ")
-        // sb.AppendLine("    TBMASTER_PBOMI a ")
-        // sb.AppendLine("USING ")
-        // sb.AppendLine("( ")
-        // sb.AppendLine("  Select *  ")
-        // sb.AppendLine("    FROM tbMaster_TokoIGR ")
-        // sb.AppendLine("   WHERE COALESCE(TKO_TGLTUTUP,CURRENT_DATE+1) > CURRENT_DATE ")
-        // sb.AppendLine(") b ")
-        // sb.AppendLine("ON (a.PBO_KodeOMI = b.TKO_KodeOMI ")
-        // sb.AppendLine("   and PBO_NOPB = '" & noPB & "' ")
-        // sb.AppendLine("     AND DATE_TRUNC('DAY', PBO_TglPB) = TO_DATE('" & tglPB & "','DD-MM-YYYY') ")
-        // sb.AppendLine("     And PBO_KodeOMI = '" & KodeToko & "') ")
-        // sb.AppendLine("WHEN MATCHED THEN ")
-        // sb.AppendLine("  UPDATE SET PBO_KodeMember = b.TKO_KodeCustomer, ")
-        // sb.AppendLine("             PBO_RecordID = '3' ")
+        DB::insert("
+            MERGE INTO
+                TBMASTER_PBOMI a
+            USING
+            (
+                Select *
+                    FROM tbMaster_TokoIGR
+                WHERE COALESCE(TKO_TGLTUTUP,CURRENT_DATE+1) > CURRENT_DATE
+            ) b
+            ON (a.PBO_KodeOMI = b.TKO_KodeOMI
+            and PBO_NOPB = '" . $noPB . "'
+                AND DATE_TRUNC('DAY', PBO_TglPB) = TO_DATE('" . $tglPB. "','DD-MM-YYYY')
+                And PBO_KodeOMI = '" . $KodeToko . "')
+            WHEN MATCHED THEN
+            UPDATE SET PBO_KodeMember = b.TKO_KodeCustomer,
+                PBO_RecordID = '3'
+        ");
 
         //! VARIABLE jumItmCSV
         // sb.AppendLine("Select COALESCE(COUNT(1),0)  ")
@@ -1976,6 +2143,15 @@ class Controller extends BaseController
         // sb.AppendLine("   And DATE_TRUNC('DAY', CPB_TglPB) = to_date('" & tglPB & "','DD-MM-YYYY') ")
         // sb.AppendLine("   AND CPB_KodeToko = '" & KodeToko & "' ")
 
+        $jumItmCSV = DB::table('CSV_PB_BUAH')
+            ->where([
+                'CPB_IP' => $ip,
+                'CPB_NoPB' => $noPB,
+                'CPB_KodeToko' => $KodeToko,
+            ])
+            ->where(DB::raw("DATE_TRUNC('DAY', CPB_TglPB)"), Carbon::parse($tglPB)->format('d-m-Y'))
+            ->count();
+
         //! VARIABLE jumTolakan
         // sb.AppendLine("Select COALESCE(Count(1),0)  ")
         // sb.AppendLine("  From temp_cetakpb_tolakan_idm ")
@@ -1983,6 +2159,15 @@ class Controller extends BaseController
         // sb.AppendLine("   And nodok = '" & noPB & "'   ")
         // sb.AppendLine("   And DATE_TRUNC('DAY', tgldok) = to_date('" & tglPB & "','DD-MM-YYYY') ")
         // sb.AppendLine("	  AND KCAB = '" & KodeToko & "' ")
+
+        $jumTolakan = DB::table('temp_cetakpb_tolakan_idm')
+            ->where([
+                'REQ_ID' => $ip,
+                'nodok' => $noPB,
+                'KCAB' => $KodeToko,
+            ])
+            ->where(DB::raw("DATE_TRUNC('DAY', tgldok)"), Carbon::parse($tglPB)->format('d-m-Y'))
+            ->count();
 
         //! VARIABLE rphOrder
         // sb.AppendLine("Select sum(COALESCE(pbo_nilaiorder,0))  ")
@@ -1992,218 +2177,243 @@ class Controller extends BaseController
         // sb.AppendLine("   And DATE_TRUNC('DAY', PBO_TglPB) = to_date('" & tglPB & "','DD-MM-YYYY') ")
         // sb.AppendLine("   And PBO_KodeOMI = '" & KodeToko & "' ")
 
+        DB::table('tbmaster_pbomi')
+            ->selectRaw("sum(COALESCE(pbo_nilaiorder,0)) as sum")
+            ->where([
+                'pbo_kodeigr' => $KDIGR,
+                'pbo_nopb' => $noPB,
+                'pbo_kodeomi' => $KodeToko,
+            ])
+            ->where(DB::raw("DATE_TRUNC('DAY', pbo_tglpb)"), Carbon::parse($tglPB)->format('Y-m-d'))
+            ->first()->sum;
+
         $JumlahKontainer = 0;
         $JumlahBronjong = 0;
         $KubikasiKontainer = 0;
         $KubikasiBronjong = 0;
 
         //! Insert Into TBTR_Header_Buah
-        // sb.AppendLine("INSERT INTO TBTR_Header_Buah ")
-        // sb.AppendLine("( ")
-        // sb.AppendLine("  HDB_kodeigr, ")
-        // sb.AppendLine("  HDB_Flag, ")
-        // sb.AppendLine("  HDB_tgltransaksi, ")
-        // sb.AppendLine("  HDB_kodetoko, ")
-        // sb.AppendLine("  HDB_nopb, ")
-        // sb.AppendLine("  HDB_tglpb, ")
-        // sb.AppendLine("  HDB_itempb, ")
-        // sb.AppendLine("  HDB_itemvalid, ")
-        // sb.AppendLine("  HDB_rphvalid, ")
-        // sb.AppendLine("  HDB_filepb, ")
-        // sb.AppendLine("  HDB_keterangan, ")
-        // sb.AppendLine("  HDB_create_by, ")
-        // sb.AppendLine("  HDB_create_dt ")
-        // sb.AppendLine(") ")
-        // sb.AppendLine("Select pbo_kodeigr, ")
-        // sb.AppendLine("       '1', ")
-        // sb.AppendLine("       CURRENT_TIMESTAMP, ")
-        // sb.AppendLine("       pbo_kodeomi, ")
-        // sb.AppendLine("       pbo_noPB, ")
-        // sb.AppendLine("       pbo_tglPB, ")
-        // sb.AppendLine("       " & jumItmCSV & ", ")
-        // sb.AppendLine("	      Count(PBO_PLUIGR), ")
-        // sb.AppendLine("	      SUM(PBO_NilaiOrder), ")
-        // sb.AppendLine("       '" & FilePB & "', ")
-        // sb.AppendLine("       '" & JenisPB & "', ")
-        // sb.AppendLine("       '" & UserID & "', ")
-        // sb.AppendLine("	      CURRENT_TIMESTAMP ")
-        // sb.AppendLine("  FROM tbMaster_pbomi ")
-        // sb.AppendLine(" Where pbo_noPB = '" & noPB & "' ")
-        // sb.AppendLine("   And DATE_TRUNC('DAY', pbo_tglPB) = TO_DATE('" & tglPB & "','DD-MM-YYYY') ")
-        // sb.AppendLine("   And PBO_KodeOMI = '" & KodeToko & "' ")
-        // sb.AppendLine(" GROUP BY pbo_kodeigr, ")
-        // sb.AppendLine("       pbo_kodeomi, ")
-        // sb.AppendLine("       pbo_noPB, ")
-        // sb.AppendLine("       pbo_tglPB ")
+        DB::insert("
+            INSERT INTO TBTR_Header_Buah
+            (
+                HDB_kodeigr,
+                HDB_Flag,
+                HDB_tgltransaksi,
+                HDB_kodetoko,
+                HDB_nopb,
+                HDB_tglpb,
+                HDB_itempb,
+                HDB_itemvalid,
+                HDB_rphvalid,
+                HDB_filepb,
+                HDB_keterangan,
+                HDB_create_by,
+                HDB_create_dt
+            )
+            Select pbo_kodeigr,
+                '1',
+                CURRENT_TIMESTAMP,
+                pbo_kodeomi,
+                pbo_noPB,
+                pbo_tglPB,
+                " . $jumItmCSV . ",
+                    Count(PBO_PLUIGR),
+                    SUM(PBO_NilaiOrder),
+                '" . $FilePB ."',
+                '" . $JenisPB . "',
+                '" . session('userid') . "',
+                    CURRENT_TIMESTAMP
+            FROM tbMaster_pbomi
+            Where pbo_noPB = '" . $noPB . "'
+            And DATE_TRUNC('DAY', pbo_tglPB) = TO_DATE('" . $tglPB. "','DD-MM-YYYY')
+            And PBO_KodeOMI = '" . $KodeToko . "'
+            GROUP BY pbo_kodeigr,
+                pbo_kodeomi,
+                pbo_noPB,
+                pbo_tglPB
+        ");
 
         //! MERGE TBTR_Header_Buah-SET NoUrut
-        // sb.AppendLine("MERGE INTO ")
-        // sb.AppendLine("   TBTR_Header_Buah a ")
-        // sb.AppendLine("USING ")
-        // sb.AppendLine("( ")
-        // sb.AppendLine("  SELECT CLB_Kode, ")
-        // sb.AppendLine("         CLB_Toko, ")
-        // sb.AppendLine("         CLB_NoUrut  ")
-        // sb.AppendLine("    FROM CLUSTER_BUAH ")
-        // sb.AppendLine(") B ")
-        // sb.AppendLine("ON  ")
-        // sb.AppendLine("( a.HDB_KodeToko = b.CLB_Toko ")
-        // sb.AppendLine(" and HDB_NOPB = '" & noPB & "' ")
-        // sb.AppendLine("   AND DATE_TRUNC('DAY', HDB_tglPB) = TO_DATE('" & tglPB & "','DD-MM-YYYY') ")
-        // sb.AppendLine("   AND HDB_Flag = '1'  ")
-        // sb.AppendLine("   AND HDB_KodeToko = '" & KodeToko & "') ")
-        // sb.AppendLine("WHEN MATCHED THEN ")
-        // sb.AppendLine("  UPDATE SET HDB_KodeCluster = b.CLB_Kode, ")
-        // sb.AppendLine("             HDB_NoUrut = b.CLB_NoUrut ")
+        DB::insert("
+            MERGE INTO
+                TBTR_Header_Buah a
+            USING
+            (
+                SELECT CLB_Kode,
+                    CLB_Toko,
+                    CLB_NoUrut
+                FROM CLUSTER_BUAH
+            ) B
+            ON
+            (
+                a.HDB_KodeToko = b.CLB_Toko
+                and HDB_NOPB = '" . $noPB . "'
+                AND DATE_TRUNC('DAY', HDB_tglPB) = TO_DATE('" . $tglPB. "','DD-MM-YYYY')
+                AND HDB_Flag = '1'
+                AND HDB_KodeToko = '" . $KodeToko . "'
+            )
+            WHEN MATCHED THEN
+            UPDATE SET HDB_KodeCluster = b.CLB_Kode,
+                HDB_NoUrut = b.CLB_NoUrut
+        ");
 
         //! INSERT INTO DCP_DATA_BUAH
-        // sb.AppendLine("INSERT INTO DCP_DATA_BUAH ")
-        // sb.AppendLine("( ")
-        // sb.AppendLine("  DDB_KodeSBU, ")
-        // sb.AppendLine("  DDB_KodeToko, ")
-        // sb.AppendLine("  DDB_NoPB, ")
-        // sb.AppendLine("  DDB_TglPB, ")
-        // sb.AppendLine("  DDB_PRDCD, ")
-        // sb.AppendLine("  DDB_PLUIDM, ")
-        // sb.AppendLine("  DDB_Deskripsi, ")
-        // sb.AppendLine("  DDB_Unit, ")
-        // sb.AppendLine("  DDB_Frac, ")
-        // sb.AppendLine("  DDB_FlagBKP1, ")
-        // sb.AppendLine("  DDB_FlagBKP2, ")
-        // sb.AppendLine("  DDB_QtyOrder, ")
-        // sb.AppendLine("  DDB_TglUpload, ")
-        // sb.AppendLine("  DDB_IP, ")
-        // sb.AppendLine("  DDB_JenisPB, ")
-        // sb.AppendLine("  DDB_NoUrutJenisPB ")
-        // sb.AppendLine(") ")
-        // sb.AppendLine("SELECT '" & KodeSBU & "' as KodeSBU, ")
-        // sb.AppendLine("       PBO_KodeOMI, ")
-        // sb.AppendLine("	      PBO_NoPB, ")
-        // sb.AppendLine("	      PBO_TglPB, ")
-        // sb.AppendLine("	      PBO_PluIGR, ")
-        // sb.AppendLine("	      PBO_PluOMI, ")
-        // sb.AppendLine("	      SUBSTR(PRD_DeskripsiPendek,1,20), ")
-        // sb.AppendLine("	      PRD_Unit, ")
-        // sb.AppendLine("	      PRD_Frac, ")
-        // sb.AppendLine("	      PRD_FlagBKP1, ")
-        // sb.AppendLine("	      PRD_FlagBKP2, ")
-        // sb.AppendLine("	      PBO_QtyOrder, ")
-        // sb.AppendLine("	      CURRENT_timestamp, ")
-        // sb.AppendLine("	      '" & IP & "', ")
-        // sb.AppendLine("	      '" & JenisPB & "', ")
-        // sb.AppendLine("       " & NoUrJenisPB & " ")
-        // sb.AppendLine("  From tbMaster_PBOMI, ")
-        // sb.AppendLine("       tbMaster_Prodmast ")
-        // sb.AppendLine(" WHERE PBO_NOPB = '" & noPB & "' ")
-        // sb.AppendLine("   AND DATE_TRUNC('DAY', PBO_TglPB) = TO_DATE('" & tglPB & "','DD-MM-YYYY') ")
-        // sb.AppendLine("   And PBO_KodeOMI = '" & KodeToko & "' ")
-        // sb.AppendLine("   AND PBO_PLUIGR = PRD_PRDCD ")
+        DB::insert("
+            INSERT INTO DCP_DATA_BUAH
+            (
+                DDB_KodeSBU,
+                DDB_KodeToko,
+                DDB_NoPB,
+                DDB_TglPB,
+                DDB_PRDCD,
+                DDB_PLUIDM,
+                DDB_Deskripsi,
+                DDB_Unit,
+                DDB_Frac,
+                DDB_FlagBKP1,
+                DDB_FlagBKP2,
+                DDB_QtyOrder,
+                DDB_TglUpload,
+                DDB_IP,
+                DDB_JenisPB,
+                DDB_NoUrutJenisPB
+            )
+            SELECT '" . $KodeSBU . "' as KodeSBU,
+                PBO_KodeOMI,
+                PBO_NoPB,
+                PBO_TglPB,
+                PBO_PluIGR,
+                PBO_PluOMI,
+                SUBSTR(PRD_DeskripsiPendek,1,20),
+                PRD_Unit,
+                PRD_Frac,
+                PRD_FlagBKP1,
+                PRD_FlagBKP2,
+                PBO_QtyOrder,
+                CURRENT_timestamp,
+                '" . $ip . "',
+                '" . $JenisPB . "',
+                " . $NoUrJenisPB . "
+            From tbMaster_PBOMI,
+                tbMaster_Prodmast
+            WHERE PBO_NOPB = '" . $noPB . "'
+                AND DATE_TRUNC('DAY', PBO_TglPB) = TO_DATE('" . $tglPB. "','DD-MM-YYYY')
+                And PBO_KodeOMI = '" . $KodeToko . "'
+                AND PBO_PLUIGR = PRD_PRDCD
+        ");
 
         //! MERGE DCP_DATA_BUAH SET DDB_KodeCluster,DDB_NoUrutToko
-        // sb.AppendLine("MERGE INTO  ")
-        // sb.AppendLine("     DCP_DATA_BUAH  A ")
-        // sb.AppendLine("USING  ")
-        // sb.AppendLine("(  ")
-        // sb.AppendLine(" SELECT * ")
-        // sb.AppendLine("   FROM CLUSTER_BUAH  ")
-        // sb.AppendLine(") B ")
-        // sb.AppendLine("ON ")
-        // sb.AppendLine("( ")
-        // sb.AppendLine("  A.DDB_KodeToko = B.CLB_Toko ")
-        // sb.AppendLine("   AND DDB_IP = '" & IP & "'  ")
-        // sb.AppendLine("     AND DDB_KodeToko = '" & KodeToko & "'  ")
-        // sb.AppendLine("	    AND DDB_NOPB = '" & noPB & "'  ")
-        // sb.AppendLine("	    AND DATE_TRUNC('DAY', DDB_TglPB) = TO_DATE('" & tglPB & "','DD-MM-YYYY')  ")
-        // sb.AppendLine("	    AND DDB_JeniSPB = '" & JenisPB & "'  ")
-        // sb.AppendLine("	    AND DDB_RecordID IS NULL  ")
-        // sb.AppendLine(") ")
-        // sb.AppendLine("WHEN MATCHED THEN  ")
-        // sb.AppendLine("  UPDATE SET DDB_NoUrutToko  = B.CLB_NoUrut, ")
-        // sb.AppendLine("             DDB_KodeCluster = B.CLB_Kode ")
+        DB::insert("
+            MERGE INTO
+                DCP_DATA_BUAH  A
+            USING
+            (
+                SELECT *
+                FROM CLUSTER_BUAH
+            ) B
+            ON (
+                A.DDB_KodeToko = B.CLB_Toko
+                AND DDB_IP = '" . $ip . "'
+                AND DDB_KodeToko = '" . $KodeToko . "'
+                AND DDB_NOPB = '" . $noPB . "'
+                AND DATE_TRUNC('DAY', DDB_TglPB) = TO_DATE('" . $tglPB. "','DD-MM-YYYY')
+                AND DDB_JeniSPB = '" . $JenisPB . "'
+                AND DDB_RecordID IS NULL
+            )
+            WHEN MATCHED THEN
+            UPDATE SET DDB_NoUrutToko  = B.CLB_NoUrut,
+                DDB_KodeCluster = B.CLB_Kode
+        ");
 
         //! MERGE DCP_DATA_BUAH SET DDB_NoUrutPLU
-        // sb.AppendLine("MERGE INTO ")
-        // sb.AppendLine("     DCP_DATA_BUAH A ")
-        // sb.AppendLine("USING ")
-        // sb.AppendLine("( ")
-        // sb.AppendLine(" SELECT *  ")
-        // sb.AppendLine("   FROM TEMP_URUTAN_BUAH ")
-        // sb.AppendLine("  WHERE IP = '" & IP & "' ")
-        // sb.AppendLine(") B ")
-        // sb.AppendLine("ON ")
-        // sb.AppendLine("( ")
-        // sb.AppendLine("      A.DDB_PLUIDM = B.PLU ")
-        // sb.AppendLine("  AND A.DDB_JenisPB = B.Jenis ")
-        // sb.AppendLine("   AND DDB_IP = '" & IP & "' ")
-        // sb.AppendLine("     AND DDB_KodeToko = '" & KodeToko & "' ")
-        // sb.AppendLine("	    AND DDB_NOPB = '" & noPB & "' ")
-        // sb.AppendLine("	    AND DATE_TRUNC('DAY', DDB_TglPB) = TO_DATE('" & tglPB & "','DD-MM-YYYY') ")
-        // sb.AppendLine("	    AND DDB_JeniSPB = '" & JenisPB & "' ")
-        // sb.AppendLine("	    AND DDB_RecordID IS NULL ")
-        // sb.AppendLine(") ")
-        // sb.AppendLine("WHEN MATCHED THEN ")
-        // sb.AppendLine("  UPDATE SET DDB_NoUrutPLU = B.NoUrut ")
+        DB::insert("
+            MERGE INTO
+                DCP_DATA_BUAH A
+            USING
+            (
+                SELECT *
+                FROM TEMP_URUTAN_BUAH
+                WHERE IP = '" . $ip . "'
+            ) B
+            ON (
+                A.DDB_PLUIDM = B.PLU
+                AND A.DDB_JenisPB = B.Jenis
+                AND DDB_IP = '" . $ip . "'
+                AND DDB_KodeToko = '" . $KodeToko . "'
+                AND DDB_NOPB = '" . $noPB . "'
+                AND DATE_TRUNC('DAY', DDB_TglPB) = TO_DATE('" . $tglPB. "','DD-MM-YYYY')
+                AND DDB_JeniSPB = '" . $JenisPB . "'
+                AND DDB_RecordID IS NULL
+            )
+            WHEN MATCHED THEN
+            UPDATE SET DDB_NoUrutPLU = B.NoUrut
+        ");
 
         //! INSERT INTO HISTORY_DCP_DATA_BUAH
-        // sb.AppendLine("INSERT INTO HISTORY_DCP_DATA_BUAH ")
-        // sb.AppendLine("( ")
-        // sb.AppendLine("  HDDB_RecordID, ")
-        // sb.AppendLine("  HDDB_ID, ")
-        // sb.AppendLine("  HDDB_KodeSBU, ")
-        // sb.AppendLine("  HDDB_KodeToko, ")
-        // sb.AppendLine("  HDDB_NoPB, ")
-        // sb.AppendLine("  HDDB_TglPB, ")
-        // sb.AppendLine("  HDDB_PRDCD, ")
-        // sb.AppendLine("  HDDB_PLUIDM, ")
-        // sb.AppendLine("  HDDB_Deskripsi, ")
-        // sb.AppendLine("  HDDB_Unit, ")
-        // sb.AppendLine("  HDDB_Frac, ")
-        // sb.AppendLine("  HDDB_FlagBKP1, ")
-        // sb.AppendLine("  HDDB_FlagBKP2, ")
-        // sb.AppendLine("  HDDB_QtyOrder, ")
-        // sb.AppendLine("  HDDB_QtyScan, ")
-        // sb.AppendLine("  HDDB_TglUpload, ")
-        // sb.AppendLine("  HDDB_TglScan, ")
-        // sb.AppendLine("  HDDB_UserScan, ")
-        // sb.AppendLine("  HDDB_IP, ")
-        // sb.AppendLine("  HDDB_KodeCluster, ")
-        // sb.AppendLine("  HDDB_JenisPB, ")
-        // sb.AppendLine("  HDDB_NoUrutJenisPB, ")
-        // sb.AppendLine("  HDDB_NoUrutPLU, ")
-        // sb.AppendLine("  HDDB_NoUrutToko, ")
-        // sb.AppendLine("  HDDB_NoKoli ")
-        // sb.AppendLine(") ")
-        // sb.AppendLine("SELECT DDB_RecordID, ")
-        // sb.AppendLine("       DDB_ID, ")
-        // sb.AppendLine("       DDB_KodeSBU, ")
-        // sb.AppendLine("       DDB_KodeToko, ")
-        // sb.AppendLine("       DDB_NoPB, ")
-        // sb.AppendLine("       DDB_TglPB, ")
-        // sb.AppendLine("       DDB_PRDCD, ")
-        // sb.AppendLine("       DDB_PLUIDM, ")
-        // sb.AppendLine("       DDB_Deskripsi, ")
-        // sb.AppendLine("       DDB_Unit, ")
-        // sb.AppendLine("       DDB_Frac, ")
-        // sb.AppendLine("       DDB_FlagBKP1, ")
-        // sb.AppendLine("       DDB_FlagBKP2, ")
-        // sb.AppendLine("       DDB_QtyOrder, ")
-        // sb.AppendLine("       DDB_QtyScan, ")
-        // sb.AppendLine("       DDB_TglUpload, ")
-        // sb.AppendLine("       DDB_TglScan, ")
-        // sb.AppendLine("       DDB_UserScan, ")
-        // sb.AppendLine("       DDB_IP, ")
-        // sb.AppendLine("       DDB_KodeCluster, ")
-        // sb.AppendLine("       DDB_JenisPB, ")
-        // sb.AppendLine("       DDB_NoUrutJenisPB, ")
-        // sb.AppendLine("       DDB_NoUrutPLU, ")
-        // sb.AppendLine("       DDB_NoUrutToko, ")
-        // sb.AppendLine("       DDB_NoKoli ")
-        // sb.AppendLine("  FROM DCP_DATA_BUAH ")
-        // sb.AppendLine(" WHERE DATE_TRUNC('DAY', DDB_TGLUPLOAD) < CURRENT_DATE - 90 ")
+        DB::insert("
+            INSERT INTO HISTORY_DCP_DATA_BUAH
+            (
+                HDDB_RecordID,
+                HDDB_ID,
+                HDDB_KodeSBU,
+                HDDB_KodeToko,
+                HDDB_NoPB,
+                HDDB_TglPB,
+                HDDB_PRDCD,
+                HDDB_PLUIDM,
+                HDDB_Deskripsi,
+                HDDB_Unit,
+                HDDB_Frac,
+                HDDB_FlagBKP1,
+                HDDB_FlagBKP2,
+                HDDB_QtyOrder,
+                HDDB_QtyScan,
+                HDDB_TglUpload,
+                HDDB_TglScan,
+                HDDB_UserScan,
+                HDDB_IP,
+                HDDB_KodeCluster,
+                HDDB_JenisPB,
+                HDDB_NoUrutJenisPB,
+                HDDB_NoUrutPLU,
+                HDDB_NoUrutToko,
+                HDDB_NoKoli
+            )
+            SELECT DDB_RecordID,
+                DDB_ID,
+                DDB_KodeSBU,
+                DDB_KodeToko,
+                DDB_NoPB,
+                DDB_TglPB,
+                DDB_PRDCD,
+                DDB_PLUIDM,
+                DDB_Deskripsi,
+                DDB_Unit,
+                DDB_Frac,
+                DDB_FlagBKP1,
+                DDB_FlagBKP2,
+                DDB_QtyOrder,
+                DDB_QtyScan,
+                DDB_TglUpload,
+                DDB_TglScan,
+                DDB_UserScan,
+                DDB_IP,
+                DDB_KodeCluster,
+                DDB_JenisPB,
+                DDB_NoUrutJenisPB,
+                DDB_NoUrutPLU,
+                DDB_NoUrutToko,
+                DDB_NoKoli
+            FROM DCP_DATA_BUAH
+            WHERE DATE_TRUNC('DAY', DDB_TGLUPLOAD) < CURRENT_DATE - 90
+        ");
 
         //! DELETE FROM DCP_DATA_BUAH
         // sb.AppendLine("DELETE FROM DCP_DATA_BUAH ")
         // sb.AppendLine(" WHERE DATE_TRUNC('DAY', DDB_TGLUPLOAD) < CURRENT_DATE - 90 ")
+        DB::table('dcp_data_buah')
+            ->whereRaw("DATE_TRUNC('DAY', ddb_tglupload) < CURRENT_DATE - 90")
+            ->delete();
 
         // CetakALL_1(PersenMargin, CounterKarton, CounterKecil)
         // CetakALL_2(PersenMargin, CounterKarton, CounterKecil)
@@ -2213,16 +2423,37 @@ class Controller extends BaseController
         // CetakALL_6(PersenMargin, CounterKarton, CounterKecil)
     }
 
-    public function CetakALL_1($PersenMargin, $CounterKarton, $CounterKecil){
+    public function CetakALL_1(){
+
+        //! VARIABLE
+        $ip = $this->getIP();
+        $KodeToko = "";
+        $noPB = "";
+        $tglPB = "";
+        $PersenMargin = "";
+
         //! GET HEADER CETAKAN
         // sb.AppendLine("Select PRS_NamaCabang ")
         // sb.AppendLine("  From tbMaster_perusahaan ")
+
+        $data['namaCabang'] = DB::table('tbmaster_perusahaan')
+            ->select('prs_namacabang')
+            ->first()->prs_namacabang;
 
         // sb.AppendLine("Select TKO_NamaOMI ")
         // sb.AppendLine("  From tbMaster_TokoIGR ")
         // sb.AppendLine(" Where TKO_KodeIGR = '" & KDIGR & "' ")
         // sb.AppendLine("   And TKO_KodeOMI = '" & KodeToko & "' ")
         // sb.AppendLine("   And COALESCE(TKO_TGLTUTUP,CURRENT_DATE+1) > CURRENT_DATE ")
+
+        $data['namaToko'] = DB::table('tbmaster_tokoigr')
+            ->select('tko_namaomi')
+            ->where([
+                'tko_kodeigr' => session('KODECABANG'),
+                'tko_kodeomi' => $KodeToko,
+            ])
+            ->whereRaw("coalesce(TKO_TGLTUTUP,CURRENT_DATE+1) > CURRENT_DATE")
+            ->first()->tko_namaomi;
 
         //! f = "LIST ORDER PB"
 
@@ -2231,126 +2462,138 @@ class Controller extends BaseController
         // sb.AppendLine("  FROM information_schema.columns ")
         // sb.AppendLine(" Where UPPER(table_name) = 'TBMASTER_MARGINPLUIDM' ")
 
-        if($jum > 0){
+        $count = DB::table('information_schema.columns')
+            ->whereRaw("upper(table_name) = 'TBMASTER_MARGINPLUIDM'")
+            ->count();
+
+        if($count > 0){
             //! INSERT INTO PBIDM_LISTORDER
-            // sb.AppendLine("INSERT INTO PBIDM_LISTORDER ")
-            // sb.AppendLine("  ( ")
-            // sb.AppendLine("  PBL_KODETOKO, ")
-            // sb.AppendLine("  PBL_NOPB, ")
-            // sb.AppendLine("  PBL_TGLPB, ")
-            // sb.AppendLine("  PBL_PLU, ")
-            // sb.AppendLine("  PBL_DESKRIPSI, ")
-            // sb.AppendLine("  PBL_UNIT, ")
-            // sb.AppendLine("  PBL_FRAC, ")
-            // sb.AppendLine("  PBL_QTYB, ")
-            // sb.AppendLine("  PBL_QTYK, ")
-            // sb.AppendLine("  PBL_QTYO, ")
-            // sb.AppendLine("  PBL_HRGSATUAN, ")
-            // sb.AppendLine("  PBL_NILAI, ")
-            // sb.AppendLine("  PBL_PPN, ")
-            // sb.AppendLine("  PBL_TOTAL, ")
-            // sb.AppendLine("  PBL_CREATE_BY, ")
-            // sb.AppendLine("  PBL_CREATE_DT ")
-            // sb.AppendLine("  ) ")
-            // sb.AppendLine("Select '" & KodeToko & "' as KODETOKO, ")
-            // sb.AppendLine("       '" & noPB & "' as NoPB,  ")
-            // sb.AppendLine("       TO_DATE('" & tglPB & "','DD-MM-YYYY') as TglPB,  ")
-            // sb.AppendLine("       plukarton as plu,  ")
-            // sb.AppendLine("       desk,  ")
-            // sb.AppendLine("       unitkarton as unit,  ")
-            // sb.AppendLine("       frackarton as frac, ")
-            // sb.AppendLine("       qtyb as qty, ")
-            // sb.AppendLine("       qtyk as frc,  ")
-            // sb.AppendLine("       fdqtyb as inpcs,  ")
-            // sb.AppendLine("       Round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+(COALESCE(MPI_MARGIN,3)/100))) as Harga, ")
-            // sb.AppendLine("       fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+(COALESCE(MPI_MARGIN,3)/100))) as Nilai, ")
-            // sb.AppendLine("       fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+(COALESCE(MPI_MARGIN,3)/100))) * (COALESCE(PRD_PPN,0)/100) * CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN 1 ELSE 0 END as PPN, ")
-            // sb.AppendLine("       fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+(COALESCE(MPI_MARGIN,3)/100))) * (1 + CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN (COALESCE(PRD_PPN,0)/100) ELSE 0 END) as TOTAL, ")
-            // sb.AppendLine("       '" & UserID & "', ")
-            // sb.AppendLine("       CURRENT_TIMESTAMP ")
-            // sb.AppendLine("  From temp_pbidm_ready ")
-            // sb.AppendLine("  JOIN tbmaster_prodmast ON prd_prdcd = plukarton ")
-            // sb.AppendLine("  LEFT JOIN tbmaster_marginpluidm ON MPI_PluIGR = PLUKARTON ")
-            // sb.AppendLine(" Where req_id = '" & IP & "' ")
-            // sb.AppendLine("   and fdnouo = '" & noPB & "' ")
-            // sb.AppendLine("   and DATE_TRUNC('DAY', fdtgpb) = to_date('" & tglPB & "','DD-MM-YYYY')   ")
+            DB::insert("
+                INSERT INTO PBIDM_LISTORDER
+                (
+                    PBL_KODETOKO,
+                    PBL_NOPB,
+                    PBL_TGLPB,
+                    PBL_PLU,
+                    PBL_DESKRIPSI,
+                    PBL_UNIT,
+                    PBL_FRAC,
+                    PBL_QTYB,
+                    PBL_QTYK,
+                    PBL_QTYO,
+                    PBL_HRGSATUAN,
+                    PBL_NILAI,
+                    PBL_PPN,
+                    PBL_TOTAL,
+                    PBL_CREATE_BY,
+                    PBL_CREATE_DT
+                )
+                Select '" . $KodeToko . "' as KODETOKO,
+                    '" . $noPB . "' as NoPB,
+                    TO_DATE('" . $tglPB. "','DD-MM-YYYY') as TglPB,
+                    plukarton as plu,
+                    desk,
+                    unitkarton as unit,
+                    frackarton as frac,
+                    qtyb as qty,
+                    qtyk as frc,
+                    fdqtyb as inpcs,
+                    Round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+(COALESCE(MPI_MARGIN,3)/100))) as Harga,
+                    fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+(COALESCE(MPI_MARGIN,3)/100))) as Nilai,
+                    fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+(COALESCE(MPI_MARGIN,3)/100))) * (COALESCE(PRD_PPN,0)/100) * CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN 1 ELSE 0 END as PPN,
+                    fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+(COALESCE(MPI_MARGIN,3)/100))) * (1 + CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN (COALESCE(PRD_PPN,0)/100) ELSE 0 END) as TOTAL,
+                    '" . session('userid') . "',
+                    CURRENT_TIMESTAMP
+                From temp_pbidm_ready
+                JOIN tbmaster_prodmast ON prd_prdcd = plukarton
+                LEFT JOIN tbmaster_marginpluidm ON MPI_PluIGR = PLUKARTON
+                Where req_id = '" . $ip . "'
+                    and fdnouo = '" . $noPB . "'
+                    and DATE_TRUNC('DAY', fdtgpb) = to_date('" . $tglPB. "','DD-MM-YYYY')
+            ");
 
             //! ISI dtListOrder
-            // sb.AppendLine("Select plukarton as plu,  ")
-            // sb.AppendLine("       desk,  ")
-            // sb.AppendLine("       unitkarton ||'/'|| frackarton as unit,  ")
-            // sb.AppendLine("       qtyb as qty, ")
-            // sb.AppendLine("       qtyk as frc,  ")
-            // sb.AppendLine("       fdqtyb as inpcs,  ")
-            // sb.AppendLine("       Round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+(COALESCE(MPI_MARGIN,3)/100))) as Harga, ")
-            // sb.AppendLine("       fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+(COALESCE(MPI_MARGIN,3)/100))) as Nilai, ")
-            // sb.AppendLine("       fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+(COALESCE(MPI_MARGIN,3)/100))) * (COALESCE(PRD_PPN,0)/100) * CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN 1 ELSE 0 END as PPN, ")
-            // sb.AppendLine("       fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+(COALESCE(MPI_MARGIN,3)/100))) * (1 + CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN (COALESCE(PRD_PPN,0)/100) ELSE 0 END) as TOTAL ")
-            // sb.AppendLine("  From temp_pbidm_ready ")
-            // sb.AppendLine("  JOIN tbmaster_prodmast ON prd_prdcd = plukarton ")
-            // sb.AppendLine("  LEFT JOIN tbmaster_marginpluidm ON MPI_PluIGR = PLUKARTON ")
-            // sb.AppendLine(" Where req_id = '" & IP & "' ")
-            // sb.AppendLine("   and fdnouo = '" & noPB & "' ")
-            // sb.AppendLine("   and DATE_TRUNC('DAY', fdtgpb) = to_date('" & tglPB & "','DD-MM-YYYY')   ")
-            // sb.AppendLine(" Order By plukarton,fdqtyb desc ")
+            DB::select("
+                Select plukarton as plu,
+                    desk,
+                    unitkarton ||'/'|| frackarton as unit,
+                    qtyb as qty,
+                    qtyk as frc,
+                    fdqtyb as inpcs,
+                    Round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+(COALESCE(MPI_MARGIN,3)/100))) as Harga,
+                    fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+(COALESCE(MPI_MARGIN,3)/100))) as Nilai,
+                    fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+(COALESCE(MPI_MARGIN,3)/100))) * (COALESCE(PRD_PPN,0)/100) * CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN 1 ELSE 0 END as PPN,
+                    fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+(COALESCE(MPI_MARGIN,3)/100))) * (1 + CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN (COALESCE(PRD_PPN,0)/100) ELSE 0 END) as TOTAL
+                From temp_pbidm_ready
+                JOIN tbmaster_prodmast ON prd_prdcd = plukarton
+                LEFT JOIN tbmaster_marginpluidm ON MPI_PluIGR = PLUKARTON
+                Where req_id = '" . $ip . "'
+                    and fdnouo = '" . $noPB . "'
+                    and DATE_TRUNC('DAY', fdtgpb) = to_date('" . $tglPB. "','DD-MM-YYYY')
+                Order By plukarton,fdqtyb desc
+            ");
         }else{
             //! INSERT INTO PBIDM_LISTORDER
-            // sb.AppendLine("INSERT INTO PBIDM_REKAPORDER  ")
-            // sb.AppendLine("  ( ")
-            // sb.AppendLine("  PBL_KODETOKO, ")
-            // sb.AppendLine("  PBL_NOPB, ")
-            // sb.AppendLine("  PBL_TGLPB, ")
-            // sb.AppendLine("  PBL_PLU, ")
-            // sb.AppendLine("  PBL_DESKRIPSI, ")
-            // sb.AppendLine("  PBL_UNIT, ")
-            // sb.AppendLine("  PBL_QTYB, ")
-            // sb.AppendLine("  PBL_QTYK, ")
-            // sb.AppendLine("  PBL_QTYO, ")
-            // sb.AppendLine("  PBL_HRGSATUAN, ")
-            // sb.AppendLine("  PBL_NILAI, ")
-            // sb.AppendLine("  PBL_PPN, ")
-            // sb.AppendLine("  PBL_TOTAL, ")
-            // sb.AppendLine("  PBL_CREATE_BY, ")
-            // sb.AppendLine("  PBL_CREATE_DT ")
-            // sb.AppendLine("  ) ")
-            // sb.AppendLine("Select '" & KodeToko & "' as KODETOKO ")
-            // sb.AppendLine("       '" & noPB & "' as NoPB,  ")
-            // sb.AppendLine("       TO_DATE('" & tglPB & "','YYYYMMDD') as TglPB,  ")
-            // sb.AppendLine("       plukarton as plu,  ")
-            // sb.AppendLine("       desk,  ")
-            // sb.AppendLine("       unitkarton ||'/'|| frackarton as unit,  ")
-            // sb.AppendLine("       qtyb as qty, ")
-            // sb.AppendLine("       qtyk as frc,  ")
-            // sb.AppendLine("       fdqtyb as inpcs,  ")
-            // sb.AppendLine("       Round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+ " & PersenMargin & ")) as Harga, ")
-            // sb.AppendLine("       fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+" & PersenMargin & ")) as Nilai, ")
-            // sb.AppendLine("       fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+" & PersenMargin & ")) * (COALESCE(PRD_PPN,0)/100) * CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN 1 ELSE 0 END as PPN, ")
-            // sb.AppendLine("       fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+" & PersenMargin & ")) * (1 + CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN (COALESCE(PRD_PPN,0)/100) ELSE 0 END) as TOTAL, ")
-            // sb.AppendLine("       '" & UserID & "', ")
-            // sb.AppendLine("       CURRENT_DATE ")
-            // sb.AppendLine("  From temp_pbidm_ready, tbMaster_prodmast ")
-            // sb.AppendLine(" Where req_id = '" & IP & "' ")
-            // sb.AppendLine("   and fdnouo = '" & noPB & "' ")
-            // sb.AppendLine("   and DATE_TRUNC('DAY', fdtgpb) = to_date('" & tglPB & "','DD-MM-YYYY')   ")
-            // sb.AppendLine("   and prd_prdcd = plukarton ")
+            DB::insert("
+                INSERT INTO PBIDM_REKAPORDER
+                (
+                    PBL_KODETOKO,
+                    PBL_NOPB,
+                    PBL_TGLPB,
+                    PBL_PLU,
+                    PBL_DESKRIPSI,
+                    PBL_UNIT,
+                    PBL_QTYB,
+                    PBL_QTYK,
+                    PBL_QTYO,
+                    PBL_HRGSATUAN,
+                    PBL_NILAI,
+                    PBL_PPN,
+                    PBL_TOTAL,
+                    PBL_CREATE_BY,
+                    PBL_CREATE_DT
+                )
+                Select '" . $KodeToko . "' as KODETOKO
+                    '" . $noPB . "' as NoPB,
+                    TO_DATE('" . $tglPB. "','YYYYMMDD') as TglPB,
+                    plukarton as plu,
+                    desk,
+                    unitkarton ||'/'|| frackarton as unit,
+                    qtyb as qty,
+                    qtyk as frc,
+                    fdqtyb as inpcs,
+                    Round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+ " . $PersenMargin . ")) as Harga,
+                    fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+" . $PersenMargin . ")) as Nilai,
+                    fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+" . $PersenMargin . ")) * (COALESCE(PRD_PPN,0)/100) * CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN 1 ELSE 0 END as PPN,
+                    fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+" . $PersenMargin . ")) * (1 + CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN (COALESCE(PRD_PPN,0)/100) ELSE 0 END) as TOTAL,
+                    '" . session('userid') . "',
+                    CURRENT_DATE
+                From temp_pbidm_ready, tbMaster_prodmast
+                Where req_id = '" . $ip . "'
+                    and fdnouo = '" . $noPB . "'
+                    and DATE_TRUNC('DAY', fdtgpb) = to_date('" . $tglPB. "','DD-MM-YYYY')
+                    and prd_prdcd = plukarton
+            ");
 
             //! ISI dtListOrder
-            // sb.AppendLine("Select plukarton as plu,  ")
-            // sb.AppendLine("       desk,  ")
-            // sb.AppendLine("       unitkarton ||'/'|| frackarton as unit,  ")
-            // sb.AppendLine("       qtyb as qty, ")
-            // sb.AppendLine("       qtyk as frc,  ")
-            // sb.AppendLine("       fdqtyb as inpcs,  ")
-            // sb.AppendLine("       Round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+ " & PersenMargin & ")) as Harga, ")
-            // sb.AppendLine("       fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+" & PersenMargin & ")) as Nilai, ")
-            // sb.AppendLine("       fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+" & PersenMargin & ")) * (COALESCE(PRD_PPN,0)/100) * CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN 1 ELSE 0 END as PPN, ")
-            // sb.AppendLine("       fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+" & PersenMargin & ")) * (1 + CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN (COALESCE(PRD_PPN,0)/100) ELSE 0 END) as TOTAL ")
-            // sb.AppendLine("  From temp_pbidm_ready, tbMaster_prodmast ")
-            // sb.AppendLine(" Where req_id = '" & IP & "' ")
-            // sb.AppendLine("   and fdnouo = '" & noPB & "' ")
-            // sb.AppendLine("   and DATE_TRUNC('DAY', fdtgpb) = to_date('" & tglPB & "','DD-MM-YYYY')   ")
-            // sb.AppendLine("   and prd_prdcd = plukarton ")
-            // sb.AppendLine(" Order By plukarton, FDQTYB ")
+            DB::select("
+                Select plukarton as plu,
+                    desk,
+                    unitkarton ||'/'|| frackarton as unit,
+                    qtyb as qty,
+                    qtyk as frc,
+                    fdqtyb as inpcs,
+                    Round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+ " . $PersenMargin . ")) as Harga,
+                    fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+" . $PersenMargin . ")) as Nilai,
+                    fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+" . $PersenMargin . ")) * (COALESCE(PRD_PPN,0)/100) * CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN 1 ELSE 0 END as PPN,
+                    fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+" . $PersenMargin . ")) * (1 + CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN (COALESCE(PRD_PPN,0)/100) ELSE 0 END) as TOTAL
+                From temp_pbidm_ready, tbMaster_prodmast
+                Where req_id = '" . $ip . "'
+                    and fdnouo = '" . $noPB . "'
+                    and DATE_TRUNC('DAY', fdtgpb) = to_date('" . $tglPB. "','DD-MM-YYYY')
+                    and prd_prdcd = plukarton
+                Order By plukarton, FDQTYB
+            ");
         }
 
         //? rptListOrder.SetParameterValue("NamaCabang", NamaCab)
@@ -2360,16 +2603,37 @@ class Controller extends BaseController
         //? rptListOrder.SetParameterValue("Tglpb", tglPB)
     }
 
-    public function CetakALL_2($PersenMargin, $CounterKarton, $CounterKecil){
+    public function CetakALL_2(){
+
+        //! VARIABLE
+        $ip = $this->getIP();
+        $KodeToko = "";
+        $noPB = "";
+        $tglPB = "";
+        $PersenMargin = "";
+
         //! GET HEADER CETAKAN
         // sb.AppendLine("Select PRS_NamaCabang ")
         // sb.AppendLine("  From tbMaster_perusahaan ")
+
+        $data['namaCabang'] = DB::table('tbmaster_perusahaan')
+            ->select('prs_namacabang')
+            ->first()->prs_namacabang;
 
         // sb.AppendLine("Select TKO_NamaOMI ")
         // sb.AppendLine("  From tbMaster_TokoIGR ")
         // sb.AppendLine(" Where TKO_KodeIGR = '" & KDIGR & "' ")
         // sb.AppendLine("   And TKO_KodeOMI = '" & KodeToko & "' ")
         // sb.AppendLine("   And COALESCE(TKO_TGLTUTUP,CURRENT_DATE+1) > CURRENT_DATE ")
+
+        $data['namaToko'] = DB::table('tbmaster_tokoigr')
+            ->select('tko_namaomi')
+            ->where([
+                'tko_kodeigr' => session('KODECABANG'),
+                'tko_kodeomi' => $KodeToko,
+            ])
+            ->whereRaw("coalesce(TKO_TGLTUTUP,CURRENT_DATE+1) > CURRENT_DATE")
+            ->first()->tko_namaomi;
 
         //! f = "REKAP ORDER PB"
 
@@ -2378,112 +2642,124 @@ class Controller extends BaseController
         // sb.AppendLine("  FROM information_schema.columns ")
         // sb.AppendLine(" Where UPPER(table_name) = 'TBMASTER_MARGINPLUIDM' ")
 
-        if($jum > 0){
+        $count = DB::table('information_schema.columns')
+            ->whereRaw("upper(table_name) = 'TBMASTER_MARGINPLUIDM'")
+            ->count();
+
+        if($count > 0){
             //! INSERT INTO PBIDM_REKAPORDER
-            // sb.AppendLine("INSERT INTO PBIDM_REKAPORDER  ")
-            // sb.AppendLine("  ( ")
-            // sb.AppendLine("  PBR_KODETOKO, ")
-            // sb.AppendLine("  PBR_NOPB, ")
-            // sb.AppendLine("  PBR_TGLPB, ")
-            // sb.AppendLine("  PBR_NAMADIVISI, ")
-            // sb.AppendLine("  PBR_KODEDIVISI, ")
-            // sb.AppendLine("  PBL_ITEM, ")
-            // sb.AppendLine("  PBL_NILAI, ")
-            // sb.AppendLine("  PBL_PPN, ")
-            // sb.AppendLine("  PBL_SUBTOTAL, ")
-            // sb.AppendLine("  PBL_CREATE_BY, ")
-            // sb.AppendLine("  PBL_CREATE_DT ")
-            // sb.AppendLine("  ) ")
-            // sb.AppendLine("Select '" & KodeToko & "' as KODETOKO, ")
-            // sb.AppendLine("       '" & noPB & "' as NoPB,  ")
-            // sb.AppendLine("       TO_DATE('" & tglPB & "','DD-MM-YYYY') as TglPB, ")
-            // sb.AppendLine("       DIV_NamaDivisi as NamaDivisi, ")
-            // sb.AppendLine("       PRD_KodeDivisi as KodeDivisi, ")
-            // sb.AppendLine("       Count(PLUKARTON) as Item, ")
-            // sb.AppendLine("       SUM(fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END  * (1+(COALESCE(MPI_MARGIN,3)/100)))) as Nilai, ")
-            // sb.AppendLine("       SUM(fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END  * (1+(COALESCE(MPI_MARGIN,3)/100)) * (COALESCE(PRD_PPN,0)/100) * CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN 1 ELSE 0 END)) as PPN, ")
-            // sb.AppendLine("       SUM(fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END  * (1+(COALESCE(MPI_MARGIN,3)/100)) * (1 + CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN (COALESCE(PRD_PPN,0)/100) ELSE 0 END))) as SUBTOTAL, ")
-            // sb.AppendLine("       '" & UserID & "', ")
-            // sb.AppendLine("       CURRENT_DATE ")
-            // sb.AppendLine("  From temp_pbidm_ready ")
-            // sb.AppendLine("  JOIN tbmaster_prodmast ON prd_prdcd = plukarton ")
-            // sb.AppendLine("  JOIN tbMaster_Divisi ON DIV_KodeDivisi = PRD_KodeDivisi ")
-            // sb.AppendLine("  LEFT JOIN tbmaster_marginpluidm ON MPI_PluIGR = PLUKARTON ")
-            // sb.AppendLine(" Where req_id = '" & IP & "' ")
-            // sb.AppendLine("   and fdnouo = '" & noPB & "' ")
-            // sb.AppendLine("   and DATE_TRUNC('DAY', fdtgpb) = to_date('" & tglPB & "','DD-MM-YYYY')  ")
-            // sb.AppendLine(" Group By DIV_NamaDivisi, ")
-            // sb.AppendLine("          PRD_KodeDivisi ")
+            DB::insert("
+                INSERT INTO PBIDM_REKAPORDER
+                (
+                    PBR_KODETOKO,
+                    PBR_NOPB,
+                    PBR_TGLPB,
+                    PBR_NAMADIVISI,
+                    PBR_KODEDIVISI,
+                    PBL_ITEM,
+                    PBL_NILAI,
+                    PBL_PPN,
+                    PBL_SUBTOTAL,
+                    PBL_CREATE_BY,
+                    PBL_CREATE_DT
+                )
+                Select '" . $KodeToko . "' as KODETOKO,
+                    '" . $noPB . "' as NoPB,
+                    TO_DATE('" . $tglPB. "','DD-MM-YYYY') as TglPB,
+                    DIV_NamaDivisi as NamaDivisi,
+                    PRD_KodeDivisi as KodeDivisi,
+                    Count(PLUKARTON) as Item,
+                    SUM(fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END  * (1+(COALESCE(MPI_MARGIN,3)/100)))) as Nilai,
+                    SUM(fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END  * (1+(COALESCE(MPI_MARGIN,3)/100)) * (COALESCE(PRD_PPN,0)/100) * CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN 1 ELSE 0 END)) as PPN,
+                    SUM(fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END  * (1+(COALESCE(MPI_MARGIN,3)/100)) * (1 + CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN (COALESCE(PRD_PPN,0)/100) ELSE 0 END))) as SUBTOTAL,
+                    '" . session('userid') . "',
+                    CURRENT_DATE
+                From temp_pbidm_ready
+                JOIN tbmaster_prodmast ON prd_prdcd = plukarton
+                JOIN tbMaster_Divisi ON DIV_KodeDivisi = PRD_KodeDivisi
+                LEFT JOIN tbmaster_marginpluidm ON MPI_PluIGR = PLUKARTON
+                Where req_id = '" . $ip . "'
+                    and fdnouo = '" . $noPB . "'
+                    and DATE_TRUNC('DAY', fdtgpb) = to_date('" . $tglPB. "','DD-MM-YYYY')
+                Group By DIV_NamaDivisi,
+                        PRD_KodeDivisi
+            ");
 
             //! ISI dtRekapOrder
-            // sb.AppendLine("Select DIV_NamaDivisi as NamaDivisi, ")
-            // sb.AppendLine("       PRD_KodeDivisi as KodeDivisi, ")
-            // sb.AppendLine("       Count(PLUKARTON) as Item, ")
-            // sb.AppendLine("       SUM(fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END  * (1+(COALESCE(MPI_MARGIN,3)/100)))) as Nilai, ")
-            // sb.AppendLine("       SUM(fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END  * (1+(COALESCE(MPI_MARGIN,3)/100)) * (COALESCE(PRD_PPN,0)/100) * CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN 1 ELSE 0 END)) as PPN, ")
-            // sb.AppendLine("       SUM(fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END  * (1+(COALESCE(MPI_MARGIN,3)/100)) * (1 + CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN (COALESCE(PRD_PPN,0)/100) ELSE 0 END))) as SUBTOTAL ")
-            // sb.AppendLine("  From temp_pbidm_ready ")
-            // sb.AppendLine("  JOIN tbmaster_prodmast ON prd_prdcd = plukarton ")
-            // sb.AppendLine("  JOIN tbMaster_Divisi ON DIV_KodeDivisi = PRD_KodeDivisi ")
-            // sb.AppendLine("  LEFT JOIN tbmaster_marginpluidm ON MPI_PluIGR = PLUKARTON ")
-            // sb.AppendLine(" Where req_id = '" & IP & "' ")
-            // sb.AppendLine("   and fdnouo = '" & noPB & "' ")
-            // sb.AppendLine("   and DATE_TRUNC('DAY', fdtgpb) = to_date('" & tglPB & "','DD-MM-YYYY')  ")
-            // sb.AppendLine(" Group By DIV_NamaDivisi, ")
-            // sb.AppendLine("          PRD_KodeDivisi ")
-            // sb.AppendLine(" Order By PRD_KodeDivisi ")
+            DB::select("
+                Select DIV_NamaDivisi as NamaDivisi,
+                    PRD_KodeDivisi as KodeDivisi,
+                    Count(PLUKARTON) as Item,
+                    SUM(fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END  * (1+(COALESCE(MPI_MARGIN,3)/100)))) as Nilai,
+                    SUM(fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END  * (1+(COALESCE(MPI_MARGIN,3)/100)) * (COALESCE(PRD_PPN,0)/100) * CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN 1 ELSE 0 END)) as PPN,
+                    SUM(fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END  * (1+(COALESCE(MPI_MARGIN,3)/100)) * (1 + CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN (COALESCE(PRD_PPN,0)/100) ELSE 0 END))) as SUBTOTAL
+                From temp_pbidm_ready
+                JOIN tbmaster_prodmast ON prd_prdcd = plukarton
+                JOIN tbMaster_Divisi ON DIV_KodeDivisi = PRD_KodeDivisi
+                LEFT JOIN tbmaster_marginpluidm ON MPI_PluIGR = PLUKARTON
+                Where req_id = '" . $ip . "'
+                    and fdnouo = '" . $noPB . "'
+                    and DATE_TRUNC('DAY', fdtgpb) = to_date('" . $tglPB. "','DD-MM-YYYY')
+                Group By DIV_NamaDivisi,
+                        PRD_KodeDivisi
+                Order By PRD_KodeDivisi
+            ");
         }else{
             //! INSERT INTO PBIDM_REKAPORDER
-            // sb.AppendLine("INSERT INTO PBIDM_REKAPORDER  ")
-            // sb.AppendLine("  ( ")
-            // sb.AppendLine("  PBR_KODETOKO, ")
-            // sb.AppendLine("  PBR_NOPB, ")
-            // sb.AppendLine("  PBR_TGLPB, ")
-            // sb.AppendLine("  PBR_NAMADIVISI, ")
-            // sb.AppendLine("  PBR_KODEDIVISI, ")
-            // sb.AppendLine("  PBL_ITEM, ")
-            // sb.AppendLine("  PBL_NILAI, ")
-            // sb.AppendLine("  PBL_PPN, ")
-            // sb.AppendLine("  PBL_SUBTOTAL, ")
-            // sb.AppendLine("  PBL_CREATE_BY, ")
-            // sb.AppendLine("  PBL_CREATE_DT ")
-            // sb.AppendLine("  ) ")
-            // sb.AppendLine("Select '" & KodeToko & "' as KODETOKO ")
-            // sb.AppendLine("       '" & noPB & "' as NoPB,  ")
-            // sb.AppendLine("       TO_DATE('" & tglPB & "','YYYYMMDD') as TglPB, ")
-            // sb.AppendLine("       DIV_NamaDivisi as NamaDivisi, ")
-            // sb.AppendLine("       PRD_KodeDivisi as KodeDivisi, ")
-            // sb.AppendLine("       Count(PLUKARTON) as Item, ")
-            // sb.AppendLine("       SUM(fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END  * (1+" & PersenMargin & "))) as Nilai, ")
-            // sb.AppendLine("       SUM(fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END  * (1+" & PersenMargin & ") * (COALESCE(PRD_PPN,0)/100) * CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN 1 ELSE 0 END)) as PPN, ")
-            // sb.AppendLine("       SUM(fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END  * (1+" & PersenMargin & ") * (1 + CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN (COALESCE(PRD_PPN,0)/100) ELSE 0 END))) as SUBTOTAL, ")
-            // sb.AppendLine("       '" & UserID & "', ")
-            // sb.AppendLine("       CURRENT_DATE ")
-            // sb.AppendLine("  From temp_pbidm_ready, tbMaster_prodmast, tbMaster_Divisi ")
-            // sb.AppendLine(" Where req_id = '" & IP & "' ")
-            // sb.AppendLine("   and fdnouo = '" & noPB & "' ")
-            // sb.AppendLine("   and DATE_TRUNC('DAY', fdtgpb) = to_date('" & tglPB & "','DD-MM-YYYY')  ")
-            // sb.AppendLine("   and prd_prdcd = plukarton ")
-            // sb.AppendLine("   and DIV_KodeDivisi = PRD_KodeDivisi ")
-            // sb.AppendLine(" Group By DIV_NamaDivisi, ")
-            // sb.AppendLine("          PRD_KodeDivisi ")
+            DB::insert("
+                INSERT INTO PBIDM_REKAPORDER
+                (
+                    PBR_KODETOKO,
+                    PBR_NOPB,
+                    PBR_TGLPB,
+                    PBR_NAMADIVISI,
+                    PBR_KODEDIVISI,
+                    PBL_ITEM,
+                    PBL_NILAI,
+                    PBL_PPN,
+                    PBL_SUBTOTAL,
+                    PBL_CREATE_BY,
+                    PBL_CREATE_DT
+                )
+                Select '" . $KodeToko . "' as KODETOKO
+                    '" . $noPB . "' as NoPB,
+                    TO_DATE('" . $tglPB. "','YYYYMMDD') as TglPB,
+                    DIV_NamaDivisi as NamaDivisi,
+                    PRD_KodeDivisi as KodeDivisi,
+                    Count(PLUKARTON) as Item,
+                    SUM(fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END  * (1+" . $PersenMargin . "))) as Nilai,
+                    SUM(fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END  * (1+" . $PersenMargin . ") * (COALESCE(PRD_PPN,0)/100) * CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN 1 ELSE 0 END)) as PPN,
+                    SUM(fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END  * (1+" . $PersenMargin . ") * (1 + CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN (COALESCE(PRD_PPN,0)/100) ELSE 0 END))) as SUBTOTAL,
+                    '" . session('userid') . "',
+                    CURRENT_DATE
+                From temp_pbidm_ready, tbMaster_prodmast, tbMaster_Divisi
+                Where req_id = '" . $ip . "'
+                    and fdnouo = '" . $noPB . "'
+                    and DATE_TRUNC('DAY', fdtgpb) = to_date('" . $tglPB. "','DD-MM-YYYY')
+                    and prd_prdcd = plukarton
+                    and DIV_KodeDivisi = PRD_KodeDivisi
+                Group By DIV_NamaDivisi,
+                        PRD_KodeDivisi
+            ");
 
             //! ISI dtRekapOrder
-            // sb.AppendLine("Select DIV_NamaDivisi as NamaDivisi, ")
-            // sb.AppendLine("       PRD_KodeDivisi as KodeDivisi, ")
-            // sb.AppendLine("       Count(PLUKARTON) as Item, ")
-            // sb.AppendLine("       SUM(fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END  * (1+" & PersenMargin & "))) as Nilai, ")
-            // sb.AppendLine("       SUM(fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END  * (1+" & PersenMargin & ") * (COALESCE(PRD_PPN,0)/100) * CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN 1 ELSE 0 END)) as PPN, ")
-            // sb.AppendLine("       SUM(fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END  * (1+" & PersenMargin & ") * (1 + CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN (COALESCE(PRD_PPN,0)/100) ELSE 0 END))) as SUBTOTAL ")
-            // sb.AppendLine("  From temp_pbidm_ready, tbMaster_prodmast, tbMaster_Divisi ")
-            // sb.AppendLine(" Where req_id = '" & IP & "' ")
-            // sb.AppendLine("   and fdnouo = '" & noPB & "' ")
-            // sb.AppendLine("   and DATE_TRUNC('DAY', fdtgpb) = to_date('" & tglPB & "','DD-MM-YYYY')  ")
-            // sb.AppendLine("   and prd_prdcd = plukarton ")
-            // sb.AppendLine("   and DIV_KodeDivisi = PRD_KodeDivisi ")
-            // sb.AppendLine(" Group By DIV_NamaDivisi, ")
-            // sb.AppendLine("          PRD_KodeDivisi ")
-            // sb.AppendLine(" Order By PRD_KodeDivisi ")
+            DB::select("
+                Select DIV_NamaDivisi as NamaDivisi,
+                    PRD_KodeDivisi as KodeDivisi,
+                    Count(PLUKARTON) as Item,
+                    SUM(fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END  * (1+" . $PersenMargin . "))) as Nilai,
+                    SUM(fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END  * (1+" . $PersenMargin . ") * (COALESCE(PRD_PPN,0)/100) * CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN 1 ELSE 0 END)) as PPN,
+                    SUM(fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END  * (1+" . $PersenMargin . ") * (1 + CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN (COALESCE(PRD_PPN,0)/100) ELSE 0 END))) as SUBTOTAL
+                From temp_pbidm_ready, tbMaster_prodmast, tbMaster_Divisi
+                Where req_id = '" . $ip . "'
+                    and fdnouo = '" . $noPB . "'
+                    and DATE_TRUNC('DAY', fdtgpb) = to_date('" . $tglPB. "','DD-MM-YYYY')
+                    and prd_prdcd = plukarton
+                    and DIV_KodeDivisi = PRD_KodeDivisi
+                Group By DIV_NamaDivisi,
+                        PRD_KodeDivisi
+                Order By PRD_KodeDivisi
+            ");
         }
 
         //? rptRekap.SetParameterValue("NamaCabang", NamaCab)
@@ -2493,10 +2769,21 @@ class Controller extends BaseController
         //? rptRekap.SetParameterValue("Tglpb", tglPB)
     }
 
-    public function CetakALL_3($PersenMargin, $CounterKarton, $CounterKecil){
+    public function CetakALL_3(){
+
+        //! VARIABLE
+        $ip = $this->getIP();
+        $KodeToko = "";
+        $noPB = "";
+        $tglPB = "";
+
         //! GET HEADER CETAKAN
         // sb.AppendLine("Select PRS_NamaCabang ")
         // sb.AppendLine("  From tbMaster_perusahaan ")
+
+        $data['namaCabang'] = DB::table('tbmaster_perusahaan')
+            ->select('prs_namacabang')
+            ->first()->prs_namacabang;
 
         // sb.AppendLine("Select TKO_NamaOMI ")
         // sb.AppendLine("  From tbMaster_TokoIGR ")
@@ -2504,72 +2791,86 @@ class Controller extends BaseController
         // sb.AppendLine("   And TKO_KodeOMI = '" & KodeToko & "' ")
         // sb.AppendLine("   And COALESCE(TKO_TGLTUTUP,CURRENT_DATE+1) > CURRENT_DATE ")
 
+        $data['namaToko'] = DB::table('tbmaster_tokoigr')
+            ->select('tko_namaomi')
+            ->where([
+                'tko_kodeigr' => session('KODECABANG'),
+                'tko_kodeomi' => $KodeToko,
+            ])
+            ->whereRaw("coalesce(TKO_TGLTUTUP,CURRENT_DATE+1) > CURRENT_DATE")
+            ->first()->tko_namaomi;
+
         //! f = "KARTON NON DPD"
 
         //! INSERT INTO PBIDM_KARTONNONDPD
-        // sb.AppendLine("INSERT INTO PBIDM_KARTONNONDPD")
-        // sb.AppendLine("( ")
-        // sb.AppendLine("  PBD_KODETOKO, ")
-        // sb.AppendLine("  PBD_NOPB, ")
-        // sb.AppendLine("  PBD_TGLPB, ")
-        // sb.AppendLine("  PBD_NAMAGROUP, ")
-        // sb.AppendLine("  PBD_KODERAK, ")
-        // sb.AppendLine("  PBD_SUBRAK, ")
-        // sb.AppendLine("  PBD_TIPERAK, ")
-        // sb.AppendLine("  PBD_PLU, ")
-        // sb.AppendLine("  PBD_NOURUT, ")
-        // sb.AppendLine("  PBD_DESKRIPSI, ")
-        // sb.AppendLine("  PBD_TAG, ")
-        // sb.AppendLine("  PBD_QTY, ")
-        // sb.AppendLine("  PBD_UNIT, ")
-        // sb.AppendLine("  PBD_FRAC, ")
-        // sb.AppendLine("  PBD_STOK,  ")
-        // sb.AppendLine("  PBD_CREATE_BY, ")
-        // sb.AppendLine("  PBD_CREATE_DT ")
-        // sb.AppendLine(") ")
-        // sb.AppendLine("Select '" & KodeToko & "' as KODETOKO, ")
-        // sb.AppendLine("       '" & noPB & "' as NoPB,  ")
-        // sb.AppendLine("       TO_DATE('" & tglPB & "','DD-MM-YYYY') as TglPB, ")
-        // sb.AppendLine("       GRR_GroupRak as NamaGroup, ")
-        // sb.AppendLine("       LKS_KodeRak as KodeRak, ")
-        // sb.AppendLine("       LKS_KodeSubRak as SubRak, ")
-        // sb.AppendLine("       LKS_TipeRak as TipeRak, ")
-        // sb.AppendLine("       PLUKARTON as PLU, ")
-        // sb.AppendLine("       LKS_NoUrut as NoUrut, ")
-        // sb.AppendLine("       Desk, ")
-        // sb.AppendLine("       PRD_KodeTag as TAG, ")
-        // sb.AppendLine("       QTYB as ""Order"", ")
-        // sb.AppendLine("       UNITKarton , ")
-        // sb.AppendLine("       FracKarton, ")
-        // sb.AppendLine("	      Stok, ")
-        // sb.AppendLine("       '" & UserID & "', ")
-        // sb.AppendLine("       CURRENT_TIMESTAMP ")
-        // sb.AppendLine("  From temp_karton_nondpd_idm,tbMaster_Prodmast ")
-        // sb.AppendLine(" Where REQ_ID = '" & IP & "' ")
-        // sb.AppendLine("   And FDKCAB = '" & KodeToko & "' ")
-        // sb.AppendLine("   And FDNOUO = '" & noPB & "' ")
-        // sb.AppendLine("   And DATE_TRUNC('DAY', FDTGPB) = to_date('" & tglPB & "','DD-MM-YYYY') ")
-        // sb.AppendLine("   And PRD_PRDCD = PLUKARTON ")
+        $userid = session('userid');
+        DB::insert(`
+            INSERT INTO PBIDM_KARTONNONDPD
+            (
+                PBD_KODETOKO,
+                PBD_NOPB,
+                PBD_TGLPB,
+                PBD_NAMAGROUP,
+                PBD_KODERAK,
+                PBD_SUBRAK,
+                PBD_TIPERAK,
+                PBD_PLU,
+                PBD_NOURUT,
+                PBD_DESKRIPSI,
+                PBD_TAG,
+                PBD_QTY,
+                PBD_UNIT,
+                PBD_FRAC,
+                PBD_STOK,
+                PBD_CREATE_BY,
+                PBD_CREATE_DT
+            )
+            Select '$KodeToko' as KODETOKO,
+                '$noPB' as NoPB,
+                TO_DATE('$tglPB','DD-MM-YYYY') as TglPB,
+                GRR_GroupRak as NamaGroup,
+                LKS_KodeRak as KodeRak,
+                LKS_KodeSubRak as SubRak,
+                LKS_TipeRak as TipeRak,
+                PLUKARTON as PLU,
+                LKS_NoUrut as NoUrut,
+                Desk,
+                PRD_KodeTag as TAG,
+                QTYB as ""Order"",
+                UNITKarton ,
+                FracKarton,
+                    Stok,
+                '$userid',
+                CURRENT_TIMESTAMP
+            From temp_karton_nondpd_idm,tbMaster_Prodmast
+            Where REQ_ID = '$ip'
+                And FDKCAB = '$KodeToko'
+                And FDNOUO = '$noPB'
+                And DATE_TRUNC('DAY', FDTGPB) = to_date('$tglPB','DD-MM-YYYY')
+                And PRD_PRDCD = PLUKARTON
+        `);
 
         //! ISI dtKartonNonDPD
-        // sb.AppendLine("Select DISTINCT GRR_GroupRak as NamaGroup, ")
-        // sb.AppendLine("       LKS_KodeRak as KodeRak, ")
-        // sb.AppendLine("       LKS_KodeSubRak as SubRak, ")
-        // sb.AppendLine("       LKS_TipeRak as TipeRak, ")
-        // sb.AppendLine("       PLUKARTON as PLU, ")
-        // sb.AppendLine("       LKS_NoUrut as NoUrut, ")
-        // sb.AppendLine("       Desk, ")
-        // sb.AppendLine("       PRD_KodeTag as TAG, ")
-        // sb.AppendLine("       QTYB as ""Order"", ")
-        // sb.AppendLine("       UNITKarton ||'/'|| FracKarton as UNIT, ")
-        // sb.AppendLine("	      Stok ")
-        // sb.AppendLine("  From temp_karton_nondpd_idm,tbMaster_Prodmast ")
-        // sb.AppendLine(" Where REQ_ID = '" & IP & "' ")
-        // sb.AppendLine("   And FDKCAB = '" & KodeToko & "' ")
-        // sb.AppendLine("   And FDNOUO = '" & noPB & "' ")
-        // sb.AppendLine("   And DATE_TRUNC('DAY', FDTGPB) = to_date('" & tglPB & "','DD-MM-YYYY') ")
-        // sb.AppendLine("   And PRD_PRDCD = PLUKARTON ")
-        // sb.AppendLine(" Order By GRR_GroupRak,LKS_KodeRak,LKS_KodeSubRak,LKS_TipeRak,LKS_NoUrut ")
+        DB::select(`
+            Select DISTINCT GRR_GroupRak as NamaGroup,
+                LKS_KodeRak as KodeRak,
+                LKS_KodeSubRak as SubRak,
+                LKS_TipeRak as TipeRak,
+                PLUKARTON as PLU,
+                LKS_NoUrut as NoUrut,
+                Desk,
+                PRD_KodeTag as TAG,
+                QTYB as ""Order"",
+                UNITKarton ||'/'|| FracKarton as UNIT,
+                    Stok
+            From temp_karton_nondpd_idm,tbMaster_Prodmast
+            Where REQ_ID = '$ip'
+                And FDKCAB = '$KodeToko'
+                And FDNOUO = '$noPB'
+                And DATE_TRUNC('DAY', FDTGPB) = to_date('$tglPB','DD-MM-YYYY')
+                And PRD_PRDCD = PLUKARTON
+            Order By GRR_GroupRak,LKS_KodeRak,LKS_KodeSubRak,LKS_TipeRak,LKS_NoUrut
+        `);
 
         //? rptKarton.SetParameterValue("NamaCabang", NamaCab)
         //? rptKarton.SetParameterValue("NamaToko", NamaToko)
@@ -2579,10 +2880,21 @@ class Controller extends BaseController
         //? rptKarton.SetParameterValue("Batch", CounterKarton)
     }
 
-    public function CetakALL_4($PersenMargin, $CounterKarton, $CounterKecil){
+    public function CetakALL_4(){
+
+        //! VARIABLE
+        $ip = $this->getIP();
+        $KodeToko = "";
+        $noPB = "";
+        $tglPB = "";
+
         //! GET HEADER CETAKAN
         // sb.AppendLine("Select PRS_NamaCabang ")
         // sb.AppendLine("  From tbMaster_perusahaan ")
+
+        $data['namaCabang'] = DB::table('tbmaster_perusahaan')
+            ->select('prs_namacabang')
+            ->first()->prs_namacabang;
 
         // sb.AppendLine("Select TKO_NamaOMI ")
         // sb.AppendLine("  From tbMaster_TokoIGR ")
@@ -2590,28 +2902,41 @@ class Controller extends BaseController
         // sb.AppendLine("   And TKO_KodeOMI = '" & KodeToko & "' ")
         // sb.AppendLine("   And COALESCE(TKO_TGLTUTUP,CURRENT_DATE+1) > CURRENT_DATE ")
 
+        $data['namaToko'] = DB::table('tbmaster_tokoigr')
+            ->select('tko_namaomi')
+            ->where([
+                'tko_kodeigr' => session('KODECABANG'),
+                'tko_kodeomi' => $KodeToko,
+            ])
+            ->whereRaw("coalesce(TKO_TGLTUTUP,CURRENT_DATE+1) > CURRENT_DATE")
+            ->first()->tko_namaomi;
+
         //! f = "ORDER DITOLAK"
 
-        $kodeDCIDM = $this->getKodeDC(KodeToko);
+        $kodeDCIDM = $this->getKodeDC($KodeToko);
 
         //! ISI dtOrderDitolak
-        // sb.AppendLine("Select PLU as PLUIDM, ")
-        // sb.AppendLine("       PLUIGR, ")
-        // sb.AppendLine("       PRD_DeskripsiPanjang as DESK, ")
-        // sb.AppendLine("       PRD_UNIT||'/'||PRD_Frac as UNIT, ")
-        // sb.AppendLine("       QTYO as QTY, ")
-        // sb.AppendLine("       KETA as Keterangan         ")
-        // sb.AppendLine("  From temp_cetakpb_tolakan_idm,tbMaster_Prodmast ")
-        // sb.AppendLine(" Where REQ_ID = '" & IP & "' ")
-        // sb.AppendLine("   And KCAB = '" & KodeToko & "' ")
-        // sb.AppendLine("   And NODOK = '" & noPB & "' ")
-        // sb.AppendLine("   And DATE_TRUNC('DAY', TGLDOK) = to_date('" & tglPB & "','DD-MM-YYYY') ")
-        // sb.AppendLine("   And PRD_PRDCD = PLUIGR ")
-        // If kodeDCIDM <> "" Then
-        //     sb.AppendLine("   And KETA <> 'PLU TIDAK TERDAFTAR DI TBMASTER_PRODCRM' ")
-        // Else
-        //     sb.AppendLine("   And KETA <> 'PLU TIDAK TERDAFTAR DI TBMASTER_PRODCRM' ")
-        // End If
+        $query = "";
+        $query .= "Select PLU as PLUIDM, ";
+        $query .= "       PLUIGR, ";
+        $query .= "       PRD_DeskripsiPanjang as DESK, ";
+        $query .= "       PRD_UNIT||'/'||PRD_Frac as UNIT, ";
+        $query .= "       QTYO as QTY, ";
+        $query .= "       KETA as Keterangan         ";
+        $query .= "  From temp_cetakpb_tolakan_idm,tbMaster_Prodmast ";
+        $query .= " Where REQ_ID = '" . $ip . "' ";
+        $query .= "   And KCAB = '" . $KodeToko . "' ";
+        $query .= "   And NODOK = '" . $noPB . "' ";
+        $query .= "   And DATE_TRUNC('DAY', TGLDOK) = to_date('" . $tglPB. "','DD-MM-YYYY') ";
+        $query .= "   And PRD_PRDCD = PLUIGR ";
+
+        if($kodeDCIDM <> ""){
+            $query .= "   And KETA <> 'PLU TIDAK TERDAFTAR DI TBMASTER_PRODCRM' ";
+        }else{
+            $query .= "   And KETA <> 'PLU TIDAK TERDAFTAR DI TBMASTER_PRODCRM' ";
+        }
+
+        DB::select($query);
 
         //? rptDitolak.SetParameterValue("NamaCabang", NamaCab)
         //? rptDitolak.SetParameterValue("NamaToko", NamaToko)
@@ -2621,10 +2946,21 @@ class Controller extends BaseController
 
     }
 
-    public function CetakALL_5($PersenMargin, $CounterKarton, $CounterKecil){
+    public function CetakALL_5(){
+
+        //! VARIABLE
+        $ip = $this->getIP();
+        $KodeToko = "";
+        $noPB = "";
+        $tglPB = "";
+
         //! GET HEADER CETAKAN
         // sb.AppendLine("Select PRS_NamaCabang ")
         // sb.AppendLine("  From tbMaster_perusahaan ")
+
+        $data['namaCabang'] = DB::table('tbmaster_perusahaan')
+            ->select('prs_namacabang')
+            ->first()->prs_namacabang;
 
         // sb.AppendLine("Select TKO_NamaOMI ")
         // sb.AppendLine("  From tbMaster_TokoIGR ")
@@ -2632,95 +2968,109 @@ class Controller extends BaseController
         // sb.AppendLine("   And TKO_KodeOMI = '" & KodeToko & "' ")
         // sb.AppendLine("   And COALESCE(TKO_TGLTUTUP,CURRENT_DATE+1) > CURRENT_DATE ")
 
+        $data['namaToko'] = DB::table('tbmaster_tokoigr')
+            ->select('tko_namaomi')
+            ->where([
+                'tko_kodeigr' => session('KODECABANG'),
+                'tko_kodeomi' => $KodeToko,
+            ])
+            ->whereRaw("coalesce(TKO_TGLTUTUP,CURRENT_DATE+1) > CURRENT_DATE")
+            ->first()->tko_namaomi;
+
         //! f = "RAK JALUR TIDAK KETEMU"
 
         //! INSERT INTO PBIDM_RAKJALUR_TIDAKKETEMU
-        // sb.AppendLine("INSERT INTO PBIDM_RAKJALUR_TIDAKKETEMU")
-        // sb.AppendLine("( ")
-        // sb.AppendLine("  PBT_KODETOKO, ")
-        // sb.AppendLine("  PBT_NOPB, ")
-        // sb.AppendLine("  PBT_TGLPB, ")
-        // sb.AppendLine("  PBT_PLU, ")
-        // sb.AppendLine("  PBT_DESKRIPSI, ")
-        // sb.AppendLine("  PBT_KODERAK, ")
-        // sb.AppendLine("  PBT_SUBRAK, ")
-        // sb.AppendLine("  PBT_TIPERAK, ")
-        // sb.AppendLine("  PBT_SHELVINGRAK, ")
-        // sb.AppendLine("  PBT_QTYB, ")
-        // sb.AppendLine("  PBT_QTYK, ")
-        // sb.AppendLine("  PBT_UNITKARTON, ")
-        // sb.AppendLine("  PBT_FRACKARTON, ")
-        // sb.AppendLine("  PBT_RECORDID, ")
-        // sb.AppendLine("  PBT_CREATE_BY, ")
-        // sb.AppendLine("  PBT_CREATE_DT ")
-        // sb.AppendLine(") ")
-        // sb.AppendLine("Select DISTINCT '" & KodeToko & "' as KODETOKO, ")
-        // sb.AppendLine("       '" & noPB & "' as NoPB,  ")
-        // sb.AppendLine("       TO_DATE('" & tglPB & "','DD-MM-YYYY') as TglPB, ")
-        // sb.AppendLine("       NJI.PluKarton as PLU, ")
-        // sb.AppendLine("       NJI.DESK, ")
-        // sb.AppendLine("       CASE WHEN NJI.FDRCID = 'B' THEN '' ELSE COALESCE(lks_KodeRak,'') END as KodeRak, ")
-        // sb.AppendLine("       CASE WHEN NJI.FDRCID = 'B' THEN '' ELSE COALESCE(lks_KodeSubrak,'') END as SubRak, ")
-        // sb.AppendLine("       CASE WHEN NJI.FDRCID = 'B' THEN '' ELSE COALESCE(lks_TipeRak,'') END as TipeRak, ")
-        // sb.AppendLine("       CASE WHEN NJI.FDRCID = 'B' THEN '' ELSE COALESCE(lks_ShelvingRak,'') END as ShelvingRak, ")
-        // sb.AppendLine("       NJI.QTYB as OrderCTN, ")
-        // sb.AppendLine("       NJI.QTYK as OrderPCS, ")
-        // sb.AppendLine("       NJI.UnitKarton, ")
-        // sb.AppendLine("       NJI.FracKarton, ")
-        // sb.AppendLine("       COALESCE(NJI.FDRCID,'X') as RECID, ")
-        // sb.AppendLine("       '" & UserID & "', ")
-        // sb.AppendLine("       CURRENT_TIMESTAMP ")
-        // sb.AppendLine("  From TEMP_NOJALUR_IDM NJI LEFT OUTER JOIN tbMaster_Lokasi ")
-        // sb.AppendLine(" ON ( LKS_KodeIGR = '" & KDIGR & "' ")
-        // sb.AppendLine("   And LKS_PRDCD = PLUKARTON ")
-        // sb.AppendLine("   And LKS_KodeRak Not Like 'D%' ")
-        // sb.AppendLine("   And LKS_TIPERAK NOT LIKE  'S%') ")
-        // sb.AppendLine("   WHERE REQ_ID = '" & IP & "' ")
-        // sb.AppendLine("   And FDKCAB = '" & KodeToko & "' ")
-        // sb.AppendLine("   And fdnouo = '" & noPB & "' ")
-        // sb.AppendLine("   And DATE_TRUNC('DAY', fdtgpb) = to_date('" & tglPB & "','DD-MM-YYYY')  ")
-        // sb.AppendLine("  And Not EXISTS ")
-        // sb.AppendLine("    ( ")
-        // sb.AppendLine("       Select grr_grouprak ")
-        // sb.AppendLine("         from tbmaster_grouprak,tbmaster_lokasi lks2 ")
-        // sb.AppendLine("        where grr_koderak = lks2.lks_koderak ")
-        // sb.AppendLine("          and grr_subrak = lks2.lks_kodesubrak ")
-        // sb.AppendLine("          and LKS_KodeRak Like 'D%' ")
-        // sb.AppendLine("          And LKS_TIPERAK NOT LIKE 'S%' ")
-        // sb.AppendLine("          and lks_prdcd = plukarton ")
-        // sb.AppendLine("    )  ")
+        DB::insert("
+            INSERT INTO PBIDM_RAKJALUR_TIDAKKETEMU
+            (
+                PBT_KODETOKO,
+                PBT_NOPB,
+                PBT_TGLPB,
+                PBT_PLU,
+                PBT_DESKRIPSI,
+                PBT_KODERAK,
+                PBT_SUBRAK,
+                PBT_TIPERAK,
+                PBT_SHELVINGRAK,
+                PBT_QTYB,
+                PBT_QTYK,
+                PBT_UNITKARTON,
+                PBT_FRACKARTON,
+                PBT_RECORDID,
+                PBT_CREATE_BY,
+                PBT_CREATE_DT
+            )
+            Select DISTINCT '" . $KodeToko . "' as KODETOKO,
+                '" . $noPB . "' as NoPB,
+                TO_DATE('" . $tglPB. "','DD-MM-YYYY') as TglPB,
+                NJI.PluKarton as PLU,
+                NJI.DESK,
+                CASE WHEN NJI.FDRCID = 'B' THEN '' ELSE COALESCE(lks_KodeRak,'') END as KodeRak,
+                CASE WHEN NJI.FDRCID = 'B' THEN '' ELSE COALESCE(lks_KodeSubrak,'') END as SubRak,
+                CASE WHEN NJI.FDRCID = 'B' THEN '' ELSE COALESCE(lks_TipeRak,'') END as TipeRak,
+                CASE WHEN NJI.FDRCID = 'B' THEN '' ELSE COALESCE(lks_ShelvingRak,'') END as ShelvingRak,
+                NJI.QTYB as OrderCTN,
+                NJI.QTYK as OrderPCS,
+                NJI.UnitKarton,
+                NJI.FracKarton,
+                COALESCE(NJI.FDRCID,'X') as RECID,
+                '" . session('userid') . "',
+                CURRENT_TIMESTAMP
+            From TEMP_NOJALUR_IDM NJI LEFT OUTER JOIN tbMaster_Lokasi
+            ON ( LKS_KodeIGR = '" . session('KODECABANG') . "'
+                And LKS_PRDCD = PLUKARTON
+                And LKS_KodeRak Not Like 'D%'
+                And LKS_TIPERAK NOT LIKE  'S%')
+            WHERE REQ_ID = '" . $ip . "'
+                And FDKCAB = '" . $KodeToko . "'
+                And fdnouo = '" . $noPB . "'
+                And DATE_TRUNC('DAY', fdtgpb) = to_date('" . $tglPB. "','DD-MM-YYYY')
+                And Not EXISTS
+                (
+                    Select grr_grouprak
+                    from tbmaster_grouprak,tbmaster_lokasi lks2
+                    where grr_koderak = lks2.lks_koderak
+                        and grr_subrak = lks2.lks_kodesubrak
+                        and LKS_KodeRak Like 'D%'
+                        And LKS_TIPERAK NOT LIKE 'S%'
+                        and lks_prdcd = plukarton
+                )
+        ");
 
         //! ISI dtRakJalurTidakKetemu
-        // sb.AppendLine("Select DISTINCT NJI.PluKarton as PLU, ")
-        // sb.AppendLine("       NJI.DESK, ")
-        // sb.AppendLine("       CASE WHEN NJI.FDRCID = 'B' THEN '' ELSE COALESCE(lks_KodeRak,'') END as KodeRak, ")
-        // sb.AppendLine("       CASE WHEN NJI.FDRCID = 'B' THEN '' ELSE COALESCE(lks_KodeSubrak,'') END as SubRak, ")
-        // sb.AppendLine("       CASE WHEN NJI.FDRCID = 'B' THEN '' ELSE COALESCE(lks_TipeRak,'') END as TipeRak, ")
-        // sb.AppendLine("       CASE WHEN NJI.FDRCID = 'B' THEN '' ELSE COALESCE(lks_ShelvingRak,'') END as ShelvingRak, ")
-        // sb.AppendLine("       NJI.QTYB as OrderCTN, ")
-        // sb.AppendLine("       NJI.QTYK as OrderPCS, ")
-        // sb.AppendLine("       NJI.UnitKarton||'/'||NJI.FracKarton as UNIT,  ")
-        // sb.AppendLine("       COALESCE(NJI.FDRCID,'X') as RECID ")
-        // sb.AppendLine("  From TEMP_NOJALUR_IDM NJI LEFT OUTER JOIN tbMaster_Lokasi ")
-        // sb.AppendLine(" ON (LKS_KodeIGR = '" & KDIGR & "' ")
-        // sb.AppendLine("   And LKS_PRDCD = PLUKARTON ")
-        // sb.AppendLine("   And LKS_KodeRak Not Like 'D%' ")
-        // sb.AppendLine("   And LKS_TIPERAK NOT LIKE  'S%') ")
-        // sb.AppendLine("   WHERE REQ_ID = '" & IP & "' ")
-        // sb.AppendLine("   And FDKCAB = '" & KodeToko & "' ")
-        // sb.AppendLine("   And fdnouo = '" & noPB & "' ")
-        // sb.AppendLine("   And DATE_TRUNC('DAY', fdtgpb) = to_date('" & tglPB & "','DD-MM-YYYY')  ")
-        // sb.AppendLine("  And Not EXISTS ")
-        // sb.AppendLine("    ( ")
-        // sb.AppendLine("       Select grr_grouprak ")
-        // sb.AppendLine("         from tbmaster_grouprak,tbmaster_lokasi lks2 ")
-        // sb.AppendLine("        where grr_koderak = lks2.lks_koderak ")
-        // sb.AppendLine("          and grr_subrak = lks2.lks_kodesubrak ")
-        // sb.AppendLine("          and LKS_KodeRak Like 'D%' ")
-        // sb.AppendLine("          And LKS_TIPERAK NOT LIKE 'S%' ")
-        // sb.AppendLine("          and lks_prdcd = plukarton ")
-        // sb.AppendLine("    )  ")
-        // sb.AppendLine("  Order By NJI.PLUKarton ")
+        DB::select("
+            Select DISTINCT NJI.PluKarton as PLU,
+                NJI.DESK,
+                CASE WHEN NJI.FDRCID = 'B' THEN '' ELSE COALESCE(lks_KodeRak,'') END as KodeRak,
+                CASE WHEN NJI.FDRCID = 'B' THEN '' ELSE COALESCE(lks_KodeSubrak,'') END as SubRak,
+                CASE WHEN NJI.FDRCID = 'B' THEN '' ELSE COALESCE(lks_TipeRak,'') END as TipeRak,
+                CASE WHEN NJI.FDRCID = 'B' THEN '' ELSE COALESCE(lks_ShelvingRak,'') END as ShelvingRak,
+                NJI.QTYB as OrderCTN,
+                NJI.QTYK as OrderPCS,
+                NJI.UnitKarton||'/'||NJI.FracKarton as UNIT,
+                COALESCE(NJI.FDRCID,'X') as RECID
+            From TEMP_NOJALUR_IDM NJI
+            LEFT OUTER JOIN tbMaster_Lokasi
+                ON (LKS_KodeIGR = '" . session('KODECABANG') . "'
+                And LKS_PRDCD = PLUKARTON
+                And LKS_KodeRak Not Like 'D%'
+                And LKS_TIPERAK NOT LIKE  'S%')
+            WHERE REQ_ID = '" . $ip . "'
+                And FDKCAB = '" . $KodeToko . "'
+                And fdnouo = '" . $noPB . "'
+                And DATE_TRUNC('DAY', fdtgpb) = to_date('" . $tglPB. "','DD-MM-YYYY')
+                And Not EXISTS
+                (
+                    Select grr_grouprak
+                    from tbmaster_grouprak,tbmaster_lokasi lks2
+                    where grr_koderak = lks2.lks_koderak
+                        and grr_subrak = lks2.lks_kodesubrak
+                        and LKS_KodeRak Like 'D%'
+                        And LKS_TIPERAK NOT LIKE 'S%'
+                        and lks_prdcd = plukarton
+                )
+            Order By NJI.PLUKarton
+        ");
 
         //? rptTidakKetemu.SetParameterValue("NamaCabang", NamaCab)
         //? rptTidakKetemu.SetParameterValue("NamaToko", NamaToko)
@@ -2731,10 +3081,21 @@ class Controller extends BaseController
 
     }
 
-    public function CetakALL_6($PersenMargin, $CounterKarton, $CounterKecil){
+    public function CetakALL_6(){
+
+        //! VARIABLE
+        $ip = $this->getIP();
+        $KodeToko = '';
+        $noPB = '';
+        $tglPB = '';
+
         //! GET HEADER CETAKAN
         // sb.AppendLine("Select PRS_NamaCabang ")
         // sb.AppendLine("  From tbMaster_perusahaan ")
+
+        $data['namaCabang'] = DB::table('tbmaster_perusahaan')
+            ->select('prs_namacabang')
+            ->first()->prs_namacabang;
 
         // sb.AppendLine("Select TKO_NamaOMI ")
         // sb.AppendLine("  From tbMaster_TokoIGR ")
@@ -2742,72 +3103,86 @@ class Controller extends BaseController
         // sb.AppendLine("   And TKO_KodeOMI = '" & KodeToko & "' ")
         // sb.AppendLine("   And COALESCE(TKO_TGLTUTUP,CURRENT_DATE+1) > CURRENT_DATE ")
 
+        $data['namaToko'] = DB::table('tbmaster_tokoigr')
+            ->select('tko_namaomi')
+            ->where([
+                'tko_kodeigr' => session('KODECABANG'),
+                'tko_kodeomi' => $KodeToko,
+            ])
+            ->whereRaw("coalesce(TKO_TGLTUTUP,CURRENT_DATE+1) > CURRENT_DATE")
+            ->first()->tko_namaomi;
+
         //! f = "JALUR CETAK KERTAS"
 
         //! INSERT INTO PBIDM_JALURKERTAS
-        // sb.AppendLine("INSERT INTO PBIDM_JALURKERTAS ")
-        // sb.AppendLine("( ")
-        // sb.AppendLine("  PBK_KODETOKO, ")
-        // sb.AppendLine("  PBK_NOPB, ")
-        // sb.AppendLine("  PBK_TGLPB, ")
-        // sb.AppendLine("  PBK_NAMAGROUP, ")
-        // sb.AppendLine("  PBK_KODERAK, ")
-        // sb.AppendLine("  PBK_SUBRAK, ")
-        // sb.AppendLine("  PBK_TIPERAK, ")
-        // sb.AppendLine("  PBK_PLU, ")
-        // sb.AppendLine("  PBK_NOURUT, ")
-        // sb.AppendLine("  PBK_DESKRIPSI, ")
-        // sb.AppendLine("  PBK_TAG, ")
-        // sb.AppendLine("  PBK_QTY, ")
-        // sb.AppendLine("  PBK_UNIT, ")
-        // sb.AppendLine("  PBK_FRAC, ")
-        // sb.AppendLine("  PBK_STOK, ")
-        // sb.AppendLine("  PBK_CREATE_BY, ")
-        // sb.AppendLine("  PBK_CREATE_DT ")
-        // sb.AppendLine(") ")
-        // sb.AppendLine("Select DISTINCT '" & KodeToko & "' as KODETOKO, ")
-        // sb.AppendLine("       '" & noPB & "' as NoPB,  ")
-        // sb.AppendLine("       TO_DATE('" & tglPB & "','DD-MM-YYYY') as TglPB, ")
-        // sb.AppendLine("       GRR_GroupRak as NamaGroup, ")
-        // sb.AppendLine("       PLUKARTON as PLU, ")
-        // sb.AppendLine("       LKS_KodeRak as KodeRak, ")
-        // sb.AppendLine("       LKS_KodeSubRak as Subrak, ")
-        // sb.AppendLine("       LKS_TipeRak as TipeRak, ")
-        // sb.AppendLine("       LKS_NoUrut as NoUrut, ")
-        // sb.AppendLine("       DESK, ")
-        // sb.AppendLine("       PRD_KodeTag, ")
-        // sb.AppendLine("       QTYK as ""ORDER"", ")
-        // sb.AppendLine("       UNITKECIL, ")
-        // sb.AppendLine("       FRACKECIL, ")
-        // sb.AppendLine("       STOK, ")
-        // sb.AppendLine("       '" & UserID & "', ")
-        // sb.AppendLine("       CURRENT_TIMESTAMP ")
-        // sb.AppendLine("  From TEMP_JALURKERTAS_IDM, tbMaster_Prodmast   ")
-        // sb.AppendLine(" Where REQ_ID = '" & IP & "' ")
-        // sb.AppendLine("   And FDKCAB = '" & KodeToko & "' ")
-        // sb.AppendLine("   And FDNOUO = '" & noPB & "' ")
-        // sb.AppendLine("   And DATE_TRUNC('DAY', FDTGPB) = to_date('" & tglPB & "','DD-MM-YYYY') ")
-        // sb.AppendLine("   And PRD_PRDCD = PLUKARTON  ")
+        $userid = session('userid');
+        DB::insert(`
+            INSERT INTO PBIDM_JALURKERTAS
+            (
+                PBK_KODETOKO,
+                PBK_NOPB,
+                PBK_TGLPB,
+                PBK_NAMAGROUP,
+                PBK_KODERAK,
+                PBK_SUBRAK,
+                PBK_TIPERAK,
+                PBK_PLU,
+                PBK_NOURUT,
+                PBK_DESKRIPSI,
+                PBK_TAG,
+                PBK_QTY,
+                PBK_UNIT,
+                PBK_FRAC,
+                PBK_STOK,
+                PBK_CREATE_BY,
+                PBK_CREATE_DT
+            )
+            Select DISTINCT '$KodeToko' as KODETOKO,
+                '$noPB' as NoPB,
+                TO_DATE('$tglPB','DD-MM-YYYY') as TglPB,
+                GRR_GroupRak as NamaGroup,
+                PLUKARTON as PLU,
+                LKS_KodeRak as KodeRak,
+                LKS_KodeSubRak as Subrak,
+                LKS_TipeRak as TipeRak,
+                LKS_NoUrut as NoUrut,
+                DESK,
+                PRD_KodeTag,
+                QTYK as ""ORDER"",
+                UNITKECIL,
+                FRACKECIL,
+                STOK,
+                '$userid',
+                CURRENT_TIMESTAMP
+            From TEMP_JALURKERTAS_IDM, tbMaster_Prodmast
+            Where REQ_ID = '$ip'
+                And FDKCAB = '$KodeToko'
+                And FDNOUO = '$noPB'
+                And DATE_TRUNC('DAY', FDTGPB) = to_date('$tglPB','DD-MM-YYYY')
+                And PRD_PRDCD = PLUKARTON
+        `);
 
         //! ISI dtJalurCetakKertas
-        // sb.AppendLine("Select GRR_GroupRak as NamaGroup, ")
-        // sb.AppendLine("       PLUKARTON as PLU, ")
-        // sb.AppendLine("       LKS_KodeRak as KodeRak, ")
-        // sb.AppendLine("       LKS_KodeSubRak as Subrak, ")
-        // sb.AppendLine("       LKS_TipeRak as TipeRak, ")
-        // sb.AppendLine("       LKS_NoUrut as NoUrut, ")
-        // sb.AppendLine("       DESK, ")
-        // sb.AppendLine("       PRD_KodeTag, ")
-        // sb.AppendLine("       QTYK as ""ORDER"", ")
-        // sb.AppendLine("       UNITKECIL ||' /'|| FRACKECIL as UNIT, ")
-        // sb.AppendLine("       STOK ")
-        // sb.AppendLine("  From TEMP_JALURKERTAS_IDM, tbMaster_Prodmast   ")
-        // sb.AppendLine(" Where REQ_ID = '" & IP & "' ")
-        // sb.AppendLine("   And FDKCAB = '" & KodeToko & "' ")
-        // sb.AppendLine("   And FDNOUO = '" & noPB & "' ")
-        // sb.AppendLine("   And DATE_TRUNC('DAY', FDTGPB) = to_date('" & tglPB & "','DD-MM-YYYY') ")
-        // sb.AppendLine("   And PRD_PRDCD = PLUKARTON  ")
-        // sb.AppendLine(" Order By COALESCE(GRR_GROUPRAK,'0'),LKS_KodeRak,LKS_KodeSubRak,LKS_TipeRak,LKS_NoUrut ")
+        DB::insert(`
+            Select GRR_GroupRak as NamaGroup,
+                PLUKARTON as PLU,
+                LKS_KodeRak as KodeRak,
+                LKS_KodeSubRak as Subrak,
+                LKS_TipeRak as TipeRak,
+                LKS_NoUrut as NoUrut,
+                DESK,
+                PRD_KodeTag,
+                QTYK as ""ORDER"",
+                UNITKECIL ||' /'|| FRACKECIL as UNIT,
+                STOK
+            From TEMP_JALURKERTAS_IDM, tbMaster_Prodmast
+            Where REQ_ID = '$ip'
+                And FDKCAB = '$KodeToko'
+                And FDNOUO = '$noPB'
+                And DATE_TRUNC('DAY', FDTGPB) = to_date($tglPB','DD-MM-YYYY')
+                And PRD_PRDCD = PLUKARTON
+            Order By COALESCE(GRR_GROUPRAK,'0'),LKS_KodeRak,LKS_KodeSubRak,LKS_TipeRak,LKS_NoUrut
+        `);
 
         //? rptKertas.SetParameterValue("NamaCabang", NamaCab)
         //? rptKertas.SetParameterValue("NamaToko", NamaToko)
