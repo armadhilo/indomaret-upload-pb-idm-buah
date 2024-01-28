@@ -400,11 +400,13 @@ class Controller extends BaseController
             ");
         }
 
-        $data = DB::table('information_schema.columns')
-            ->whereRaw("upper(table_name) = 'SEQ_NOKOLI_BUAH'")
-            ->count();
+        $data = DB::select("
+            SELECT COALESCE(Count(0),0)
+            FROM information_schema.SEQUENCES
+            WHERE UPPER(SEQUENCE_NAME) = 'SEQ_NOKOLI_BUAH'
+        ");
 
-        if($data == 0){
+        if($data[0]->coalesce == 0){
             //! CREATE TABLE SEQ_NOKOLI_BUAH
             DB::insert("
                 CREATE SEQUENCE SEQ_NOKOLI_BUAH
