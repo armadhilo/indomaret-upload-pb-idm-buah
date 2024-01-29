@@ -40,6 +40,11 @@
             <i class="fas fa-fw fa-chart-area"></i>
             <span>Cluster Buah</span></a>
     </li>
+    <li class="nav-item @if($sub_url == 'upload-pb-idm') active @endif">
+        <a class="nav-link" href="{{ url('/upload-pb-idm') }}">
+            <i class="fas fa-fw fa-chart-area"></i>
+            <span>Upload PB IDM</span></a>
+    </li>
     <li class="nav-item @if($sub_url == 'plu-hadiah') active @endif">
         <a class="nav-link" href="{{ url('/plu-hadiah') }}">
             <i class="fas fa-fw fa-chart-area"></i>

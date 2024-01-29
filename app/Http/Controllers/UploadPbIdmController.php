@@ -9,6 +9,8 @@ use Carbon\Carbon;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Crypt;
 
 class UploadPbIdmController extends Controller
 {
@@ -17,12 +19,12 @@ class UploadPbIdmController extends Controller
     {
         DatabaseConnection::setConnection(session('KODECABANG'), "PRODUCTION");
     }
-
     function index(){
 
         $this->CreateTabelBuah();
+        $this->formLoad();
 
-        return view("home");
+        return view("menu.upload-pb-idm");
     }
 
     //? pertama kali halaman di load
@@ -78,7 +80,11 @@ class UploadPbIdmController extends Controller
             ->whereRaw("DATE_TRUNC('DAY', cpb_tglproses) >= CURRENT_DATE - 7")
             ->count();
 
+
         //? if jum > 0 panggil function RefreshGridHeader
+        if($count > 0){
+            $this->datatablesHeader();
+        }
         //panggil query datatable_header
     }
 
@@ -177,9 +183,12 @@ class UploadPbIdmController extends Controller
         $query .= "   LEFT JOIN tbMaster_STOCK ";
         $query .= "     ON A.PLUIGR = ST_PRDCD ";
         $query .= "    AND ST_LOKASI = '01' ";
+    }
 
+    public function showDatatablesHeader(){
+        $ip = $this->getIP();
         //! ISI DATAGRID HEADER PB IDM
-        DB::select("
+        $data = DB::select("
             Select JENIS,
                 NOPB,
                 TGLPB,
@@ -191,10 +200,50 @@ class UploadPbIdmController extends Controller
             WHERE REQ_ID = '" . $ip . "'
             GROUP By JENIS, NOPB, TGLPB, TOKO, NAMA_FILE
         ");
+
+        return DataTables::of($data)
+            ->addIndexColumn()
+            ->make(true);
     }
 
     //! PROSES F3
-    public function actionF3(){
+    public function actionF3(Request $request){
+        $validator = validator($request->all(), [
+            'encrypted_csv' => 'file|mimes:csv,txt', // Adjust max file size if needed
+        ], [
+            'encrypted_csv.mimes' => 'Invalid file type. Please upload .csv File.',
+        ]);
+
+        if ($validator->fails()) {
+            return [
+                'code' => 300,
+                'message' => $validator->errors()->first()
+            ];
+        }
+
+        $file = $request->file('encrypted_csv');
+
+        if (!$file || empty($file)) {
+            return [
+                'code' => 300,
+                'message' => "File Tidak Ditemukan!"
+            ];
+        }
+
+        $filePath = $file->getRealPath();
+        $encryptedContent = file_get_contents($filePath);
+        return $encryptedContent;
+
+        $decryptedContent = Crypt::decryptString($encryptedContent);
+        // Parse CSV content into an array
+        $csvRows = array_map('str_getcsv', explode("\n", $decryptedContent));
+
+        // Remove empty rows
+        $csvRows = array_filter($csvRows);
+        return $csvRows;
+
+
+
 
         DB::beginTransaction();
         try{
@@ -709,7 +758,7 @@ class UploadPbIdmController extends Controller
                 ->where('UJB_JenisPB', $JenisPB)
                 ->count();
 
-            if($jum == 0){
+            if($count == 0){
                 //! GET URUTAN NoUrJenisPB
                 //? result nanti NoUrJenisPB+1 untuk jadi variable NoUrJenisPB
                 // sb.AppendLine("SELECT COALESCE(Count(0),0) ")

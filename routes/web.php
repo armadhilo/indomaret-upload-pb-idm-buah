@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JadwalKirimBuahController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MasterTimbanganController;
+use App\Http\Controllers\UploadPbIdmController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -72,6 +73,18 @@ Route::middleware(['mylogin'])->group(function () {
         Route::group(['prefix' => 'action'], function(){
             Route::post('save', [ClusterBuahController::class, 'actionSave']);
             Route::delete('hapus/{kode_toko}', [ClusterBuahController::class, 'actionHapus']);
+        });
+    });
+
+    //UPLOAD PB IDM 
+    Route::group(['prefix' => 'upload-pb-idm'], function(){
+
+        Route::get('/', [UploadPbIdmController::class, 'index']);
+        Route::get('/datatablesHeader', [UploadPbIdmController::class, 'showDatatablesHeader']);
+
+
+        Route::group(['prefix' => 'action'], function(){
+            Route::post('upload-csv', [UploadPbIdmController::class, 'actionF3']);
         });
     });
 
