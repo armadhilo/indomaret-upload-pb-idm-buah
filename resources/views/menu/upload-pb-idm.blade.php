@@ -106,7 +106,7 @@
                             </div>
                             <div class="form-group header-input">
                                 <label for="csv_input">PATH FILE PBBH*.CSV</label>
-                                <input type="file" id="csv_input" name="encrypted_csv" class="form-control" style="height: 47px;" accept=".csv">
+                                <input type="file" id="csv_input" name="encrypted_csv" multiple webkitdirectory directory class="form-control" style="height: 47px;">
                             </div>
                         </div>
                         <div class="body">
@@ -232,9 +232,11 @@
                 });
                 return;
             }
-            var formData = new FormData();
-            formData.append('encrypted_csv', $('#csv_input')[0].files[0]);
-            console.log(formData);
+            let files = input[0].files;
+            let formData = new FormData();
+            for (var i = 0; i < files.length; i++) {
+                formData.append('files[]', files[i]);
+            }                
             $("#modal_loading").modal("show");
             $.ajax({
                 url: "/upload-pb-idm/action/upload-csv",

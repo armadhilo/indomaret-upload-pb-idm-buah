@@ -10,7 +10,8 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Support\Facades\Crypt;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\File;
 
 class UploadPbIdmController extends Controller
 {
@@ -209,9 +210,9 @@ class UploadPbIdmController extends Controller
     //! PROSES F3
     public function actionF3(Request $request){
         $validator = validator($request->all(), [
-            'encrypted_csv' => 'file|mimes:csv,txt', // Adjust max file size if needed
+            'files.*' => 'file|mimes:csv,txt', // Adjust max file size if needed
         ], [
-            'encrypted_csv.mimes' => 'Invalid file type. Please upload .csv File.',
+            'files.*.mimes' => 'Invalid file type. Please upload .csv File.',
         ]);
 
         if ($validator->fails()) {
@@ -220,29 +221,38 @@ class UploadPbIdmController extends Controller
                 'message' => $validator->errors()->first()
             ];
         }
+        
+        $folderPath = $request->file('files');
 
-        $file = $request->file('encrypted_csv');
-
-        if (!$file || empty($file)) {
+        if (!$folderPath || empty($folderPath)) {
             return [
                 'code' => 300,
-                'message' => "File Tidak Ditemukan!"
+                'message' => "Files Tidak Ditemukan!"
             ];
         }
+        
+        $allGroupedData = [];
+    
+        foreach ($folderPath as $csvFile) {
+            $csvData = Excel::toArray([], $csvFile);
+            $header = $csvData[0][0];
+            $rowData = array_slice($csvData[0], 1);
+            $fileName = $csvFile->getClientOriginalName();;
+            $groupedData = [];
+            foreach ($rowData as $row) {
+                $groupedRow = [
+                    'NAMA_FILE' => $fileName,
+                ];
+                foreach ($header as $index => $columnName) {
+                    $groupedRow[$columnName] = $row[$index];
+                }
+                $groupedData[] = $groupedRow;
+            }
 
-        $filePath = $file->getRealPath();
-        $encryptedContent = file_get_contents($filePath);
-        return $encryptedContent;
+            $allGroupedData = array_merge($allGroupedData, $groupedData);
+        }
 
-        $decryptedContent = Crypt::decryptString($encryptedContent);
-        // Parse CSV content into an array
-        $csvRows = array_map('str_getcsv', explode("\n", $decryptedContent));
-
-        // Remove empty rows
-        $csvRows = array_filter($csvRows);
-        return $csvRows;
-
-
+        return $allGroupedData;
 
 
         DB::beginTransaction();
