@@ -81,6 +81,7 @@ Route::middleware(['mylogin'])->group(function () {
 
         Route::get('/', [UploadPbIdmController::class, 'index']);
         Route::get('/datatablesHeader', [UploadPbIdmController::class, 'showDatatablesHeader']);
+        Route::get('/datatablesDetail/{noPB}/{tglPB}/{KodeToko}', [UploadPbIdmController::class, 'showDatatablesDetail']);
 
 
         Route::group(['prefix' => 'action'], function(){

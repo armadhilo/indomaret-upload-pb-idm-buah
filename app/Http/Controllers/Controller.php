@@ -573,7 +573,7 @@ class Controller extends BaseController
         return $_SERVER['REMOTE_ADDR'];
     }
 
-    public function prosesPBIdm(){
+    public function prosesPBIdm($noPB, $tglPB, $KodeToko, $JenisPB, $fileName, $NoUrJenisPB){
         $jum = 0;
         $CounterKarton = 0;
         $CounterKecil = 0;
@@ -605,13 +605,8 @@ class Controller extends BaseController
         $VolContainer = 0;
         $VolBronjong = 0;
 
-        $ip = '';
-        $KDIGR = '';
-        $KodeToko = '';
-        $noPB = '';
-        $tglPB = '';
-        $JenisPB = '';
-        $NoUrJenisPB = '';
+        $ip = $this->getIP();
+        $KDIGR = session('KODECABANG');
 
         //! DEL TEMP_CETAKPB_TOLAKAN_IDM
         // ExecQRY("DELETE FROM TEMP_CETAKPB_TOLAKAN_IDM WHERE REQ_ID = '" & IP & "' ", "DEL TEMP_CETAKPB_TOLAKAN_IDM")

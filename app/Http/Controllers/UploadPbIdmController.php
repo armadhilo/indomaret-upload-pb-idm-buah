@@ -7,6 +7,8 @@ set_time_limit(0);
 use App\Helper\DatabaseConnection;
 use App\Helper\ApiFormatter;
 use App\Http\Requests\AuthRequest;
+use App\Http\Requests\FormNoUrutBuahProsesRequest;
+use App\Http\Requests\ProsesPbBuahRequest;
 use Carbon\Carbon;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
@@ -195,6 +197,29 @@ class UploadPbIdmController extends Controller
             FROM TEMP_CSV_PB_BUAH
             WHERE REQ_ID = '" . $ip . "'
             GROUP By JENIS, NOPB, TGLPB, TOKO, NAMA_FILE
+        ");
+
+        return DataTables::of($data)
+            ->addIndexColumn()
+            ->make(true);
+    }
+
+    public function showDatatablesDetail($noPB, $tglPB, $KodeToko){
+        $ip = $this->getIP();
+        $data = DB::select("
+            Select PLUIGR as PLU,
+                TOKO,
+                PRD_DeskripsiPanjang as DESK,
+                QTY,
+                ROUND(RUPIAH,0) as RUPIAH,
+                STOCK
+            From TEMP_CSV_PB_BUAH,
+                    TBMaster_Prodmast
+            Where NoPB = '$noPB'
+                And TGLPB = '$tglPB'
+                AND REQ_ID = '$ip'
+                AND TOKO = '$KodeToko'
+                AND PRD_PRDCD = PLUIGR
         ");
 
         return DataTables::of($data)
@@ -690,51 +715,49 @@ class UploadPbIdmController extends Controller
     //! Keys.F8, Keys.F9, Keys.F10
     public function actionF8F9F10(){
 
+        //! VARIABLE
+        //? default
+        $buttonPress = '';
+
+        // If Strings.Format(Now, "HHmmss") >= "234000" Then
+        //     MsgBox("Mohon Tunggu Sampai JAM 12 MALAM" & vbNewLine & "Untuk Melakukan UPLOAD PB!!", MsgBoxStyle.Information, ProgName)
+        //     Exit Sub
+        // End If
+
+        //! CHECK TOMBOL YANG DITEKAN
+        $JenisPB = 'CHILLED FOOD';
+        if($buttonPress == 'F8'){
+            $JenisPB = 'IMPORT';
+        }elseif($buttonPress == 'F9'){
+            $JenisPB = 'LOKAL';
+        }
+
+        //* YAKIN INGIN MEMPROSES" & vbNewLine & PADC(JenisPB & " ??
+
+        //? check apakah datatables header ada isinya?
+        //? jika tidak
+
+        //*  Tidak Ada Data " & JenisPB & " Yang Dapat Diproses !
+
+        //? open form frmNoUrutBuah
+         //* NAMA HEADER -> Urutan PLU Buah - & JenisPB
+        //* NAMA BUTTON -> PROSES UPLOAD BUAH - & JenisPB
+
+        return view('urutan_buah');
+    }
+
+    public function prosesPbBuah(ProsesPbBuahRequest $request){
         DB::beginTransaction();
         try{
 
             //! VARIABLE
             //? default
-            $buttonPress = '';
             $NoUrJenisPB = 0;
             $JumlahPB = 0;
 
             //? custom
             $ip = $this->getIP();
-            $noPB = '';
-            $tglPB = '';
-            $KodeToko = '';
-
-            // If Strings.Format(Now, "HHmmss") >= "234000" Then
-            //     MsgBox("Mohon Tunggu Sampai JAM 12 MALAM" & vbNewLine & "Untuk Melakukan UPLOAD PB!!", MsgBoxStyle.Information, ProgName)
-            //     Exit Sub
-            // End If
-
-            // Dim JenisPB As String = ""
-            // If e.KeyCode = Keys.F8 Then
-            //     JenisPB = "IMPORT"
-            // ElseIf e.KeyCode = Keys.F9 Then
-            //     JenisPB = "LOKAL"
-            // ElseIf e.KeyCode = Keys.F10 Then
-            //     JenisPB = "CHILLED FOOD"
-            // End If
-
-            //! CHECK TOMBOL YANG DITEKAN
-            $JenisPB = 'CHILLED FOOD';
-            if($buttonPress == 'F8'){
-                $JenisPB = 'IMPORT';
-            }elseif($buttonPress == 'F9'){
-                $JenisPB = 'LOKAL';
-            }
-
-            //* YAKIN INGIN MEMPROSES" & vbNewLine & PADC(JenisPB & " ??
-
-            //? check apakah datatables header ada isinya?
-            //? jika tidak
-
-            //*  Tidak Ada Data " & JenisPB & " Yang Dapat Diproses !
-
-            //? open form frmNoUrutBuah
+            $JenisPB = $request->JenisPB;
 
             //! DELETE FROM TEMP_PB_VALID
             // sb.AppendLine("DELETE FROM TEMP_PB_VALID ")
@@ -809,11 +832,15 @@ class UploadPbIdmController extends Controller
             }
 
             //!LOOP DATATABLES HEADER
+            foreach($request->datatablesHeader as $item){
 
                 // If dgvHeader.Rows(i).Cells(0).Value <> JenisPB Then GoTo skipPBBH
-                // KodeToko = dgvHeader.Rows(i).Cells(3).Value.ToString
-                // noPB = dgvHeader.Rows(i).Cells(1).Value.ToString
-                // tglPB = dgvHeader.Rows(i).Cells(2).Value.ToString
+                if($item->jenis != $JenisPB) continue;
+
+                $noPB = $item->noPB;
+                $tglPB = $item->tglPB;
+                $KodeToko = $item->KodeToko;
+                $fileName = $item->fileName;
 
                 //! GET KODETOKO TIDAK TERDAFTAR
                 $data = DB::select("
@@ -943,23 +970,9 @@ class UploadPbIdmController extends Controller
                 }
 
                 // ProsesPBIDM(dgvHeader.Rows(i).Cells(3).Value, txtPathFilePBBH.Text & "\" & dgvHeader.Rows(i).Cells(6).Value, JenisPB, NoUrJenisPB)
+                $this->prosesPBIdm($noPB, $tglPB, $KodeToko, $JenisPB, $fileName, $NoUrJenisPB);
 
                 //! INSERT INTO TEMP_PB_VALID
-                // sb.AppendLine("INSERT INTO TEMP_PB_VALID ")
-                // sb.AppendLine("( ")
-                // sb.AppendLine("  KodeToko, ")
-                // sb.AppendLine("  NoPB, ")
-                // sb.AppendLine("  TglPB, ")
-                // sb.AppendLine("  IP ")
-                // sb.AppendLine(") ")
-                // sb.AppendLine("VALUES ")
-                // sb.AppendLine("( ")
-                // sb.AppendLine(" '" & KodeToko & "', ")
-                // sb.AppendLine(" '" & noPB & "', ")
-                // sb.AppendLine(" TO_DATE('" & tglPB & "','DD-MM-YYYY'), ")
-                // sb.AppendLine(" '" & IP & "'  ")
-                // sb.AppendLine(") ")
-
                 DB::table('TEMP_PB_VALID')
                     ->insert([
                         'KodeToko' => $KodeToko,
@@ -969,14 +982,11 @@ class UploadPbIdmController extends Controller
                     ]);
 
                 $JumlahPB += 1;
-
-                skipPBBH:
-
-
+            }
             //! END LOOP DATATABLES HEADER
 
             if($JumlahPB == 0){
-                //* Tidak Ada PB " & JenisPB & " !!
+                $message = "Tidak ada PB $JenisPB";
             }
 
             //! HITUNG JUMLAH ITEM DI PBOMI
@@ -1059,7 +1069,7 @@ class UploadPbIdmController extends Controller
             ");
 
             //! dummy
-            DB::commit();
+            // DB::commit();
 
             //* PROSES UPLOAD " & JenisPB & " SELESAI DILAKUKAN
             $message = "PROSES UPLOAD " . $JenisPB . " SELESAI DILAKUKAN";
@@ -1076,5 +1086,97 @@ class UploadPbIdmController extends Controller
             $message = "Oops terjadi kesalahan ( $e )";
             throw new HttpResponseException(ApiFormatter::error(400, $message));
         }
+    }
+
+    public function datatablesFormNoUrutBuah($JenisPB){
+
+        $ip = $this->GetIP();
+
+        //! INIT URUTAN BUAH
+        $query = "";
+        $query .= "SELECT CPB_PLUIDM AS PLU, ";
+        $query .= "       PRD_DESKRIPSIPANJANG AS DESK, ";
+        $query .= "       PRD_UNIT AS UNIT, ";
+        $query .= "       PRD_FRAC AS FRAC, ";
+        $query .= "       Sum(CPB_QTY) AS TotalQTY, ";
+        $query .= "       ST_SaldoAkhir AS Stock ";
+        $query .= "  FROM CSV_PB_BUAH, ";
+        $query .= "       tbMaster_Prodcrm, ";
+        $query .= "       tbMaster_prodmast, ";
+        $query .= "       tbMaster_Stock ";
+        $query .= " WHERE cpb_ip = '" . $ip . "' ";
+        $query .= "   AND (CPB_Flag IS NULL OR CPB_Flag = '') ";
+        $query .= "   AND CPB_PLUIDM = PRC_PLUIDM ";
+        $query .= "   AND CPB_JenisPB = '" . $JenisPB . "' ";
+        $query .= "   AND PRC_PLUIGR = PRD_PRDCD ";
+        $query .= "   AND PRC_GROUP = 'I' ";
+        $query .= "   AND PRD_KodeDivisi IN ('4','6') ";
+        $query .= "   AND ST_PRDCD = PRC_PLUIGR ";
+        $query .= "   AND ST_PRDCD = PRD_PRDCD ";
+        $query .= "   AND ST_LOKASI = '01' ";
+        $query .= " GROUP BY CPB_PLUIDM, ";
+        $query .= "       PRD_DESKRIPSIPANJANG, ";
+        $query .= "       PRD_UNIT, ";
+        $query .= "       PRD_FRAC, ";
+        $query .= "       ST_SaldoAkhir ";
+        $query .= " ORDER BY ST_SaldoAkhir DESC ";
+
+        $data = DB::select($query);
+
+        return DataTables::of($data)
+            ->addIndexColumn()
+            ->make(true);
+    }
+
+    public function actionProsesFormNoUrutBuah(FormNoUrutBuahProsesRequest $request){
+
+        $ip = $this->getIP();
+
+        //* Sudah Yakin Dengan Urutan PLU Untuk Picking " & JenisPB & " ?
+
+        //! JIKA DATATABLE KOSONG
+        //* Tidak Ada Data " & JenisPB & " Yang Dapat Diproses !
+
+        //! DELETE FROM TEMP_URUTAN_BUAH
+        DB::table('TEMP_URUTAN_BUAH')
+            ->where('ip', $ip)
+            ->delete();
+
+
+        //! LOOP DATATABLES
+        foreach($request->datatables as $key => $item){
+            DB::table('TEMP_URUTAN_BUAH')
+                ->insert([
+                    'jenis' => $request->jenisPB,
+                    'plu' => $item->plu, //? data dari datatable formNoUrutBuah
+                    'nourut' => $key + 1, //? integer sesuai urutan mulai dari 1
+                    'ip' => $ip,
+                ]);
+        }
+        //! END LOOP
+
+        //! ISI NoUrut CSV_PB_BUAH
+        $query = '';
+        $query .= "MERGE INTO CSV_PB_BUAH A ";
+        $query .= "USING ";
+        $query .= "( ";
+        $query .= " SELECT *  ";
+        $query .= "   FROM TEMP_URUTAN_BUAH ";
+        $query .= "  WHERE IP = '" . $ip . "' ";
+        $query .= "    AND Jenis = '" . $request->jenisPB . "' ";
+        $query .= ") B ";
+        $query .= "ON ";
+        $query .= "( ";
+        $query .= "      A.CPB_PLUIDM = B.PLU ";
+        $query .= "  AND A.CPB_JenisPB = B.Jenis ";
+        $query .= "  AND A. CPB_IP = '" . $ip . "' ";
+        $query .= "  AND (A.CPB_Flag IS NULL OR A.CPB_Flag = '') ";
+        $query .= ") ";
+        $query .= "WHEN MATCHED THEN ";
+        $query .= "  UPDATE SET CPB_NoUrut = B.NoUrut ";
+        DB::insert($query);
+
+        $message = 'SIMPAN URUTAN BUAH BERHASIL!!';
+        return ApiFormatter::success(200, $message);
     }
 }
