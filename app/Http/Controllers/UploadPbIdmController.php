@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+set_time_limit(0);
+
 use App\Helper\DatabaseConnection;
 use App\Helper\ApiFormatter;
 use App\Http\Requests\AuthRequest;
@@ -16,8 +18,10 @@ use Illuminate\Support\Facades\File;
 class UploadPbIdmController extends Controller
 {
 
+    private $flag_pluidm;
     public function __construct(Request $request)
     {
+        $this->flag_pluidm = false;
         DatabaseConnection::setConnection(session('KODECABANG'), "PRODUCTION");
     }
     function index(){
@@ -42,7 +46,6 @@ class UploadPbIdmController extends Controller
             ->count();
 
        //? if jum > 0 lanjut CHECK TBMASTER_PLUIDM jika kosong $flag_pluidm = false
-       $flag_pluidm = false;
        if($count > 0){
             //! CHECK TBMASTER_PLUIDM
             $count = DB::select("
@@ -61,38 +64,15 @@ class UploadPbIdmController extends Controller
 
             //? if jum > 0 $flag_pluidm = true jika kosong $flag_pluidm = false
             if($count[0]->jml_pluidm > 0){
-                $flag_pluidm = true;
+                $this->flag_pluidm = true;
             }
        }
-
-        //! ISI GRID HEADER
-        // sb.AppendLine("Select COALESCE(Count(1),0) ")
-        // sb.AppendLine("  From CSV_PB_BUAH ")
-        // sb.AppendLine(" Where DATE_TRUNC('DAY', CPB_TGLPROSES) >= CURRENT_DATE - 7  ")
-        // sb.AppendLine(" AND (CPB_Flag IS NULL OR CPB_Flag = '') ")
-        // sb.AppendLine("   AND CPB_IP = '" & IP & "'  ")
-
-        $count = DB::table('csv_pb_buah')
-            ->where('cpb_ip', $ip)
-            ->where(function($query){
-                $query->whereNull('cpb_flag')
-                    ->orWhere('cpb_flag','');
-            })
-            ->whereRaw("DATE_TRUNC('DAY', cpb_tglproses) >= CURRENT_DATE - 7")
-            ->count();
-
-
-        //? if jum > 0 panggil function RefreshGridHeader
-        if($count > 0){
-            $this->datatablesHeader();
-        }
-        //panggil query datatable_header
     }
 
     private function datatablesHeader(){
 
         $ip = $this->getIP();
-        $flagPLUIDM = true;
+        $flagPLUIDM = $this->flag_pluidm;
 
         //! DELETE TEMP_CSV_PB_BUAH
         // sb.AppendLine("DELETE FROM TEMP_CSV_PB_BUAH ")
@@ -129,9 +109,7 @@ class UploadPbIdmController extends Controller
         $query .= "        PLUIDM as PLUIDM, ";
         $query .= "        PLUIGR as PLUIGR, ";
         $query .= "        QTY, ";
-        $query .= "        COALESCE(ST_AVGCOST,0) ";
-        $query .= " 	    / CASE WHEN PRD_UNIT = 'KG' THEN 1000 ELSE 1 END ";
-        $query .= " 	    * QTY / CASE WHEN IDM_MINORDER::numeric = 1000 THEN 1000 ELSE 1 END as RUPIAH, ";
+        $query .= "        COALESCE(ST_AVGCOST,0) / CASE WHEN PRD_UNIT = 'KG' THEN 1000 ELSE 1 END * QTY / CASE WHEN IDM_MINORDER::integer = 1000 THEN 1000 ELSE 1 END as RUPIAH,";
         $query .= "        COALESCE(ST_SaldoAkhir,0) STOCK, ";
         $query .= "        NAMA_FILE, ";
         $query .= "        REQ_ID ";
@@ -168,7 +146,7 @@ class UploadPbIdmController extends Controller
             $query .= "            CPB_QTY as QTY, ";
             $query .= " 	       SUBSTR(CPB_FILENAME,POSITION('PB' IN CPB_FILENAME)) AS NAMA_FILE, ";
             $query .= "            '" . $ip . "' as REQ_ID, ";
-            $query .= "            PRC_MINORDER, ";
+            $query .= "            PRC_MINORDER AS IDM_MINORDER,  ";
             $query .= "            PRD_KodeDepartement, ";
             $query .= "            PRD_Unit ";
             $query .= "       FROM CSV_PB_BUAH ";
@@ -184,10 +162,27 @@ class UploadPbIdmController extends Controller
         $query .= "   LEFT JOIN tbMaster_STOCK ";
         $query .= "     ON A.PLUIGR = ST_PRDCD ";
         $query .= "    AND ST_LOKASI = '01' ";
+        DB::insert($query);
     }
 
     public function showDatatablesHeader(){
+
         $ip = $this->getIP();
+
+        $count = DB::table('csv_pb_buah')
+            ->where('cpb_ip', $ip)
+            ->where(function($query){
+                $query->whereNull('cpb_flag')
+                    ->orWhere('cpb_flag','');
+            })
+            ->whereRaw("DATE_TRUNC('DAY', cpb_tglproses) >= CURRENT_DATE - 7")
+            ->count();
+
+        //? if jum > 0 panggil function RefreshGridHeader
+        if($count > 0){
+            $this->datatablesHeader();
+        }
+
         //! ISI DATAGRID HEADER PB IDM
         $data = DB::select("
             Select JENIS,
@@ -221,7 +216,7 @@ class UploadPbIdmController extends Controller
                 'message' => $validator->errors()->first()
             ];
         }
-        
+
         $folderPath = $request->file('files');
 
         if (!$folderPath || empty($folderPath)) {
@@ -230,9 +225,9 @@ class UploadPbIdmController extends Controller
                 'message' => "Files Tidak Ditemukan!"
             ];
         }
-        
-        $allGroupedData = [];
-    
+
+        $dataCSV = [];
+
         foreach ($folderPath as $csvFile) {
             $csvData = Excel::toArray([], $csvFile);
             $header = $csvData[0][0];
@@ -249,11 +244,8 @@ class UploadPbIdmController extends Controller
                 $groupedData[] = $groupedRow;
             }
 
-            $allGroupedData = array_merge($allGroupedData, $groupedData);
+            $dataCSV = array_merge($dataCSV, $groupedData);
         }
-
-        return $allGroupedData;
-
 
         DB::beginTransaction();
         try{
@@ -261,10 +253,6 @@ class UploadPbIdmController extends Controller
             //! VARIABLE
             $SalahSatuPBGaLolos = FALSE;
             $ip = $this->getIP();
-            $noPB = "";
-            $KodeToko = "";
-            $tglPB = "";
-            $filename = "";
 
             //? ada proses decrypt file
             //? Decryption dengan metode AES alias RijndaelManaged
@@ -278,183 +266,181 @@ class UploadPbIdmController extends Controller
             // sb.AppendLine(" Where CPB_IP = '" & IP & "' ")
             // sb.AppendLine("   AND DATE_TRUNC('DAY', CPB_TGLPROSES) = CURRENT_DATE ")
 
-            DB::table('CSV_PB_bUAH2')
+            DB::table('csv_pb_buah2')
                 ->where('cpb_ip', $ip)
                 ->whereRaw("DATE_TRUNC('DAY', cpb_tglproses) = CURRENT_DATE")
                 ->delete();
 
-            //! START LOOP
+            foreach($dataCSV as $csv){ //! START LOOP
 
-            //? 03-01-2014 KALAU ADA REVISI PB UNTUK HARI INI
-            //! DELETE CSV_PB_BUAH2 WHERE DATE_TRUNC('DAY', CPB_TglProses) = CURRENT_DATE AND CPB_NoPB
-            // sb.AppendLine("DELETE FROM CSV_PB_BUAH2 ")
-            // sb.AppendLine(" Where CPB_IP = '" & IP & "' ")
-            // sb.AppendLine("   AND DATE_TRUNC('DAY', CPB_TglProses) = CURRENT_DATE ")
-            // sb.AppendLine("   AND CPB_NoPB = '" & noPB & "' ")
-            // sb.AppendLine("   AND DATE_TRUNC('DAY', CPB_TglPB) = TO_DATE('" & tglPB & "','DD-MM-YYYY') ")
-            // sb.AppendLine("   AND CPB_KodeToko = '" & KodeToko & "' ")
-
-            DB::table('csv_pb_buah2')
-                ->where([
-                    'cpb_ip' => $ip,
-                    'cpb_nopb' => $noPB,
-                    'cpb_kodetoko' => $KodeToko,
-                ])
-                ->whereRaw("DATE_TRUNC('DAY', cpb_tglproses) = CURRENT_DATE")
-                ->whereRaw("DATE_TRUNC('DAY', cpb_tglpb) = TO_DATE('" . $tglPB . "','DD-MM-YYYY')")
-                ->delete();
-
-            //! DELETE CSV_PB_BUAH WHERE DATE_TRUNC('DAY', CPB_TglProses) = CURRENT_DATE AND CPB_NoPB
-            // sb.AppendLine("DELETE FROM CSV_PB_BUAH ")
-            // sb.AppendLine(" Where CPB_IP = '" & IP & "' ")
-            // sb.AppendLine("   AND DATE_TRUNC('DAY', CPB_TglProses) = CURRENT_DATE ")
-            // sb.AppendLine("   AND CPB_NoPB = '" & noPB & "' ")
-            // sb.AppendLine("   AND To_Char(CPB_TglPB,'DD-MM-YYYY') = '" & tglPB & "' ")
-            // sb.AppendLine("   AND CPB_KodeToko = '" & KodeToko & "' ")
-
-            DB::table('csv_pb_buah2')
-                ->where([
-                    'cpb_ip' => $ip,
-                    'cpb_nopb' => $noPB,
-                    'cpb_kodetoko' => $KodeToko,
-                ])
-                ->whereRaw("DATE_TRUNC('DAY', cpb_tglproses) = CURRENT_DATE")
-                ->where(DB::raw("To_Char(cpb_tglpb,'DD-MM-YYYY')"), $tglPB)
-                ->delete();
-
-            //? ini sek anomali karena ada if counter 100 (NOTE KEVIN)
-            //! INSERT INTO CSV_PB_BUAH2
-            // sb.AppendLine(" INSERT INTO CSV_PB_BUAH2 ( ")
-            // sb.AppendLine("   cpb_recordid, ")
-            // sb.AppendLine("   cpb_kodetoko, ")
-            // sb.AppendLine("   cpb_nopb, ")
-            // sb.AppendLine("   cpb_tglpb, ")
-            // sb.AppendLine("   cpb_pluidm, ")
-            // sb.AppendLine("   cpb_qty, ")
-            // sb.AppendLine("   cpb_gross, ")
-            // sb.AppendLine("   cpb_ip, ")
-            // sb.AppendLine("   cpb_filename, ")
-            // sb.AppendLine("   cpb_tglproses, ")
-            // sb.AppendLine("   cpb_flag, ")
-            // sb.AppendLine("   cpb_create_by, ")
-            // sb.AppendLine("   cpb_nourut ")
-            // sb.AppendLine(" ) VALUES ")
-            // sb.AppendLine(" ( ")
-            // sb.AppendLine("   '" & row(0).ToString & "', ")
-            // sb.AppendLine("   '" & row(1).ToString & "', ")
-            // sb.AppendLine("   '" & row(2).ToString & "', ")
-            // sb.AppendLine(" TO_DATE('" & row(3).ToString & "','DD/MM/YYYY HH24:MI:SS'),")
-            // sb.AppendLine("   '" & row(4).ToString & "', ")
-            // sb.AppendLine("   " & row(5).ToString & ", ")
-            // sb.AppendLine("   " & row(6).ToString & ", ")
-            // sb.AppendLine("   '" & row(7).ToString & "', ")
-            // sb.AppendLine("   '" & row(8).ToString & "', ")
-            // sb.AppendLine(" TO_DATE('" & row(9).ToString & "','DD/MM/YYYY HH24:MI:SS'),")
-            // sb.AppendLine("   '" & row(10).ToString & "', ")
-            // sb.AppendLine("   '" & row(11).ToString & "', ")
-            // sb.AppendLine("   " & IIf(row(12).ToString = "", "null", row(12).ToString) & " ")
-            // sb.AppendLine(" ) ")
-
-            $count = DB::select("
-                SELECT COALESCE(Count(DISTINCT CPB_NoPB),0) as count
-                FROM CSV_PB_BUAH2
-                WHERE EXISTS
-                (
-                    SELECT pbo_nopb
-                    FROM TBMASTER_PBOMI
-                    WHERE PBO_NOPB = CPB_NoPB
-                    AND PBO_KODEOMI = CPB_KodeToko
-                    AND DATE_TRUNC('DAY', PBO_TGLPB) = DATE_TRUNC('DAY', CPB_TglPB)
-                    AND CPB_NoPB ='" . $noPB . "'
-                    AND To_Char(CPB_TglPB,'DD-MM-YYYY')='" . $tglPB . "'
-                    AND CPB_KodeToko = '" . $KodeToko . "'
-                )
-                AND CPB_KodeToko = '" . $KodeToko . "'
-                AND CPB_NoPB ='" . $noPB . "'
-                AND To_Char(CPB_TglPB,'DD-MM-YYYY')='" . $tglPB . "'
-            ");
-
-            if($count[0]->count > 0){
-                $SalahSatuPBGaLolos = true;
-                //? continue;
-
-                //* No Dokumen:" & noPB & vbNewLine & "Tanggal:" & tglPB & vbNewLine & "File:" & fi.Name & vbNewLine & vbNewLine & "SUDAH PERNAH DIPROSES!!!
-
-                $message = "No Dokumen:" . $noPB . "Tanggal:" . $tglPB . "File:" . $filename . "SUDAH PERNAH DIPROSES!!!";
-                return ApiFormatter::error(400, $message);
-
-            }
-
-            //! GET PLU DOBEL BUAH
-            $data = DB::select("
-                Select CPB_PluIDM, COALESCE(count(CPB_KodeToko),0) as count
-                From CSV_PB_BUAH2
-                Where CPB_IP = '" . $ip . "'
-                    AND CPB_NoPB = '" . $noPB . "'
-                    AND DATE_TRUNC('DAY', CPB_TglPB) = to_date('" . $tglPB . "','DD-MM-YYYY')
-                    AND CPB_KodeToko = '" . $KodeToko . "'
-                Group By CPB_PluIDM
-                Having count(CPB_KodeToko) > 1
-            ");
-
-            if(count($data)){
-                $SalahSatuPBGaLolos = true;
-                //? continue;
-
-                $listPlu = '';
-                foreach($data as $item){
-                    $listPlu .= $item->count . ',';
+                //! HANDLING
+                //? ada case data yang dikirim double header
+                if($csv['DOCNO'] == 'DOCNO'){
+                    continue;
                 }
 
-                $message = "PLU " . rtrim($listPlu, ",") . " Dobel Di File " . $filename . " Yang Sedang Diproses, Harap Minta Revisi File PBBH Ke IDM - PLU DOBEL DI PBBH";
-                return ApiFormatter::error(400, $message);
-                //* PLU " & listPLU & " Dobel Di File " & fi.Name & " Yang Sedang Diproses," & vbNewLine & "Harap Minta Revisi File PBBH Ke IDM !", MsgBoxStyle.Information, ProgName & " - PLU DOBEL DI PBBH
-            }
+                $noPB = $csv['DOCNO'];
+                $KodeToko = $csv['TOKO'];
+                $tglPB = $csv['TGL_PB'];
+                $filename = $csv['NAMA_FILE'];
 
-            //! ISI dtTempPBIDM2
-            //? data ini di loop kemudian
-            // sb.AppendLine("Select * ")
-            // sb.AppendLine("  From CSV_PB_BUAH2 ")
-            // sb.AppendLine(" Where CPB_IP = '" & IP & "'")
-            // sb.AppendLine("   AND CPB_NoPB = '" & noPB & "'")
-            // sb.AppendLine("   AND DATE_TRUNC('DAY', CPB_TglPB) = to_date('" & tglPB & "','DD-MM-YYYY') ")
-            // sb.AppendLine("   AND CPB_KodeToko = '" & KodeToko & "' ")
+                //? 03-01-2014 KALAU ADA REVISI PB UNTUK HARI INI
+                //! DELETE CSV_PB_BUAH2 WHERE DATE_TRUNC('DAY', CPB_TglProses) = CURRENT_DATE AND CPB_NoPB
+                // sb.AppendLine("DELETE FROM CSV_PB_BUAH2 ")
+                // sb.AppendLine(" Where CPB_IP = '" & IP & "' ")
+                // sb.AppendLine("   AND DATE_TRUNC('DAY', CPB_TglProses) = CURRENT_DATE ")
+                // sb.AppendLine("   AND CPB_NoPB = '" & noPB & "' ")
+                // sb.AppendLine("   AND DATE_TRUNC('DAY', CPB_TglPB) = TO_DATE('" & tglPB & "','DD-MM-YYYY') ")
+                // sb.AppendLine("   AND CPB_KodeToko = '" & KodeToko & "' ")
 
-            $data = DB::table('csv_pb_buah2')
-                ->where([
+                DB::table('csv_pb_buah2')
+                    ->where([
+                        'cpb_ip' => $ip,
+                        'cpb_nopb' => $noPB,
+                        'cpb_kodetoko' => $KodeToko,
+                    ])
+                    ->whereRaw("DATE_TRUNC('DAY', cpb_tglproses) = CURRENT_DATE")
+                    ->whereRaw("DATE_TRUNC('DAY', cpb_tglpb) = TO_DATE('" . $tglPB . "','DD-MM-YYYY')")
+                    ->delete();
+
+                //! DELETE CSV_PB_BUAH WHERE DATE_TRUNC('DAY', CPB_TglProses) = CURRENT_DATE AND CPB_NoPB
+                // sb.AppendLine("DELETE FROM CSV_PB_BUAH ")
+                // sb.AppendLine(" Where CPB_IP = '" & IP & "' ")
+                // sb.AppendLine("   AND DATE_TRUNC('DAY', CPB_TglProses) = CURRENT_DATE ")
+                // sb.AppendLine("   AND CPB_NoPB = '" & noPB & "' ")
+                // sb.AppendLine("   AND To_Char(CPB_TglPB,'DD-MM-YYYY') = '" & tglPB & "' ")
+                // sb.AppendLine("   AND CPB_KodeToko = '" & KodeToko & "' ")
+
+                DB::table('csv_pb_buah2')
+                    ->where([
+                        'cpb_ip' => $ip,
+                        'cpb_nopb' => $noPB,
+                        'cpb_kodetoko' => $KodeToko,
+                    ])
+                    ->whereRaw("DATE_TRUNC('DAY', cpb_tglproses) = CURRENT_DATE")
+                    ->where(DB::raw("To_Char(cpb_tglpb,'DD-MM-YYYY')"), $tglPB)
+                    ->delete();
+
+                //! INSERT INTO CSV_PB_BUAH2
+                DB::table('csv_pb_buah2')->insert([
+                    'cpb_recordid' => $csv['RECID'],
+                    'cpb_kodetoko' => $csv['TOKO'],
+                    'cpb_nopb' => $csv['DOCNO'],
+                    'cpb_tglpb' => DB::raw("TO_DATE('" . $csv['TGL_PB'] . "','DD/MM/YYYY HH24:MI:SS')"),
+                    'cpb_pluidm' => $csv['PRDCD'],
+                    'cpb_qty' => $csv['QTY'],
+                    'cpb_gross' => $csv['GROSS'],
                     'cpb_ip' => $ip,
-                    'cpb_nopb' => $noPB,
-                    'cpb_kodetoko' => $KodeToko,
-                ])
-                ->whereRaw("DATE_TRUNC('DAY', cpb_tglpb) = to_date('" . $tglPB . "','DD-MM-YYYY')")
-                ->get();
+                    'cpb_filename' => $csv['NAMA_FILE'],
+                    'cpb_tglproses' => DB::raw("TO_DATE('" . Carbon::now()->format('d-m-Y') . "','DD/MM/YYYY HH24:MI:SS')"),
+                    'cpb_flag' => '',
+                    'cpb_create_by' => session('userid'),
+                    'cpb_nourut' => null,
+                ]);
 
-            if(count($data) == 0){
-                $SalahSatuPBGaLolos = true;
-                //? continue;
+                $count = DB::select("
+                    SELECT COALESCE(Count(DISTINCT CPB_NoPB),0) as count
+                    FROM CSV_PB_BUAH2
+                    WHERE EXISTS
+                    (
+                        SELECT pbo_nopb
+                        FROM TBMASTER_PBOMI
+                        WHERE PBO_NOPB = CPB_NoPB
+                        AND PBO_KODEOMI = CPB_KodeToko
+                        AND DATE_TRUNC('DAY', PBO_TGLPB) = DATE_TRUNC('DAY', CPB_TglPB)
+                        AND CPB_NoPB ='" . $noPB . "'
+                        AND To_Char(CPB_TglPB,'DD-MM-YYYY')='" . $tglPB . "'
+                        AND CPB_KodeToko = '" . $KodeToko . "'
+                    )
+                    AND CPB_KodeToko = '" . $KodeToko . "'
+                    AND CPB_NoPB ='" . $noPB . "'
+                    AND To_Char(CPB_TglPB,'DD-MM-YYYY')='" . $tglPB . "'
+                ");
 
-                $message = "TIDAK ADA DATA YANG BISA JADI PB DI IGR!! - KARENA DATANYA KOSONG";
-                return ApiFormatter::error(400, $message);
-                //* TIDAK ADA DATA YANG BISA JADI PB DI IGR!!" & vbNewLine & "(KARENA DATANYA KOSONG
-            }
+                if($count[0]->count > 0){
+                    $SalahSatuPBGaLolos = true;
+                    //? continue;
 
-            //? dari query diatas
-            //!INSERT INTO CSV_PB_BUAH
-            // sb.AppendLine(" INSERT INTO CSV_PB_BUAH ( ")
-            // sb.AppendLine("   cpb_recordid, ")
-            // sb.AppendLine("   cpb_kodetoko, ")
-            // sb.AppendLine("   cpb_nopb, ")
-            // sb.AppendLine("   cpb_tglpb, ")
-            // sb.AppendLine("   cpb_pluidm, ")
-            // sb.AppendLine("   cpb_qty, ")
-            // sb.AppendLine("   cpb_gross, ")
-            // sb.AppendLine("   cpb_ip, ")
-            // sb.AppendLine("   cpb_filename, ")
-            // sb.AppendLine("   cpb_tglproses, ")
-            // sb.AppendLine("   cpb_flag, ")
-            // sb.AppendLine("   cpb_create_by, ")
-            // sb.AppendLine("   cpb_nourut ")
-            //! END LOOP
+                    //* No Dokumen:" & noPB & vbNewLine & "Tanggal:" & tglPB & vbNewLine & "File:" & fi.Name & vbNewLine & vbNewLine & "SUDAH PERNAH DIPROSES!!!
+
+                    $message = "No Dokumen:" . $noPB . "Tanggal:" . $tglPB . "File:" . $filename . "SUDAH PERNAH DIPROSES!!!";
+                    return ApiFormatter::error(400, $message);
+
+                }
+
+                //! GET PLU DOBEL BUAH
+                $data = DB::select("
+                    Select CPB_PluIDM, COALESCE(count(CPB_KodeToko),0) as count
+                    From CSV_PB_BUAH2
+                    Where CPB_IP = '" . $ip . "'
+                        AND CPB_NoPB = '" . $noPB . "'
+                        AND DATE_TRUNC('DAY', CPB_TglPB) = to_date('" . $tglPB . "','DD-MM-YYYY')
+                        AND CPB_KodeToko = '" . $KodeToko . "'
+                    Group By CPB_PluIDM
+                    Having count(CPB_KodeToko) > 1
+                ");
+
+                if(count($data)){
+                    $SalahSatuPBGaLolos = true;
+                    //? continue;
+
+                    $listPlu = '';
+                    foreach($data as $item){
+                        $listPlu .= $item->count . ',';
+                    }
+
+                    $message = "PLU " . rtrim($listPlu, ",") . " Dobel Di File " . $filename . " Yang Sedang Diproses, Harap Minta Revisi File PBBH Ke IDM - PLU DOBEL DI PBBH";
+                    return ApiFormatter::error(400, $message);
+                    //* PLU " & listPLU & " Dobel Di File " & fi.Name & " Yang Sedang Diproses," & vbNewLine & "Harap Minta Revisi File PBBH Ke IDM !", MsgBoxStyle.Information, ProgName & " - PLU DOBEL DI PBBH
+                }
+
+                //! ISI dtTempPBIDM2
+                //? data ini di loop kemudian
+                // sb.AppendLine("Select * ")
+                // sb.AppendLine("  From CSV_PB_BUAH2 ")
+                // sb.AppendLine(" Where CPB_IP = '" & IP & "'")
+                // sb.AppendLine("   AND CPB_NoPB = '" & noPB & "'")
+                // sb.AppendLine("   AND DATE_TRUNC('DAY', CPB_TglPB) = to_date('" & tglPB & "','DD-MM-YYYY') ")
+                // sb.AppendLine("   AND CPB_KodeToko = '" & KodeToko & "' ")
+
+                $data = DB::table('csv_pb_buah2')
+                    ->where([
+                        'cpb_ip' => $ip,
+                        'cpb_nopb' => $noPB,
+                        'cpb_kodetoko' => $KodeToko,
+                    ])
+                    ->whereRaw("DATE_TRUNC('DAY', cpb_tglpb) = to_date('" . $tglPB . "','DD-MM-YYYY')")
+                    ->get();
+
+                if(count($data) == 0){
+                    $SalahSatuPBGaLolos = true;
+                    //? continue;
+
+                    $message = "TIDAK ADA DATA YANG BISA JADI PB DI IGR!! - KARENA DATANYA KOSONG";
+                    return ApiFormatter::error(400, $message);
+                    //* TIDAK ADA DATA YANG BISA JADI PB DI IGR!!" & vbNewLine & "(KARENA DATANYA KOSONG
+                }
+
+                //? dari query diatas
+                //!INSERT INTO CSV_PB_BUAH
+                foreach($data as $item){
+                    DB::table('csv_pb_buah')->insert([
+                        'cpb_recordid' => $item->cpb_recordid,
+                        'cpb_kodetoko' => $item->cpb_kodetoko,
+                        'cpb_nopb' => $item->cpb_nopb,
+                        'cpb_tglpb' => $item->cpb_tglpb,
+                        'cpb_pluidm' => $item->cpb_pluidm,
+                        'cpb_qty' => $item->cpb_qty,
+                        'cpb_gross' => $item->cpb_gross,
+                        'cpb_ip' => $item->cpb_ip,
+                        'cpb_filename' => $item->cpb_filename,
+                        'cpb_tglproses' => $item->cpb_tglproses,
+                        'cpb_flag' => $item->cpb_flag,
+                        'cpb_create_by' => session('userid'),
+                        'cpb_nourut' => $item->cpb_nourut,
+                    ]);
+                }
+            } //! END LOOP
 
             $kodeDCIDM = $this->kodeDCIDM($KodeToko);
 
@@ -505,13 +491,18 @@ class UploadPbIdmController extends Controller
             $query .= "  UPDATE SET CPB_JenisPB = b.JenisPB ";
 
             //! dummy
-            // DB::commit();
+            DB::commit();
+
+            $message = 'Proses TARIK DATA selesai';
+            return ApiFormatter::success(200, $message);
 
         } catch (HttpResponseException $e) {
             // Handle the custom response exception
             throw new HttpResponseException($e->getResponse());
 
         }catch(\Exception $e){
+
+            dd($e, $csv);
 
             DB::rollBack();
 
@@ -1070,7 +1061,7 @@ class UploadPbIdmController extends Controller
             ");
 
             //! dummy
-            // DB::commit();
+            DB::commit();
 
             //* PROSES UPLOAD " & JenisPB & " SELESAI DILAKUKAN
             $message = "PROSES UPLOAD " . $JenisPB . " SELESAI DILAKUKAN";

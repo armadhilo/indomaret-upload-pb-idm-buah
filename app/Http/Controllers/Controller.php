@@ -561,14 +561,16 @@ class Controller extends BaseController
             ->delete();
     }
 
-    public function getKodeDC($kode_toko){
-        return DB::table('master_supply_idm')
+    public function kodeDCIDM($kode_toko){
+        $data = DB::table('master_supply_idm')
             ->where('msi_kodetoko', $kode_toko)
-            ->first()->msi_kodedc;
+            ->first();
+
+        return $data->msi_kodedc ?? '';
     }
 
     public function getIP(){
-        return;
+        return $_SERVER['REMOTE_ADDR'];
     }
 
     public function prosesPBIdm(){
