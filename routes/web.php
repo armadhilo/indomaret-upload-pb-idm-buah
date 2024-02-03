@@ -76,7 +76,7 @@ Route::middleware(['mylogin'])->group(function () {
         });
     });
 
-    //UPLOAD PB IDM 
+    //UPLOAD PB IDM
     Route::group(['prefix' => 'upload-pb-idm'], function(){
 
         Route::get('/', [UploadPbIdmController::class, 'index']);
@@ -85,6 +85,7 @@ Route::middleware(['mylogin'])->group(function () {
 
         Route::group(['prefix' => 'action'], function(){
             Route::post('upload-csv', [UploadPbIdmController::class, 'actionF3']);
+            Route::get('proses-alokasi', [UploadPbIdmController::class, 'actionF6']);
         });
     });
 

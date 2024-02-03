@@ -529,7 +529,7 @@ class UploadPbIdmController extends Controller
             // sb.AppendLine(" WHERE Flag_proses IS NULL ")
 
             $count = DB::table('alokasi_buah')
-                ->whereNull('Flag_proses')
+                ->whereNull('flag_proses')
                 ->count();
 
             //? if jum = 0
@@ -615,11 +615,11 @@ class UploadPbIdmController extends Controller
             // sb.AppendLine(" WHERE Flag_Proses IS NULL   ")
 
             DB::table('alokasi_buah')
-                ->whereNull('Flag_Proses')
+                ->whereNull('flag_proses')
                 ->update([
-                    'FLAG_PROSES' => '1',
-                    'USERID_Proses' => session('userid'),
-                    'TGL_Proses' => Carbon::now(),
+                    'flag_proses' => '1',
+                    'userid_proses' => session('userid'),
+                    'tgl_proses' => Carbon::now(),
                 ]);
 
             //! INSERT INTO HISTORY_Alokasi_Buah
@@ -662,25 +662,23 @@ class UploadPbIdmController extends Controller
             // sb.AppendLine("DELETE FROM Alokasi_Buah ")
             // sb.AppendLine(" WHERE Flag_proses IS NOT NULL ")
             // sb.AppendLine("   AND DATE_TRUNC('DAY', TGL_DATA_AL) < CURRENT_DATE - 30  ")
-            DB::table('Alokasi_Buah')
-                ->whereNotNull('Flag_proses')
-                ->whereRaw("DATE_TRUNC('DAY', TGL_DATA_AL) < CURRENT_DATE - 30")
+            DB::table('alokasi_buah')
+                ->whereNotNull('flag_proses')
+                ->whereRaw("DATE_TRUNC('DAY', tgl_data_al) < CURRENT_DATE - 30")
                 ->delete();
 
             //! dummy
             // DB::commit();
             return ApiFormatter::success(200, 'Proses Alokasi Buah Selesai');
 
-        } catch (HttpResponseException $e) {
-            // Handle the custom response exception
-            throw new HttpResponseException($e->getResponse());
+        } catch(\Exception $e){
 
         }catch(\Exception $e){
 
             DB::rollBack();
 
             $message = "Oops terjadi kesalahan ( $e )";
-            throw ApiFormatter::error(500, $message);
+            return ApiFormatter::error(500, $message);
         }
 
 
