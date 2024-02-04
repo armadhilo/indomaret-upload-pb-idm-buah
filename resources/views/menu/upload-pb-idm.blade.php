@@ -206,8 +206,8 @@
                     </div>
                 </div>
                 <div class="modal-footer bg-whitesmoke br">
-                    <button type="button" class="btn btn-warning" onclick="prosesFormBuah()" id="pb_buah_button">Proses PB Buah</button>
-                    <button type="button" class="btn btn-success d-none" onclick="prosesFormNoUrut()" id="proses_no_urut_button">Proses PB Buah</button>
+                    <button type="button" class="btn btn-success" onclick="prosesFormNoUrut()" id="proses_no_urut_button">Proses PB Buah</button>
+                    <button type="button" class="btn btn-warning d-none" onclick="prosesFormBuah()" id="pb_buah_button">Proses PB Buah</button>
                 </div>
            </div>
         </div>
@@ -498,8 +498,8 @@
                     setTimeout(function () { $('#modal_loading').modal('hide'); }, 500);
                     tb_urutan_buah.rows.add(response.data).draw();
                     $('#jenis_pb_urutan_buah').val(jenisPB);
-                    $('#pb_buah_button').attr('disabled', false);
-                    $('#proses_no_urut_button').addClass('d-none');
+                    $('#pb_buah_button').addClass('d-none');
+                    $('#proses_no_urut_button').attr('disabled', false);
                     $('#modal').modal('show');
                 }, error: function(jqXHR, textStatus, errorThrown) {
                     setTimeout(function () { $('#modal_loading').modal('hide'); }, 500);
@@ -515,8 +515,8 @@
         $('#modal').on('hidden.bs.modal', function () {
             tb_urutan_buah.clear().draw();
             updatedData = undefined;
-            $('#pb_buah_button').attr('disabled', false);
-            $('#proses_no_urut_button').addClass('d-none');
+            $('#pb_buah_button').addClass('d-none');
+            $('#proses_no_urut_button').attr('disabled', false);
             $('#jenis_pb_urutan_buah').val(null)
         });
 
@@ -576,9 +576,11 @@
                         data: {jenisPB: $('#jenis_pb_urutan_buah').val()},
                         success: function(response) {
                             setTimeout(function () { $('#modal_loading').modal('hide'); }, 500);
-                            Swal.fire('Success!',response.message,'success');
-                            $('#pb_buah_button').attr('disabled', true);
-                            $('#proses_no_urut_button').removeClass('d-none');
+                            $('#modal').modal('hide');
+                            Swal.fire('Success!',response.message,'success').then(function(){
+                                showDatatablesHead();
+                                window.open('/upload-pb-idm/download-zip/' + response.data, '_blank');
+                            });
                         }, error: function(jqXHR, textStatus, errorThrown) {
                             setTimeout(function () { $('#modal_loading').modal('hide'); }, 500);
                             Swal.fire({
@@ -592,6 +594,14 @@
         }
 
         function prosesFormNoUrut(){
+            if(tb_header.rows().data().length < 1){
+                Swal.fire({
+                    title: 'Peringatan..!',
+                    text: `Tidak Ada Data ${jenisPB} Yang Dapat Diproses !`,
+                    icon: 'warning',
+                });
+                return;
+            }
             var jenisPB = $('#jenis_pb_urutan_buah').val();
             Swal.fire({
                 title: 'Yakin?',
@@ -617,10 +627,9 @@
                         data: {jenisPB: jenisPB, datatables: datatableData},
                         success: function(response) {
                             setTimeout(function () { $('#modal_loading').modal('hide'); }, 500);
-                            $('#modal').modal('hide');
-                            Swal.fire('Success!',response.message,'success').then(function(){
-                                showDatatablesHead();
-                            });
+                            Swal.fire('Success!',response.message,'success');
+                            $('#pb_buah_button').removeClass('d-none');
+                            $('#proses_no_urut_button').attr('disabled', true);
                         }, error: function(jqXHR, textStatus, errorThrown) {
                             setTimeout(function () { $('#modal_loading').modal('hide'); }, 500);
                             Swal.fire({
