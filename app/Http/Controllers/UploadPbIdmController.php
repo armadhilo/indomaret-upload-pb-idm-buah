@@ -835,8 +835,22 @@ class UploadPbIdmController extends Controller
                 $NoUrJenisPB = $count;
             }
 
+            //! GET DATA DATATABLES HEADER
+            $datatablesHeader = DB::select("
+                Select JENIS,
+                    NOPB,
+                    TGLPB,
+                    TOKO,
+                    COUNT(DISTINCT PLUIDM) as PLU,
+                    SUM(RUPIAH) as RUPIAH,
+                    NAMA_FILE
+                FROM TEMP_CSV_PB_BUAH
+                WHERE REQ_ID = '" . $ip . "'
+                GROUP By JENIS, NOPB, TGLPB, TOKO, NAMA_FILE
+            ");
+
             //!LOOP DATATABLES HEADER
-            foreach($request->datatablesHeader as $item){
+            foreach($datatablesHeader as $item){
 
                 // If dgvHeader.Rows(i).Cells(0).Value <> JenisPB Then GoTo skipPBBH
                 if($item->jenis != $JenisPB) continue;

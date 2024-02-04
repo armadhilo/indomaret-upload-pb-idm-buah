@@ -26,7 +26,6 @@ class ProsesPbBuahRequest extends FormRequest
     {
         return [
             'jenisPB' => ['required'],
-            'datatablesHeader' => ['required','array'],
         ];
     }
 

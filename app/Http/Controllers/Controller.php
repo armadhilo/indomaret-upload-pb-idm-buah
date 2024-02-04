@@ -2402,22 +2402,22 @@ class Controller extends BaseController
             ->whereRaw("DATE_TRUNC('DAY', ddb_tglupload) < CURRENT_DATE - 90")
             ->delete();
 
-        // CetakALL_1(PersenMargin, CounterKarton, CounterKecil)
-        // CetakALL_2(PersenMargin, CounterKarton, CounterKecil)
-        // CetakALL_3(PersenMargin, CounterKarton, CounterKecil)
-        // CetakALL_4(PersenMargin, CounterKarton, CounterKecil)
-        // CetakALL_5(PersenMargin, CounterKarton, CounterKecil)
-        // CetakALL_6(PersenMargin, CounterKarton, CounterKecil)
+        $this->CetakALL_1($KodeToko, $noPB, $tglPB, $PersenMargin);
+        $this->CetakALL_2($KodeToko, $noPB, $tglPB, $PersenMargin);
+        $this->CetakALL_3($KodeToko, $noPB, $tglPB, $CounterKarton);
+        $this->CetakALL_4($KodeToko, $noPB, $tglPB);
+        $this->CetakALL_6($KodeToko, $noPB, $tglPB, $CounterKecil);
     }
 
-    public function CetakALL_1(){
+    //! LIST ORDER PB
+    public function CetakALL_1($KodeToko, $noPB, $tglPB, $PersenMargin){
 
         //! VARIABLE
         $ip = $this->getIP();
-        $KodeToko = "";
-        $noPB = "";
-        $tglPB = "";
-        $PersenMargin = "";
+
+        $data['kodeToko'] = $KodeToko;
+        $data['noPB'] = $noPB;
+        $data['tglPB'] = $tglPB;
 
         //! GET HEADER CETAKAN
         // sb.AppendLine("Select PRS_NamaCabang ")
@@ -2500,7 +2500,7 @@ class Controller extends BaseController
             ");
 
             //! ISI dtListOrder
-            DB::select("
+            $data['data'] = DB::select("
                 Select plukarton as plu,
                     desk,
                     unitkarton ||'/'|| frackarton as unit,
@@ -2563,7 +2563,7 @@ class Controller extends BaseController
             ");
 
             //! ISI dtListOrder
-            DB::select("
+            $data['data'] = DB::select("
                 Select plukarton as plu,
                     desk,
                     unitkarton ||'/'|| frackarton as unit,
@@ -2581,6 +2581,24 @@ class Controller extends BaseController
                     and prd_prdcd = plukarton
                 Order By plukarton, FDQTYB
             ");
+
+            //! dummy
+            $data['data'] = DB::select("
+                Select plukarton as plu,
+                    desk,
+                    unitkarton ||'/'|| frackarton as unit,
+                    qtyb as qty,
+                    qtyk as frc,
+                    fdqtyb as inpcs,
+                    Round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+ " . $PersenMargin . ")) as Harga,
+                    fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+" . $PersenMargin . ")) as Nilai,
+                    fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+" . $PersenMargin . ")) * (COALESCE(PRD_PPN,0)/100) * CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN 1 ELSE 0 END as PPN,
+                    fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+" . $PersenMargin . ")) * (1 + CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN (COALESCE(PRD_PPN,0)/100) ELSE 0 END) as TOTAL
+                From temp_pbidm_ready, tbMaster_prodmast
+                Where
+                    prd_prdcd = plukarton
+                Order By plukarton, FDQTYB
+            ");
         }
 
         //? rptListOrder.SetParameterValue("NamaCabang", NamaCab)
@@ -2590,7 +2608,8 @@ class Controller extends BaseController
         //? rptListOrder.SetParameterValue("Tglpb", tglPB)
     }
 
-    public function CetakALL_2(){
+    //! REKAP ORDER PB
+    public function CetakALL_2($KodeToko, $noPB, $tglPB, $PersenMargin){
 
         //! VARIABLE
         $ip = $this->getIP();
@@ -2598,6 +2617,10 @@ class Controller extends BaseController
         $noPB = "";
         $tglPB = "";
         $PersenMargin = "";
+
+        $data['kodeToko'] = $KodeToko;
+        $data['noPB'] = $noPB;
+        $data['tglPB'] = $tglPB;
 
         //! GET HEADER CETAKAN
         // sb.AppendLine("Select PRS_NamaCabang ")
@@ -2673,7 +2696,7 @@ class Controller extends BaseController
             ");
 
             //! ISI dtRekapOrder
-            DB::select("
+            $data['data'] = DB::select("
                 Select DIV_NamaDivisi as NamaDivisi,
                     PRD_KodeDivisi as KodeDivisi,
                     Count(PLUKARTON) as Item,
@@ -2730,7 +2753,7 @@ class Controller extends BaseController
             ");
 
             //! ISI dtRekapOrder
-            DB::select("
+            $data['data'] = DB::select("
                 Select DIV_NamaDivisi as NamaDivisi,
                     PRD_KodeDivisi as KodeDivisi,
                     Count(PLUKARTON) as Item,
@@ -2747,6 +2770,22 @@ class Controller extends BaseController
                         PRD_KodeDivisi
                 Order By PRD_KodeDivisi
             ");
+
+            //! dummy
+            $data['data'] = DB::select("
+                Select DIV_NamaDivisi as NamaDivisi,
+                    PRD_KodeDivisi as KodeDivisi,
+                    Count(PLUKARTON) as Item,
+                    SUM(fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END  * (1+" . $PersenMargin . "))) as Nilai,
+                    SUM(fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END  * (1+" . $PersenMargin . ") * (COALESCE(PRD_PPN,0)/100) * CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN 1 ELSE 0 END)) as PPN,
+                    SUM(fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END  * (1+" . $PersenMargin . ") * (1 + CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN (COALESCE(PRD_PPN,0)/100) ELSE 0 END))) as SUBTOTAL
+                From temp_pbidm_ready, tbMaster_prodmast, tbMaster_Divisi
+                Where prd_prdcd = plukarton
+                    and DIV_KodeDivisi = PRD_KodeDivisi
+                Group By DIV_NamaDivisi,
+                        PRD_KodeDivisi
+                Order By PRD_KodeDivisi
+            ");
         }
 
         //? rptRekap.SetParameterValue("NamaCabang", NamaCab)
@@ -2756,13 +2795,19 @@ class Controller extends BaseController
         //? rptRekap.SetParameterValue("Tglpb", tglPB)
     }
 
-    public function CetakALL_3(){
+    //! KARTON NON DPD
+    public function CetakALL_3($KodeToko, $noPB, $tglPB, $CounterKarton){
 
         //! VARIABLE
         $ip = $this->getIP();
         $KodeToko = "";
         $noPB = "";
         $tglPB = "";
+
+        $data['kodeToko'] = $KodeToko;
+        $data['noPB'] = $noPB;
+        $data['tglPB'] = $tglPB;
+        $data['batch'] = $CounterKarton;
 
         //! GET HEADER CETAKAN
         // sb.AppendLine("Select PRS_NamaCabang ")
@@ -2791,7 +2836,7 @@ class Controller extends BaseController
 
         //! INSERT INTO PBIDM_KARTONNONDPD
         $userid = session('userid');
-        DB::insert(`
+        DB::insert("
             INSERT INTO PBIDM_KARTONNONDPD
             (
                 PBD_KODETOKO,
@@ -2823,7 +2868,7 @@ class Controller extends BaseController
                 LKS_NoUrut as NoUrut,
                 Desk,
                 PRD_KodeTag as TAG,
-                QTYB as ""Order"",
+                QTYB as Order,
                 UNITKarton ,
                 FracKarton,
                     Stok,
@@ -2835,10 +2880,10 @@ class Controller extends BaseController
                 And FDNOUO = '$noPB'
                 And DATE_TRUNC('DAY', FDTGPB) = to_date('$tglPB','DD-MM-YYYY')
                 And PRD_PRDCD = PLUKARTON
-        `);
+        ");
 
         //! ISI dtKartonNonDPD
-        DB::select(`
+        $data['data'] = DB::select("
             Select DISTINCT GRR_GroupRak as NamaGroup,
                 LKS_KodeRak as KodeRak,
                 LKS_KodeSubRak as SubRak,
@@ -2847,7 +2892,7 @@ class Controller extends BaseController
                 LKS_NoUrut as NoUrut,
                 Desk,
                 PRD_KodeTag as TAG,
-                QTYB as ""Order"",
+                QTYB as Order,
                 UNITKarton ||'/'|| FracKarton as UNIT,
                     Stok
             From temp_karton_nondpd_idm,tbMaster_Prodmast
@@ -2857,7 +2902,25 @@ class Controller extends BaseController
                 And DATE_TRUNC('DAY', FDTGPB) = to_date('$tglPB','DD-MM-YYYY')
                 And PRD_PRDCD = PLUKARTON
             Order By GRR_GroupRak,LKS_KodeRak,LKS_KodeSubRak,LKS_TipeRak,LKS_NoUrut
-        `);
+        ");
+
+        //! dummy
+        $data['data'] = DB::select("
+            Select DISTINCT GRR_GroupRak as NamaGroup,
+                LKS_KodeRak as KodeRak,
+                LKS_KodeSubRak as SubRak,
+                LKS_TipeRak as TipeRak,
+                PLUKARTON as PLU,
+                LKS_NoUrut as NoUrut,
+                Desk,
+                PRD_KodeTag as TAG,
+                QTYB as Order,
+                UNITKarton ||'/'|| FracKarton as UNIT,
+                    Stok
+            From temp_karton_nondpd_idm,tbMaster_Prodmast
+            Where PRD_PRDCD = PLUKARTON
+            Order By GRR_GroupRak,LKS_KodeRak,LKS_KodeSubRak,LKS_TipeRak,LKS_NoUrut
+        ");
 
         //? rptKarton.SetParameterValue("NamaCabang", NamaCab)
         //? rptKarton.SetParameterValue("NamaToko", NamaToko)
@@ -2867,13 +2930,18 @@ class Controller extends BaseController
         //? rptKarton.SetParameterValue("Batch", CounterKarton)
     }
 
-    public function CetakALL_4(){
+    //! ORDER DITOLAK
+    public function CetakALL_4($KodeToko, $noPB, $tglPB){
 
         //! VARIABLE
         $ip = $this->getIP();
         $KodeToko = "";
         $noPB = "";
         $tglPB = "";
+
+        $data['kodeToko'] = $KodeToko;
+        $data['noPB'] = $noPB;
+        $data['tglPB'] = $tglPB;
 
         //! GET HEADER CETAKAN
         // sb.AppendLine("Select PRS_NamaCabang ")
@@ -2900,30 +2968,44 @@ class Controller extends BaseController
 
         //! f = "ORDER DITOLAK"
 
-        $kodeDCIDM = $this->getKodeDC($KodeToko);
-
         //! ISI dtOrderDitolak
-        $query = "";
-        $query .= "Select PLU as PLUIDM, ";
-        $query .= "       PLUIGR, ";
-        $query .= "       PRD_DeskripsiPanjang as DESK, ";
-        $query .= "       PRD_UNIT||'/'||PRD_Frac as UNIT, ";
-        $query .= "       QTYO as QTY, ";
-        $query .= "       KETA as Keterangan         ";
-        $query .= "  From temp_cetakpb_tolakan_idm,tbMaster_Prodmast ";
-        $query .= " Where REQ_ID = '" . $ip . "' ";
-        $query .= "   And KCAB = '" . $KodeToko . "' ";
-        $query .= "   And NODOK = '" . $noPB . "' ";
-        $query .= "   And DATE_TRUNC('DAY', TGLDOK) = to_date('" . $tglPB. "','DD-MM-YYYY') ";
-        $query .= "   And PRD_PRDCD = PLUIGR ";
+        $data['data'] = DB::select("
+            Select PLU as PLUIDM,
+                PLUIGR,
+                PRD_DeskripsiPanjang as DESK,
+                PRD_UNIT||'/'||PRD_Frac as UNIT,
+                QTYO as QTY,
+                KETA as Keterangan
+            From temp_cetakpb_tolakan_idm,tbMaster_Prodmast
+            Where REQ_ID = '" . $ip . "'
+                And KCAB = '" . $KodeToko . "'
+                And NODOK = '" . $noPB . "'
+                And DATE_TRUNC('DAY', TGLDOK) = to_date('" . $tglPB. "','DD-MM-YYYY')
+                And PRD_PRDCD = PLUIGR
+                And KETA <> 'PLU TIDAK TERDAFTAR DI TBMASTER_PRODCRM'
+        ");
 
-        if($kodeDCIDM <> ""){
-            $query .= "   And KETA <> 'PLU TIDAK TERDAFTAR DI TBMASTER_PRODCRM' ";
-        }else{
-            $query .= "   And KETA <> 'PLU TIDAK TERDAFTAR DI TBMASTER_PRODCRM' ";
-        }
+        //! dummy
+        $data['data'] = DB::select("
+            Select PLU as PLUIDM,
+                PLUIGR,
+                PRD_DeskripsiPanjang as DESK,
+                PRD_UNIT||'/'||PRD_Frac as UNIT,
+                QTYO as QTY,
+                KETA as Keterangan
+            From temp_cetakpb_tolakan_idm,tbMaster_Prodmast
+            Where PRD_PRDCD = PLUIGR
+                And KETA <> 'PLU TIDAK TERDAFTAR DI TBMASTER_PRODCRM'
+        ");
 
-        DB::select($query);
+        //! SAMA JADI FR KEVIN COMMENT
+        // $kodeDCIDM = $this->getKodeDC($KodeToko);
+        // if($kodeDCIDM <> ""){
+        //     $query .= "   And KETA <> 'PLU TIDAK TERDAFTAR DI TBMASTER_PRODCRM' ";
+        // }else{
+        //     $query .= "   And KETA <> 'PLU TIDAK TERDAFTAR DI TBMASTER_PRODCRM' ";
+        // }
+
 
         //? rptDitolak.SetParameterValue("NamaCabang", NamaCab)
         //? rptDitolak.SetParameterValue("NamaToko", NamaToko)
@@ -2933,6 +3015,7 @@ class Controller extends BaseController
 
     }
 
+    //! RAK JALUR TIDAK KETEMU (PDF BELUM ADA)
     public function CetakALL_5(){
 
         //! VARIABLE
@@ -3025,7 +3108,7 @@ class Controller extends BaseController
         ");
 
         //! ISI dtRakJalurTidakKetemu
-        DB::select("
+        $data['data'] = DB::select("
             Select DISTINCT NJI.PluKarton as PLU,
                 NJI.DESK,
                 CASE WHEN NJI.FDRCID = 'B' THEN '' ELSE COALESCE(lks_KodeRak,'') END as KodeRak,
@@ -3067,13 +3150,19 @@ class Controller extends BaseController
         //? rptTidakKetemu.SetParameterValue("Batch", CounterKecil)
     }
 
-    public function CetakALL_6(){
+    //! JALUR CETAK KERTAS
+    public function CetakALL_6($KodeToko, $noPB, $tglPB, $CounterKecil){
 
         //! VARIABLE
         $ip = $this->getIP();
         $KodeToko = '';
         $noPB = '';
         $tglPB = '';
+
+        $data['kodeToko'] = $KodeToko;
+        $data['noPB'] = $noPB;
+        $data['tglPB'] = $tglPB;
+        $data['batch'] = $CounterKecil;
 
         //! GET HEADER CETAKAN
         // sb.AppendLine("Select PRS_NamaCabang ")
@@ -3102,7 +3191,7 @@ class Controller extends BaseController
 
         //! INSERT INTO PBIDM_JALURKERTAS
         $userid = session('userid');
-        DB::insert(`
+        DB::insert("
             INSERT INTO PBIDM_JALURKERTAS
             (
                 PBK_KODETOKO,
@@ -3134,7 +3223,7 @@ class Controller extends BaseController
                 LKS_NoUrut as NoUrut,
                 DESK,
                 PRD_KodeTag,
-                QTYK as ""ORDER"",
+                QTYK as order,
                 UNITKECIL,
                 FRACKECIL,
                 STOK,
@@ -3146,19 +3235,19 @@ class Controller extends BaseController
                 And FDNOUO = '$noPB'
                 And DATE_TRUNC('DAY', FDTGPB) = to_date('$tglPB','DD-MM-YYYY')
                 And PRD_PRDCD = PLUKARTON
-        `);
+        ");
 
         //! ISI dtJalurCetakKertas
-        DB::insert(`
-            Select GRR_GroupRak as NamaGroup,
-                PLUKARTON as PLU,
-                LKS_KodeRak as KodeRak,
-                LKS_KodeSubRak as Subrak,
-                LKS_TipeRak as TipeRak,
-                LKS_NoUrut as NoUrut,
-                DESK,
-                PRD_KodeTag,
-                QTYK as ""ORDER"",
+        $data['data'] = DB::select("
+            Select GRR_GroupRak as namagroup,
+                PLUKARTON as plu,
+                LKS_KodeRak as koderak,
+                LKS_KodeSubRak as subrak,
+                LKS_TipeRak as tiperak,
+                LKS_NoUrut as nourut,
+                desk,
+                prd_kodetag,
+                QTYK as order,
                 UNITKECIL ||' /'|| FRACKECIL as UNIT,
                 STOK
             From TEMP_JALURKERTAS_IDM, tbMaster_Prodmast
@@ -3168,7 +3257,23 @@ class Controller extends BaseController
                 And DATE_TRUNC('DAY', FDTGPB) = to_date($tglPB','DD-MM-YYYY')
                 And PRD_PRDCD = PLUKARTON
             Order By COALESCE(GRR_GROUPRAK,'0'),LKS_KodeRak,LKS_KodeSubRak,LKS_TipeRak,LKS_NoUrut
-        `);
+        ");
+
+        //! dummy
+        $data['data'] = DB::select("
+            Select GRR_GroupRak as namagroup,
+                PLUKARTON as plu,
+                LKS_KodeRak as koderak,
+                LKS_KodeSubRak as subrak,
+                LKS_TipeRak as tiperak,
+                LKS_NoUrut as nourut,
+                desk,
+                'kodetag' as prd_kodetag,
+                QTYK as ORDER,
+                UNITKECIL ||' /'|| FRACKECIL as UNIT,
+                STOK
+            From TEMP_JALURKERTAS_IDM
+        ");
 
         //? rptKertas.SetParameterValue("NamaCabang", NamaCab)
         //? rptKertas.SetParameterValue("NamaToko", NamaToko)
@@ -3177,6 +3282,4 @@ class Controller extends BaseController
         //? rptKertas.SetParameterValue("Tglpb", tglPB)
         //? rptKertas.SetParameterValue("Batch", CounterKecil)
     }
-
-
 }
