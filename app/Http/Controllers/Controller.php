@@ -616,7 +616,7 @@ class Controller extends BaseController
             throw new HttpResponseException(ApiFormatter::error(400, $message));
         }
 
-        $kodeDCIDM = $this->getKodeDC($KodeToko);
+        $kodeDCIDM = $this->kodeDCIDM($KodeToko);
 
         //! ISI PLU TIDAK TERDAFTAR DI TBMASTER_PLUIDM
         $query = "";

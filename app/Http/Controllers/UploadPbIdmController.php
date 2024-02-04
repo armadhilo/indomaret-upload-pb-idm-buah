@@ -15,6 +15,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
+use ZipArchive;
+use RecursiveIteratorIterator;
+use RecursiveDirectoryIterator;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 
 class UploadPbIdmController extends Controller
@@ -717,38 +722,38 @@ class UploadPbIdmController extends Controller
     }
 
     // //! Keys.F8, Keys.F9, Keys.F10
-    // public function actionF8F9F10(){
+    public function actionF8F9F10(){
 
-    //     //! VARIABLE
-    //     //? default
-    //     $buttonPress = '';
+        //! VARIABLE
+        //? default
+        $buttonPress = '';
 
-    //     // If Strings.Format(Now, "HHmmss") >= "234000" Then
-    //     //     MsgBox("Mohon Tunggu Sampai JAM 12 MALAM" & vbNewLine & "Untuk Melakukan UPLOAD PB!!", MsgBoxStyle.Information, ProgName)
-    //     //     Exit Sub
-    //     // End If
+        // If Strings.Format(Now, "HHmmss") >= "234000" Then
+        //     MsgBox("Mohon Tunggu Sampai JAM 12 MALAM" & vbNewLine & "Untuk Melakukan UPLOAD PB!!", MsgBoxStyle.Information, ProgName)
+        //     Exit Sub
+        // End If
 
-    //     //! CHECK TOMBOL YANG DITEKAN
-    //     $JenisPB = 'CHILLED FOOD';
-    //     if($buttonPress == 'F8'){
-    //         $JenisPB = 'IMPORT';
-    //     }elseif($buttonPress == 'F9'){
-    //         $JenisPB = 'LOKAL';
-    //     }
+        //! CHECK TOMBOL YANG DITEKAN
+        $JenisPB = 'CHILLED FOOD';
+        if($buttonPress == 'F8'){
+            $JenisPB = 'IMPORT';
+        }elseif($buttonPress == 'F9'){
+            $JenisPB = 'LOKAL';
+        }
 
-    //     //* YAKIN INGIN MEMPROSES" & vbNewLine & PADC(JenisPB & " ??
+        //* YAKIN INGIN MEMPROSES" & vbNewLine & PADC(JenisPB & " ??
 
-    //     //? check apakah datatables header ada isinya?
-    //     //? jika tidak
+        //? check apakah datatables header ada isinya?
+        //? jika tidak
 
-    //     //*  Tidak Ada Data " & JenisPB & " Yang Dapat Diproses !
+        //*  Tidak Ada Data " & JenisPB & " Yang Dapat Diproses !
 
-    //     //? open form frmNoUrutBuah
-    //      //* NAMA HEADER -> Urutan PLU Buah - & JenisPB
-    //     //* NAMA BUTTON -> PROSES UPLOAD BUAH - & JenisPB
+        //? open form frmNoUrutBuah
+         //* NAMA HEADER -> Urutan PLU Buah - & JenisPB
+        //* NAMA BUTTON -> PROSES UPLOAD BUAH - & JenisPB
 
-    //     return view('urutan_buah');
-    // }
+        return view('urutan_buah');
+    }
 
     public function prosesPbBuah(ProsesPbBuahRequest $request){
         DB::beginTransaction();
@@ -761,7 +766,7 @@ class UploadPbIdmController extends Controller
 
             //? custom
             $ip = $this->getIP();
-            $JenisPB = $request->JenisPB;
+            $JenisPB = $request->jenisPB;
 
             //! DELETE FROM TEMP_PB_VALID
             // sb.AppendLine("DELETE FROM TEMP_PB_VALID ")
@@ -854,11 +859,11 @@ class UploadPbIdmController extends Controller
 
                 // If dgvHeader.Rows(i).Cells(0).Value <> JenisPB Then GoTo skipPBBH
                 if($item->jenis != $JenisPB) continue;
-
-                $noPB = $item->noPB;
-                $tglPB = $item->tglPB;
-                $KodeToko = $item->KodeToko;
-                $fileName = $item->fileName;
+                
+                $noPB = $item->nopb;
+                $tglPB = $item->tglpb;
+                $KodeToko = $item->toko;
+                $fileName = $item->nama_file;
 
                 //! GET KODETOKO TIDAK TERDAFTAR
                 $data = DB::select("
@@ -879,7 +884,7 @@ class UploadPbIdmController extends Controller
                 if(count($data)){
                     $list = '';
                     foreach($data as $item){
-                        $list .= $item->CPB_KodeToko . ',';
+                        $list .= $item->cpb_kodetoko . ',';
                     }
 
                     //* TOKO " & TokoTidakTerdaftar & " BELUM TERDAFTAR DI CLUSTER_BUAH!!
@@ -986,9 +991,25 @@ class UploadPbIdmController extends Controller
                     $message = "Hari Ini Bukan Jadwal Picking Untuk TOKO " . rtrim($list, ",");
                     return ApiFormatter::error(400, $message);
                 }
-
+                
                 // ProsesPBIDM(dgvHeader.Rows(i).Cells(3).Value, txtPathFilePBBH.Text & "\" & dgvHeader.Rows(i).Cells(6).Value, JenisPB, NoUrJenisPB)
-                $this->prosesPBIdm($noPB, $tglPB, $KodeToko, $JenisPB, $fileName, $NoUrJenisPB);
+                $proses = $this->prosesPBIdm($noPB, $tglPB, $KodeToko, $JenisPB, $fileName, $NoUrJenisPB);
+                $tempFolder = storage_path('app/temp/' . $KodeToko . '_' . now()->format('Ymd_His'));
+                if (!file_exists($tempFolder)) {
+                    mkdir($tempFolder, 0777, true);
+                }
+                $pdfs = [
+                    'list_order.pdf' => PDF::loadView('pdf.list-order', $proses['cetak_all_1'])->output(),
+                    'rekap_order.pdf' => PDF::loadView('pdf.rekap-order', $proses['cetak_all_2'])->output(),
+                    'karton_non_dpd.pdf' => PDF::loadView('pdf.karton-non-dpd', $proses['cetak_all_3'])->output(),
+                    'item_order_ditolak.pdf' => PDF::loadView('pdf.order-ditolak', $proses['cetak_all_4'])->output(),
+                    'cetakan_kertas.pdf' => PDF::loadView('pdf.cetakan-kertas', $proses['cetak_all_6'])->output(),
+                ];
+                foreach ($pdfs as $filename => $pdfContent) {
+                    $pdfPath = $tempFolder . '/' . $filename;
+                    file_put_contents($pdfPath, $pdfContent);
+                }
+
 
                 //! INSERT INTO TEMP_PB_VALID
                 DB::table('temp_pb_valid')
@@ -998,10 +1019,41 @@ class UploadPbIdmController extends Controller
                         'tglpb' => DB::raw("TO_DATE('" . $tglPB . "','DD-MM-YYYY')"),
                         'ip' => $ip
                     ]);
-
+                    
                 $JumlahPB += 1;
             }
             //! END LOOP DATATABLES HEADER
+                
+            $zipFileName = '';    
+            if(isset($tempFolder)){
+                //? Zip the entire folder
+                $zipFileName = now()->format('Ymd_His') . '.zip';
+                $zip = new ZipArchive();
+                $zip->open($zipFileName, ZipArchive::CREATE);
+
+                $files = new RecursiveIteratorIterator(
+                    new RecursiveDirectoryIterator($tempFolder),
+                    RecursiveIteratorIterator::LEAVES_ONLY
+                );
+                
+                foreach ($files as $name => $file) {
+                    if (!$file->isDir()) {
+                        $filePath = $file->getRealPath();
+                        $relativePath = substr($filePath, strlen($tempFolder) + 1);
+                        $zip->addFile($filePath, $relativePath);
+                    }
+                }
+
+                $zip->close();
+                // Remove the temporary folder
+                foreach (glob($tempFolder . '/*') as $file) {
+                    unlink($file);
+                }
+                rmdir($tempFolder);
+
+                // Save the zip file
+                Storage::disk('local')->put($zipFileName, file_get_contents($zipFileName));
+            }
 
             if($JumlahPB == 0){
                 $message = "Tidak ada PB $JenisPB";
@@ -1091,7 +1143,7 @@ class UploadPbIdmController extends Controller
 
             //* PROSES UPLOAD " & JenisPB & " SELESAI DILAKUKAN
             $message = "PROSES UPLOAD " . $JenisPB . " SELESAI DILAKUKAN";
-            return ApiFormatter::success(200, $message);
+            return ApiFormatter::success(200, $message, $zipFileName);
 
         } catch (HttpResponseException $e) {
             // Handle the custom response exception
@@ -1104,6 +1156,10 @@ class UploadPbIdmController extends Controller
             $message = "Oops terjadi kesalahan ( $e )";
             throw new HttpResponseException(ApiFormatter::error(400, $message));
         }
+    }
+
+    public function downloadZip($zipName){
+        return response()->download(storage_path("app/{$zipName}"))->deleteFileAfterSend(true);
     }
 
     public function datatablesFormNoUrutBuah($JenisPB){
@@ -1147,7 +1203,8 @@ class UploadPbIdmController extends Controller
     }
 
     public function actionProsesFormNoUrutBuah(FormNoUrutBuahProsesRequest $request){
-
+                $message = 'SIMPAN URUTAN BUAH BERHASIL!!';
+        return ApiFormatter::success(200, $message);
         $ip = $this->getIP();
 
         //* Sudah Yakin Dengan Urutan PLU Untuk Picking " & JenisPB & " ?

@@ -579,7 +579,7 @@
                             $('#modal').modal('hide');
                             Swal.fire('Success!',response.message,'success').then(function(){
                                 showDatatablesHead();
-                                window.open('/upload-pb-idm/download-zip/' + response.data, '_blank');
+                                // window.open('/upload-pb-idm/download-zip/' + response.data, '_blank');
                             });
                         }, error: function(jqXHR, textStatus, errorThrown) {
                             setTimeout(function () { $('#modal_loading').modal('hide'); }, 500);
