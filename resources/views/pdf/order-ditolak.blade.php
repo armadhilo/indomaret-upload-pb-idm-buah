@@ -67,7 +67,7 @@
                     </div>
                     <div style="float: right">
                         <p><b>LISTING ITEM ORDER PB YG DITOLAK</b></p>
-                        <p>Tanggal : {{$tglPb}}</p>
+                        <p>Tanggal : {{$tglPB}}</p>
                     </div>
                 </div>
                 <hr>

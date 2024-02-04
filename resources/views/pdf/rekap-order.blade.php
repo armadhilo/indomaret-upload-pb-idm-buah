@@ -72,7 +72,7 @@
                         <p>No. Order : 99999 (Dummy)</p>
                     </div>
                     <div style="float: right">
-                        <p>Tgl : {{$tglPb}}</p>
+                        <p>Tgl : {{$tglPB}}</p>
                     </div>
                 </div>
                 <table border="1" style="border-collapse: collapse; margin-top:20px" cellpadding="2">

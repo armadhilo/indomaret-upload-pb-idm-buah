@@ -592,13 +592,13 @@ class Controller extends BaseController
         $PersenMargin = 3;
         $KodeSBU = "I";
 
-        $this->CetakALL_1($KodeToko, $noPB, $tglPB, $PersenMargin);
-        $this->CetakALL_2($KodeToko, $noPB, $tglPB, $PersenMargin);
-        $this->CetakALL_3($KodeToko, $noPB, $tglPB, $CounterKarton);
-        $this->CetakALL_4($KodeToko, $noPB, $tglPB);
-        $this->CetakALL_6($KodeToko, $noPB, $tglPB, $CounterKecil);
-
-        return;
+        return [
+            'cetak_all_1' => $this->CetakALL_1($KodeToko, $noPB, $tglPB, $PersenMargin),
+            'cetak_all_2' => $this->CetakALL_2($KodeToko, $noPB, $tglPB, $PersenMargin),
+            'cetak_all_3' => $this->CetakALL_3($KodeToko, $noPB, $tglPB, $CounterKarton),
+            'cetak_all_4' => $this->CetakALL_4($KodeToko, $noPB, $tglPB),
+            'cetak_all_6' => $this->CetakALL_6($KodeToko, $noPB, $tglPB, $CounterKecil),
+        ];
 
         //! DEL TEMP_CETAKPB_TOLAKAN_IDM
         // ExecQRY("DELETE FROM TEMP_CETAKPB_TOLAKAN_IDM WHERE REQ_ID = '" & IP & "' ", "DEL TEMP_CETAKPB_TOLAKAN_IDM")
@@ -2624,6 +2624,7 @@ class Controller extends BaseController
         //? rptListOrder.SetParameterValue("KodeToko", KodeToko)
         //? rptListOrder.SetParameterValue("Nopb", noPB)
         //? rptListOrder.SetParameterValue("Tglpb", tglPB)
+        return $data;
     }
 
     //! REKAP ORDER PB
@@ -2811,6 +2812,7 @@ class Controller extends BaseController
         //? rptRekap.SetParameterValue("KodeToko", KodeToko)
         //? rptRekap.SetParameterValue("Nopb", noPB)
         //? rptRekap.SetParameterValue("Tglpb", tglPB)
+        return $data;
     }
 
     //! KARTON NON DPD
@@ -2946,6 +2948,7 @@ class Controller extends BaseController
         //? rptKarton.SetParameterValue("Nopb", noPB)
         //? rptKarton.SetParameterValue("Tglpb", tglPB)
         //? rptKarton.SetParameterValue("Batch", CounterKarton)
+        return $data;
     }
 
     //! ORDER DITOLAK
@@ -3030,7 +3033,7 @@ class Controller extends BaseController
         //? rptDitolak.SetParameterValue("KodeToko", KodeToko)
         //? rptDitolak.SetParameterValue("Nopb", noPB)
         //? rptDitolak.SetParameterValue("Tglpb", tglPB)
-
+        return $data;
     }
 
     //! RAK JALUR TIDAK KETEMU (PDF BELUM ADA)
@@ -3299,5 +3302,6 @@ class Controller extends BaseController
         //? rptKertas.SetParameterValue("Nopb", noPB)
         //? rptKertas.SetParameterValue("Tglpb", tglPB)
         //? rptKertas.SetParameterValue("Batch", CounterKecil)
+        return $data;
     }
 }

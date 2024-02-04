@@ -72,7 +72,7 @@
                         <p>No. Order : 99999 (Dummy)</p>
                     </div>
                     <div style="float: right">
-                        <p>Tgl : {{$tglPb}}</p>
+                        <p>Tgl : {{$tglPB}}</p>
                         <p>Batch : {{ $batch }}</p>
                     </div>
                 </div>

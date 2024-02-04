@@ -69,7 +69,7 @@
                 <div style="margin: 12px 0;">
 
                     <p style="float: left">No. Order : 99999 (Dummy)</p>
-                    <p style="float: right; text-align: right;">Tgl : {{$tglPb}}</p>
+                    <p style="float: right; text-align: right;">Tgl : {{$tglPB}}</p>
                 </div>
 
                 <table border="1" style="border-collapse: collapse; margin-top:20px" cellpadding="2">

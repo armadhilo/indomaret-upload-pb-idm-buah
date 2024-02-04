@@ -207,7 +207,7 @@
                 </div>
                 <div class="modal-footer bg-whitesmoke br">
                     <button type="button" class="btn btn-success" onclick="prosesFormNoUrut()" id="proses_no_urut_button">Proses PB Buah</button>
-                    <button type="button" class="btn btn-warning d-none" onclick="prosesFormBuah()" id="pb_buah_button">Proses PB Buah</button>
+                    <button type="button" class="btn btn-warning d-none" onclick="prosesFormBuah()" id="pb_buah_button">Proses Form No. Urut Buah</button>
                 </div>
            </div>
         </div>
@@ -576,10 +576,12 @@
                         data: {jenisPB: $('#jenis_pb_urutan_buah').val()},
                         success: function(response) {
                             setTimeout(function () { $('#modal_loading').modal('hide'); }, 500);
-                            $('#modal').modal('hide');
                             Swal.fire('Success!',response.message,'success').then(function(){
+                                $('#modal').modal('hide');
                                 showDatatablesHead();
-                                // window.open('/upload-pb-idm/download-zip/' + response.data, '_blank');
+                                setTimeout(() => {
+                                    window.open('/upload-pb-idm/action/download-zip/' + response.data, '_blank');
+                                }, 500);
                             });
                         }, error: function(jqXHR, textStatus, errorThrown) {
                             setTimeout(function () { $('#modal_loading').modal('hide'); }, 500);

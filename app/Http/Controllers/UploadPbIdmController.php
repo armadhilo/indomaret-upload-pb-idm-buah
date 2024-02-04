@@ -846,23 +846,23 @@ class UploadPbIdmController extends Controller
                     COUNT(DISTINCT PLUIDM) as PLU,
                     SUM(RUPIAH) as RUPIAH,
                     NAMA_FILE
-                FROM TEMP_CSV_PB_BUAH
-                WHERE REQ_ID = '" . $ip . "'
+                    FROM TEMP_CSV_PB_BUAH
+                    WHERE REQ_ID = '" . $ip . "'
                 GROUP By JENIS, NOPB, TGLPB, TOKO, NAMA_FILE
             ");
 
             //!LOOP DATATABLES HEADER
             foreach($datatablesHeader as $item){
-
+                
                 // If dgvHeader.Rows(i).Cells(0).Value <> JenisPB Then GoTo skipPBBH
                 // if($item->jenis != $JenisPB) continue; //! dummy
-
+                
+                //! dummy
                 $noPB = $item->nopb;
                 $tglPB = $item->tglpb;
                 $KodeToko = $item->toko;
                 $fileName = $item->nama_file;
 
-                //! dummy
                 $proses = $this->prosesPBIdm($noPB, $tglPB, $KodeToko, $JenisPB, $fileName, $NoUrJenisPB);
                 $tempFolder = storage_path('app/temp/' . $KodeToko . '_' . now()->format('Ymd_His'));
                 if (!file_exists($tempFolder)) {
@@ -873,12 +873,13 @@ class UploadPbIdmController extends Controller
                     'rekap_order.pdf' => PDF::loadView('pdf.rekap-order', $proses['cetak_all_2'])->output(),
                     'karton_non_dpd.pdf' => PDF::loadView('pdf.karton-non-dpd', $proses['cetak_all_3'])->output(),
                     'item_order_ditolak.pdf' => PDF::loadView('pdf.order-ditolak', $proses['cetak_all_4'])->output(),
-                    'cetakan_kertas.pdf' => PDF::loadView('pdf.cetakan-kertas', $proses['cetak_all_6'])->output(),
+                    // 'cetakan_kertas.pdf' => PDF::loadView('pdf.cetakan-kertas', $proses['cetak_all_6'])->output(),                                                                                               
                 ];
                 foreach ($pdfs as $filename => $pdfContent) {
                     $pdfPath = $tempFolder . '/' . $filename;
                     file_put_contents($pdfPath, $pdfContent);
                 }
+
 
                 continue;
                 //! end dummy
@@ -1011,24 +1012,7 @@ class UploadPbIdmController extends Controller
                 }
 
                 // ProsesPBIDM(dgvHeader.Rows(i).Cells(3).Value, txtPathFilePBBH.Text & "\" & dgvHeader.Rows(i).Cells(6).Value, JenisPB, NoUrJenisPB)
-                $proses = $this->prosesPBIdm($noPB, $tglPB, $KodeToko, $JenisPB, $fileName, $NoUrJenisPB);
-                $tempFolder = storage_path('app/temp/' . $KodeToko . '_' . now()->format('Ymd_His'));
-                if (!file_exists($tempFolder)) {
-                    mkdir($tempFolder, 0777, true);
-                }
-                $pdfs = [
-                    'list_order.pdf' => PDF::loadView('pdf.list-order', $proses['cetak_all_1'])->output(),
-                    'rekap_order.pdf' => PDF::loadView('pdf.rekap-order', $proses['cetak_all_2'])->output(),
-                    'karton_non_dpd.pdf' => PDF::loadView('pdf.karton-non-dpd', $proses['cetak_all_3'])->output(),
-                    'item_order_ditolak.pdf' => PDF::loadView('pdf.order-ditolak', $proses['cetak_all_4'])->output(),
-                    'cetakan_kertas.pdf' => PDF::loadView('pdf.cetakan-kertas', $proses['cetak_all_6'])->output(),
-                ];
-                foreach ($pdfs as $filename => $pdfContent) {
-                    $pdfPath = $tempFolder . '/' . $filename;
-                    file_put_contents($pdfPath, $pdfContent);
-                }
-
-
+                
                 //! INSERT INTO TEMP_PB_VALID
                 DB::table('temp_pb_valid')
                     ->insert([
@@ -1041,33 +1025,49 @@ class UploadPbIdmController extends Controller
                 $JumlahPB += 1;
             }
             //! END LOOP DATATABLES HEADER
-
             $zipFileName = '';
+
             if(isset($tempFolder)){
                 //? Zip the entire folder
-                $zipFileName = now()->format('Ymd_His') . '.zip';
+                $zipFileName = now()->format('Y-m-d') . '.zip';
                 $zip = new ZipArchive();
                 $zip->open($zipFileName, ZipArchive::CREATE);
 
                 $files = new RecursiveIteratorIterator(
-                    new RecursiveDirectoryIterator($tempFolder),
+                    new RecursiveDirectoryIterator(storage_path('app/temp/')),
                     RecursiveIteratorIterator::LEAVES_ONLY
                 );
-
+                
                 foreach ($files as $name => $file) {
                     if (!$file->isDir()) {
                         $filePath = $file->getRealPath();
-                        $relativePath = substr($filePath, strlen($tempFolder) + 1);
+                        $relativePath = substr($filePath, strlen(storage_path('app/temp/')));
                         $zip->addFile($filePath, $relativePath);
                     }
                 }
-
+                
                 $zip->close();
-                // Remove the temporary folder
-                foreach (glob($tempFolder . '/*') as $file) {
-                    unlink($file);
+                // Remove the temporary folder and its contents
+                $files = File::allFiles(storage_path('app/temp'));
+                $folders = File::directories(storage_path('app/temp'));
+
+                foreach ($files as $file) {
+                    if ($file->isDir()) {
+                        $subFolderFiles = File::allFiles($file->getRealPath());
+                        
+                        foreach ($subFolderFiles as $subFile) {
+                            if ($subFile->getExtension() === 'pdf') {
+                                File::delete($subFile->getRealPath());
+                            }
+                        }
+                    } else {
+                        File::delete($file->getRealPath());
+                    }
                 }
-                rmdir($tempFolder);
+
+                foreach ($folders as $folder){
+                    rmdir($folder);
+                }
 
                 // Save the zip file
                 Storage::disk('local')->put($zipFileName, file_get_contents($zipFileName));
@@ -1180,6 +1180,7 @@ class UploadPbIdmController extends Controller
     }
 
     public function downloadZip($zipName){
+        File::delete(public_path($zipName));
         return response()->download(storage_path("app/{$zipName}"))->deleteFileAfterSend(true);
     }
 
