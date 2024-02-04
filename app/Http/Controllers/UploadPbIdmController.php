@@ -768,77 +768,74 @@ class UploadPbIdmController extends Controller
             $ip = $this->getIP();
             $JenisPB = $request->jenisPB;
 
-            //! DELETE FROM TEMP_PB_VALID
-            // sb.AppendLine("DELETE FROM TEMP_PB_VALID ")
-            // sb.AppendLine(" Where IP = '" & IP & "' ")
+            // //! DELETE FROM TEMP_PB_VALID
+            // DB::table('temp_pb_valid')
+            //     ->where('ip', $ip)
+            //     ->delete();
 
-            DB::table('temp_pb_valid')
-                ->where('ip', $ip)
-                ->delete();
+            // //? check jika datatables header dan detail harus ada
 
-            //? check jika datatables header dan detail harus ada
+            // //! GET URUTAN JENISPB
+            // // sb.AppendLine("SELECT COALESCE(Count(0),0) ")
+            // // sb.AppendLine("  FROM URUTAN_JENISPB_BUAH ")
+            // // sb.AppendLine(" WHERE DATE_TRUNC('DAY', UJB_CREATE_DT) = CURRENT_DATE ")
+            // // sb.AppendLine("   AND UJB_JenisPB = '" & JenisPB & "' ")
 
-            //! GET URUTAN JENISPB
-            // sb.AppendLine("SELECT COALESCE(Count(0),0) ")
-            // sb.AppendLine("  FROM URUTAN_JENISPB_BUAH ")
-            // sb.AppendLine(" WHERE DATE_TRUNC('DAY', UJB_CREATE_DT) = CURRENT_DATE ")
-            // sb.AppendLine("   AND UJB_JenisPB = '" & JenisPB & "' ")
+            // $count = DB::table('urutan_jenispb_buah')
+            //     ->whereRaw("DATE_TRUNC('DAY', ujb_create_dt) = CURRENT_DATE")
+            //     ->where('ujb_jenispb', $JenisPB)
+            //     ->count();
 
-            $count = DB::table('urutan_jenispb_buah')
-                ->whereRaw("DATE_TRUNC('DAY', ujb_create_dt) = CURRENT_DATE")
-                ->where('ujb_jenispb', $JenisPB)
-                ->count();
+            // if($count == 0){
+            //     //! GET URUTAN NoUrJenisPB
+            //     //? result nanti NoUrJenisPB+1 untuk jadi variable NoUrJenisPB
+            //     // sb.AppendLine("SELECT COALESCE(Count(0),0) ")
+            //     // sb.AppendLine("  FROM URUTAN_JENISPB_BUAH ")
+            //     // sb.AppendLine(" WHERE DATE_TRUNC('DAY', UJB_CREATE_DT) = CURRENT_DATE ")
 
-            if($count == 0){
-                //! GET URUTAN NoUrJenisPB
-                //? result nanti NoUrJenisPB+1 untuk jadi variable NoUrJenisPB
-                // sb.AppendLine("SELECT COALESCE(Count(0),0) ")
-                // sb.AppendLine("  FROM URUTAN_JENISPB_BUAH ")
-                // sb.AppendLine(" WHERE DATE_TRUNC('DAY', UJB_CREATE_DT) = CURRENT_DATE ")
+            //     $count = DB::table('urutan_jenispb_buah')
+            //         ->whereRaw("DATE_TRUNC('DAY', ujb_create_dt) = CURRENT_DATE")
+            //         ->count();
 
-                $count = DB::table('urutan_jenispb_buah')
-                    ->whereRaw("DATE_TRUNC('DAY', ujb_create_dt) = CURRENT_DATE")
-                    ->count();
+            //     $NoUrJenisPB = $count + 1;
 
-                $NoUrJenisPB = $count + 1;
+            //     //! INSERT INTO URUTAN_JENISPB_BUAH
+            //     // sb.AppendLine("INSERT INTO URUTAN_JENISPB_BUAH ")
+            //     // sb.AppendLine("( ")
+            //     // sb.AppendLine("  UJB_JenisPB, ")
+            //     // sb.AppendLine("  UJB_NoUrut, ")
+            //     // sb.AppendLine("  UJB_Create_By, ")
+            //     // sb.AppendLine("  UJB_Create_Dt ")
+            //     // sb.AppendLine(") ")
+            //     // sb.AppendLine("VALUES ")
+            //     // sb.AppendLine("( ")
+            //     // sb.AppendLine("  '" & JenisPB & "', ")
+            //     // sb.AppendLine("  " & NoUrJenisPB & ", ")
+            //     // sb.AppendLine("  '" & UserID & "', ")
+            //     // sb.AppendLine("  CURRENT_TIMESTAMP ")
+            //     // sb.AppendLine(") ")
 
-                //! INSERT INTO URUTAN_JENISPB_BUAH
-                // sb.AppendLine("INSERT INTO URUTAN_JENISPB_BUAH ")
-                // sb.AppendLine("( ")
-                // sb.AppendLine("  UJB_JenisPB, ")
-                // sb.AppendLine("  UJB_NoUrut, ")
-                // sb.AppendLine("  UJB_Create_By, ")
-                // sb.AppendLine("  UJB_Create_Dt ")
-                // sb.AppendLine(") ")
-                // sb.AppendLine("VALUES ")
-                // sb.AppendLine("( ")
-                // sb.AppendLine("  '" & JenisPB & "', ")
-                // sb.AppendLine("  " & NoUrJenisPB & ", ")
-                // sb.AppendLine("  '" & UserID & "', ")
-                // sb.AppendLine("  CURRENT_TIMESTAMP ")
-                // sb.AppendLine(") ")
+            //     DB::table('urutan_jenispb_buah')
+            //         ->insert([
+            //             'ujb_jenispb' => $JenisPB,
+            //             'ujb_nourut' => $NoUrJenisPB,
+            //             'ujb_create_by' => session('userid'),
+            //             'ujb_create_dt' => Carbon::now(),
+            //         ]);
+            // }else{
+            //     //! GET URUTAN JENISPB -> NoUrJenisPB
+            //     // sb.AppendLine("SELECT COALESCE(Count(0),0) ")
+            //     // sb.AppendLine("  FROM URUTAN_JENISPB_BUAH ")
+            //     // sb.AppendLine(" WHERE DATE_TRUNC('DAY', UJB_CREATE_DT) = CURRENT_DATE ")
+            //     // sb.AppendLine("   AND UJB_JenisPB = '" & JenisPB & "' ")
 
-                DB::table('urutan_jenispb_buah')
-                    ->insert([
-                        'ujb_jenispb' => $JenisPB,
-                        'ujb_nourut' => $NoUrJenisPB,
-                        'ujb_create_by' => session('userid'),
-                        'ujb_create_dt' => Carbon::now(),
-                    ]);
-            }else{
-                //! GET URUTAN JENISPB -> NoUrJenisPB
-                // sb.AppendLine("SELECT COALESCE(Count(0),0) ")
-                // sb.AppendLine("  FROM URUTAN_JENISPB_BUAH ")
-                // sb.AppendLine(" WHERE DATE_TRUNC('DAY', UJB_CREATE_DT) = CURRENT_DATE ")
-                // sb.AppendLine("   AND UJB_JenisPB = '" & JenisPB & "' ")
+            //     $count = DB::table('urutan_jenispb_buah')
+            //         ->where('ujb_jenispb', $JenisPB)
+            //         ->whereRaw("DATE_TRUNC('DAY', ujb_create_dt) = CURRENT_DATE")
+            //         ->count();
 
-                $count = DB::table('urutan_jenispb_buah')
-                    ->where('ujb_jenispb', $JenisPB)
-                    ->whereRaw("DATE_TRUNC('DAY', ujb_create_dt) = CURRENT_DATE")
-                    ->count();
-
-                $NoUrJenisPB = $count;
-            }
+            //     $NoUrJenisPB = $count;
+            // }
 
             //! GET DATA DATATABLES HEADER
             $datatablesHeader = DB::select("
@@ -858,12 +855,33 @@ class UploadPbIdmController extends Controller
             foreach($datatablesHeader as $item){
 
                 // If dgvHeader.Rows(i).Cells(0).Value <> JenisPB Then GoTo skipPBBH
-                if($item->jenis != $JenisPB) continue;
-                
+                // if($item->jenis != $JenisPB) continue; //! dummy
+
                 $noPB = $item->nopb;
                 $tglPB = $item->tglpb;
                 $KodeToko = $item->toko;
                 $fileName = $item->nama_file;
+
+                //! dummy
+                $proses = $this->prosesPBIdm($noPB, $tglPB, $KodeToko, $JenisPB, $fileName, $NoUrJenisPB);
+                $tempFolder = storage_path('app/temp/' . $KodeToko . '_' . now()->format('Ymd_His'));
+                if (!file_exists($tempFolder)) {
+                    mkdir($tempFolder, 0777, true);
+                }
+                $pdfs = [
+                    'list_order.pdf' => PDF::loadView('pdf.list-order', $proses['cetak_all_1'])->output(),
+                    'rekap_order.pdf' => PDF::loadView('pdf.rekap-order', $proses['cetak_all_2'])->output(),
+                    'karton_non_dpd.pdf' => PDF::loadView('pdf.karton-non-dpd', $proses['cetak_all_3'])->output(),
+                    'item_order_ditolak.pdf' => PDF::loadView('pdf.order-ditolak', $proses['cetak_all_4'])->output(),
+                    'cetakan_kertas.pdf' => PDF::loadView('pdf.cetakan-kertas', $proses['cetak_all_6'])->output(),
+                ];
+                foreach ($pdfs as $filename => $pdfContent) {
+                    $pdfPath = $tempFolder . '/' . $filename;
+                    file_put_contents($pdfPath, $pdfContent);
+                }
+
+                continue;
+                //! end dummy
 
                 //! GET KODETOKO TIDAK TERDAFTAR
                 $data = DB::select("
@@ -991,7 +1009,7 @@ class UploadPbIdmController extends Controller
                     $message = "Hari Ini Bukan Jadwal Picking Untuk TOKO " . rtrim($list, ",");
                     return ApiFormatter::error(400, $message);
                 }
-                
+
                 // ProsesPBIDM(dgvHeader.Rows(i).Cells(3).Value, txtPathFilePBBH.Text & "\" & dgvHeader.Rows(i).Cells(6).Value, JenisPB, NoUrJenisPB)
                 $proses = $this->prosesPBIdm($noPB, $tglPB, $KodeToko, $JenisPB, $fileName, $NoUrJenisPB);
                 $tempFolder = storage_path('app/temp/' . $KodeToko . '_' . now()->format('Ymd_His'));
@@ -1019,12 +1037,12 @@ class UploadPbIdmController extends Controller
                         'tglpb' => DB::raw("TO_DATE('" . $tglPB . "','DD-MM-YYYY')"),
                         'ip' => $ip
                     ]);
-                    
+
                 $JumlahPB += 1;
             }
             //! END LOOP DATATABLES HEADER
-                
-            $zipFileName = '';    
+
+            $zipFileName = '';
             if(isset($tempFolder)){
                 //? Zip the entire folder
                 $zipFileName = now()->format('Ymd_His') . '.zip';
@@ -1035,7 +1053,7 @@ class UploadPbIdmController extends Controller
                     new RecursiveDirectoryIterator($tempFolder),
                     RecursiveIteratorIterator::LEAVES_ONLY
                 );
-                
+
                 foreach ($files as $name => $file) {
                     if (!$file->isDir()) {
                         $filePath = $file->getRealPath();
@@ -1055,88 +1073,89 @@ class UploadPbIdmController extends Controller
                 Storage::disk('local')->put($zipFileName, file_get_contents($zipFileName));
             }
 
-            if($JumlahPB == 0){
-                $message = "Tidak ada PB $JenisPB";
-            }
+            //! dicomment
+            // if($JumlahPB == 0){
+            //     $message = "Tidak ada PB $JenisPB";
+            // }
 
-            //! HITUNG JUMLAH ITEM DI PBOMI
-            $count = DB::select("
-                SELECT COALESCE(Count(0),0) as count
-                FROM tbMaster_pbomi
-                WHERE EXISTS
-                (
-                    SELECT cpb_kodetoko
-                    FROM csv_pb_buah,
-                        cluster_buah
-                    WHERE CPB_JenisPB = '" . $JenisPB . "'
-                    AND CPB_RecordID IS NULL
-                    AND CPB_IP = '" . $ip . "'
-                    AND CLB_Toko = CPB_KodeToko
-                    AND (CPB_Flag IS NULL OR CPB_Flag = '')
-                    AND cpb_kodetoko = pbo_kodeomi
-                    AND cpb_nopb = pbo_nopb
-                    AND cpb_tglpb = pbo_tglpb
-                    AND EXISTS
-                    (
-                    SELECT KodeToko
-                        FROM TEMP_PB_VALID
-                        WHERE KodeToko = CPB_KodeToko
-                            AND NoPB = CPB_NoPB
-                            AND TglPB = CPB_TglPB
-                            AND IP = '" . $ip . "'
-                    )
-                )
-            ");
+            // //! HITUNG JUMLAH ITEM DI PBOMI
+            // $count = DB::select("
+            //     SELECT COALESCE(Count(0),0) as count
+            //     FROM tbMaster_pbomi
+            //     WHERE EXISTS
+            //     (
+            //         SELECT cpb_kodetoko
+            //         FROM csv_pb_buah,
+            //             cluster_buah
+            //         WHERE CPB_JenisPB = '" . $JenisPB . "'
+            //         AND CPB_RecordID IS NULL
+            //         AND CPB_IP = '" . $ip . "'
+            //         AND CLB_Toko = CPB_KodeToko
+            //         AND (CPB_Flag IS NULL OR CPB_Flag = '')
+            //         AND cpb_kodetoko = pbo_kodeomi
+            //         AND cpb_nopb = pbo_nopb
+            //         AND cpb_tglpb = pbo_tglpb
+            //         AND EXISTS
+            //         (
+            //         SELECT KodeToko
+            //             FROM TEMP_PB_VALID
+            //             WHERE KodeToko = CPB_KodeToko
+            //                 AND NoPB = CPB_NoPB
+            //                 AND TglPB = CPB_TglPB
+            //                 AND IP = '" . $ip . "'
+            //         )
+            //     )
+            // ");
 
-            if($count[0]->count > 0){
-                //! INSERT INTO PICKING_ANTRIAN_BUAH
-                DB::insert("
-                    INSERT INTO PICKING_ANTRIAN_BUAH
-                    (
-                        PAB_KodeCluster,
-                        PAB_JenisPB,
-                        PAB_Create_By,
-                        PAB_Create_Dt
-                    )
-                    SELECT DISTINCT CLB_Kode AS KodeCluster,
-                        '" . $JenisPB . "' AS JenisPB,
-                        '" . session('userid') . "',
-                        CURRENT_DATE
-                    FROM csv_pb_buah,
-                        cluster_buah
-                    WHERE CPB_JenisPB = '" . $JenisPB . "'
-                        AND CPB_RecordID IS NULL
-                        AND CPB_IP = '" . $ip . "'
-                        AND CLB_Toko = CPB_KodeToko
-                        AND (CPB_Flag IS NULL OR CPB_Flag = '')
-                        AND EXISTS
-                        (
-                            SELECT KodeToko
-                            FROM TEMP_PB_VALID
-                            WHERE KodeToko = CPB_KodeToko
-                                AND NoPB = CPB_NoPB
-                                AND TglPB = CPB_TglPB
-                                AND IP = '" . $ip . "'
-                        )
-                ");
-            }
+            // if($count[0]->count > 0){
+            //     //! INSERT INTO PICKING_ANTRIAN_BUAH
+            //     DB::insert("
+            //         INSERT INTO PICKING_ANTRIAN_BUAH
+            //         (
+            //             PAB_KodeCluster,
+            //             PAB_JenisPB,
+            //             PAB_Create_By,
+            //             PAB_Create_Dt
+            //         )
+            //         SELECT DISTINCT CLB_Kode AS KodeCluster,
+            //             '" . $JenisPB . "' AS JenisPB,
+            //             '" . session('userid') . "',
+            //             CURRENT_DATE
+            //         FROM csv_pb_buah,
+            //             cluster_buah
+            //         WHERE CPB_JenisPB = '" . $JenisPB . "'
+            //             AND CPB_RecordID IS NULL
+            //             AND CPB_IP = '" . $ip . "'
+            //             AND CLB_Toko = CPB_KodeToko
+            //             AND (CPB_Flag IS NULL OR CPB_Flag = '')
+            //             AND EXISTS
+            //             (
+            //                 SELECT KodeToko
+            //                 FROM TEMP_PB_VALID
+            //                 WHERE KodeToko = CPB_KodeToko
+            //                     AND NoPB = CPB_NoPB
+            //                     AND TglPB = CPB_TglPB
+            //                     AND IP = '" . $ip . "'
+            //             )
+            //     ");
+            // }
 
-            //! SET FLAG CSV_PB_BUAH
-            DB::update("
-                UPDATE CSV_PB_BUAH
-                SET CPB_Flag = '1'
-                WHERE CPB_IP = '" . $ip . "'
-                    AND (CPB_Flag IS NULL OR CPB_Flag = '')
-                    AND EXISTS
-                    (
-                        SELECT KodeToko
-                        FROM TEMP_PB_VALID
-                        WHERE KodeToko = CPB_KodeToko
-                            AND NoPB = CPB_NoPB
-                            AND TglPB = CPB_TglPB
-                            AND IP = '" . $ip . "'
-                    )
-            ");
+            // //! SET FLAG CSV_PB_BUAH
+            // DB::update("
+            //     UPDATE CSV_PB_BUAH
+            //     SET CPB_Flag = '1'
+            //     WHERE CPB_IP = '" . $ip . "'
+            //         AND (CPB_Flag IS NULL OR CPB_Flag = '')
+            //         AND EXISTS
+            //         (
+            //             SELECT KodeToko
+            //             FROM TEMP_PB_VALID
+            //             WHERE KodeToko = CPB_KodeToko
+            //                 AND NoPB = CPB_NoPB
+            //                 AND TglPB = CPB_TglPB
+            //                 AND IP = '" . $ip . "'
+            //         )
+            // ");
 
             //! dummy
             // DB::commit();
@@ -1150,6 +1169,8 @@ class UploadPbIdmController extends Controller
             throw new HttpResponseException($e->getResponse());
 
         }catch(\Exception $e){
+
+            dd($e);
 
             DB::rollBack();
 

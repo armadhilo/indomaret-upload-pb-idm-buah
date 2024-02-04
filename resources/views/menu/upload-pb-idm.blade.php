@@ -99,7 +99,7 @@
     }
 
     #tb_header tbody tr{
-        cursor: pointer;    
+        cursor: pointer;
     }
 
     #loading_datatable{
@@ -146,7 +146,7 @@
                                     Loading...
                                 </button>
                             </div>
-    
+
                             <div class="position-relative mt-5">
                                 <table class="table table-striped table-hover table-center w-100 datatable-dark-primary" id="tb_detail" style="margin-top: 20px">
                                     <thead>
@@ -235,7 +235,7 @@
                     { data: 'tglpb'},
                     { data: 'toko'},
                     { data: 'plu'},
-                    { data: 'rupiah'},
+                    { data: 'rupiah', render: $.fn.dataTable.render.number( ',', '.', 0, 'Rp ' )},
                     { data: 'nama_file'},
                 ],
                 columnDefs: [
@@ -370,7 +370,7 @@
             let formData = new FormData();
             for (var i = 0; i < files.length; i++) {
                 formData.append('files[]', files[i]);
-            }                
+            }
             $("#modal_loading").modal("show");
             $.ajax({
                 url: "/upload-pb-idm/action/upload-csv",
@@ -466,7 +466,7 @@
             }
         });
 
-        // Urutan PLU Buah Function 
+        // Urutan PLU Buah Function
 
         function getJenisPB(keyCode) {
             if (keyCode === 119) {
@@ -543,7 +543,7 @@
 
             if (selectedRow.length === 1) {
                 e.preventDefault();
-                
+
                 if (e.key === 'PageUp') {
                     selectedRow.insertBefore(selectedRow.prev());
                 } else if (e.key === 'PageDown') {
