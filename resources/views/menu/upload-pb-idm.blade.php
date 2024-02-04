@@ -401,6 +401,46 @@
             });
         };
 
+        function tarikAlokasiBuah(){
+            if(tb_header.rows().data().length < 1){
+                Swal.fire({
+                    title: 'Peringatan..!',
+                    text: `Belum Ada PB Reguler !!`,
+                    icon: 'warning',
+                });
+                return;
+            }
+            Swal.fire({
+                title: 'Yakin?',
+                text: `Yakin Akan Proses Alokasi (Sudah Tarik Semua Data PBBH) ??`,
+                icon: 'warning',
+                showCancelButton: true,
+            })
+            .then((result) => {
+                if (result.value) {
+                    $('#modal_loading').modal('show');
+                    $.ajax({
+                        url: `/upload-pb-idm/action/proses-alokasi`,
+                        type: "GET",
+                        success: function(response) {
+                            setTimeout(function () { $('#modal_loading').modal('hide'); }, 500);
+                            Swal.fire('Success!',response.message,'success').then(function(){
+                                showDatatablesHead();
+                            });
+                        }, error: function(jqXHR, textStatus, errorThrown) {
+                            setTimeout(function () { $('#modal_loading').modal('hide'); }, 500);
+                            Swal.fire({
+                                text: (jqXHR.responseJSON && jqXHR.responseJSON.code === 400)
+                                    ? jqXHR.responseJSON.message
+                                    : "Oops! Terjadi kesalahan segera hubungi tim IT (" + errorThrown + ")",
+                                icon: "error"
+                            });
+                        }
+                    });
+                }
+            })
+        }
+
         $(document).keydown(function(e) {
             const keyCode = e.which || e.keyCode;
 
@@ -408,8 +448,8 @@
                 e.preventDefault();
                 uploadCSV();
             } else if (keyCode === 119 || keyCode === 120 || keyCode === 121) {
+                e.preventDefault();
                 const jenisPB = getJenisPB(keyCode);
-
                 Swal.fire({
                     title: 'Yakin?',
                     text: `Apakah anda yakin ingin memproses ${jenisPB} ?`,
@@ -421,6 +461,8 @@
                         queryUrutanBuah(jenisPB);
                     }
                 });
+            } else if (e.which === 117 || e.keyCode === 117){
+                tarikAlokasiBuah();
             }
         });
 
@@ -496,7 +538,6 @@
             return updatedData;
         }
 
-
         $(document).on('keydown', function(e) {
             var selectedRow = $('#tb_urutan_buah tbody tr.select-r');
 
@@ -512,6 +553,14 @@
         });
 
         function prosesFormBuah(){
+            if(tb_header.rows().data().length < 1){
+                Swal.fire({
+                    title: 'Peringatan..!',
+                    text: `Tidak Ada Data ${jenisPB} Yang Dapat Diproses !`,
+                    icon: 'warning',
+                });
+                return;
+            }
             Swal.fire({
                 title: 'Yakin?',
                 text: `Apakah anda yakin ingin melakukan proses Form Buah ?`,
@@ -575,7 +624,9 @@
                         }, error: function(jqXHR, textStatus, errorThrown) {
                             setTimeout(function () { $('#modal_loading').modal('hide'); }, 500);
                             Swal.fire({
-                                text: "Oops! Terjadi kesalahan segera hubungi tim IT (" + errorThrown + ")",
+                                text: (jqXHR.responseJSON && jqXHR.responseJSON.code === 400)
+                                    ? jqXHR.responseJSON.message
+                                    : "Oops! Terjadi kesalahan segera hubungi tim IT (" + errorThrown + ")",
                                 icon: "error"
                             });
                         }
