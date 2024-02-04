@@ -38,6 +38,21 @@
         font-size: 13px;
     }
 
+    #header_tb_modal{
+        background: #6E214A;
+        padding: 6px;
+        color: white;
+        margin-bottom: 15px;
+        display: inline-block;
+        border: 2px groove lightgray;
+    }
+
+    #header_tb_modal h5{
+        margin: 0;
+        font-size: 1rem;
+        font-weight: bold;
+    }
+
     .table tbody tr.deactive td{
         background-color: #ffb6c19e;
     }
@@ -111,7 +126,7 @@
                         </div>
                         <div class="body">
                             <div class="position-relative">
-                                <table class="table table-striped table-hover datatable-dark-primary table-center" id="tb_header" style="margin-top: 20px">
+                                <table class="table table-striped table-hover w-100 datatable-dark-primary table-center" id="tb_header" style="margin-top: 20px">
                                     <thead>
                                         <tr>
                                             <th>JENIS</th>
@@ -130,11 +145,10 @@
                                     <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
                                     Loading...
                                 </button>
-    
                             </div>
     
                             <div class="position-relative mt-5">
-                                <table class="table table-striped table-hover table-center datatable-dark-primary" id="tb_detail" style="margin-top: 20px">
+                                <table class="table table-striped table-hover table-center w-100 datatable-dark-primary" id="tb_detail" style="margin-top: 20px">
                                     <thead>
                                         <tr>
                                             <th>PLU</th>
@@ -160,19 +174,58 @@
         </div>
     </div>
 
+    <div class="modal fade" role="dialog" id="modal" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog" style="max-width: 75%;" role="document">
+           <div class="modal-content">
+                <div class="modal-header br">
+                    <h5 class="modal-title">Urutan PLU Buah</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="header_tb_modal">
+                        <h5>* DOUBLE CLICK UNTUK SELECT DATA & TEKAN PAGE UP/DOWN UNTUK MENGUBAH URUTAN</h5>
+                    </div>
+                    <input type="hidden" id="jenis_pb_urutan_buah">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover datatable-dark-primary w-100" id="tb_urutan_buah" style="margin: 20px">
+                            <thead>
+                                <tr>
+                                    <th>PLU</th>
+                                    <th>Deskripsi</th>
+                                    <th>Unit</th>
+                                    <th>Fraction</th>
+                                    <th>TotalQTY</th>
+                                    <th>Stock</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer bg-whitesmoke br">
+                    <button type="button" class="btn btn-warning" onclick="prosesFormBuah()" id="pb_buah_button">Proses PB Buah</button>
+                    <button type="button" class="btn btn-success d-none" onclick="prosesFormNoUrut()" id="proses_no_urut_button">Proses PB Buah</button>
+                </div>
+           </div>
+        </div>
+    </div>
+
     @push('page-script')
 
     <script>
         let tb_header;
         let tb_detail;
         let selectedRowData;
+
+        let tb_urutan_buah;
+        let updated_data;
+
         function initializeDatatables(){
             tb_header = $('#tb_header').DataTable({
                 processing: true,
-                ajax: {
-                    url: '/upload-pb-idm/datatablesHeader',
-                    type: 'GET'
-                },
                 language: {
                     emptyTable: "<div class='datatable-no-data' style='color: #ababab'>Tidak Ada Data</div>",
                 },
@@ -188,12 +241,13 @@
                 columnDefs: [
                     { className: 'text-center-vh', targets: '_all' },
                 ],
+                data: [],
                 rowCallback: function(row, data){
                     $(row).dblclick(function() {
                         $('#tb_header tbody tr').removeClass('select-r');
                         $(this).addClass("select-r");
                         selectedRowData = data;
-                        showDatatableDetail(data.toko);
+                        showDatatableDetail(data.nopb, data.tglpb, data.toko);
                     });
                 },
             });
@@ -207,7 +261,7 @@
                     { data: 'toko'},
                     { data: 'desk'},
                     { data: 'qty'},
-                    { data: 'rph'},
+                    { data: 'rupiah'},
                     { data: 'stock'},
                 ],
                 columnDefs: [
@@ -218,10 +272,90 @@
                 },
             });
 
+            tb_urutan_buah = $('#tb_urutan_buah').DataTable({
+                language: {
+                    emptyTable: "<div class='datatable-no-data' style='color: #ababab'>Tidak Ada Data</div>",
+                },
+                columns: [
+                    { data: 'plu'},
+                    { data: 'desk'},
+                    { data: 'unit'},
+                    { data: 'frac'},
+                    { data: 'totalqty'},
+                    { data: 'stock'},
+                ],
+                data: [],
+                columnDefs: [
+                    { className: 'text-center-vh', targets: '_all' },
+                ],
+                rowCallback: function(row, data){
+                    $(row).dblclick(function() {
+                        $('#tb_urutan_buah tbody tr').removeClass('select-r');
+                        $(this).addClass("select-r");
+                    });
+                },
+                paging: false,
+                searching: false,
+                info: false,
+                order: [],
+            });
         }
         $(document).ready(function(){
             initializeDatatables();
+            showDatatablesHead();
         });
+
+        function showDatatablesHead(){
+            tb_header.clear().draw();
+            tb_detail.clear().draw();
+            $('.datatable-no-data').css('color', '#F2F2F2');
+            $('#loading_datatable').removeClass('d-none');
+            $('#loading_datatable_detail').removeClass('d-none');
+            $.ajax({
+                url: "/upload-pb-idm/datatablesHeader",
+                type: "GET",
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    $('#loading_datatable').addClass('d-none');
+                    $('.datatable-no-data').css('color', '#ababab');
+                    tb_header.rows.add(response.data).draw();
+                    $('#tb_header tbody tr:first').dblclick();
+                }, error: function(jqXHR, textStatus, errorThrown) {
+                    setTimeout(function () { $('#loading_datatable').addClass('d-none'); }, 500);
+                    $('#loading_datatable_detail').addClass('d-none');
+                    $('.datatable-no-data').css('color', '#ababab');
+                    Swal.fire({
+                        text: "Oops! Terjadi kesalahan segera hubungi tim IT (" + errorThrown + ")",
+                        icon: "error"
+                    });
+                }
+            });
+        }
+
+        function showDatatableDetail(noPb, tglPb, toko){
+            tb_detail.clear().draw();
+            $('.datatable-no-data').css('color', '#F2F2F2');
+            $('#loading_datatable_detail').removeClass('d-none');
+            $.ajax({
+                url: `/upload-pb-idm/datatablesDetail/${noPb}/${tglPb}/${toko}`,
+                type: "GET",
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    $('#loading_datatable_detail').addClass('d-none');
+                    $('.datatable-no-data').css('color', '#ababab');
+                    tb_detail.rows.add(response.data).draw();
+                }, error: function(jqXHR, textStatus, errorThrown) {
+                    setTimeout(function () { $('#loading_datatable_detail').addClass('d-none'); }, 500);
+                    $('.datatable-no-data').css('color', '#ababab');
+                    Swal.fire({
+                        text: "Oops! Terjadi kesalahan segera hubungi tim IT (" + errorThrown + ")",
+                        icon: "error"
+                    });
+                }
+            });
+        }
 
         function uploadCSV(){
             let input = $('#csv_input');
@@ -268,14 +402,187 @@
         };
 
         $(document).keydown(function(e) {
-            // Check if the pressed key is F3 (key code 114)
-            if (e.which === 114 || e.keyCode === 114) {
-            // Call your function here
+            const keyCode = e.which || e.keyCode;
+
+            if (keyCode === 114) {
                 e.preventDefault();
                 uploadCSV();
-            }
+            } else if (keyCode === 119 || keyCode === 120 || keyCode === 121) {
+                const jenisPB = getJenisPB(keyCode);
 
+                Swal.fire({
+                    title: 'Yakin?',
+                    text: `Apakah anda yakin ingin memproses ${jenisPB} ?`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                })
+                .then((result) => {
+                    if (result.value) {
+                        queryUrutanBuah(jenisPB);
+                    }
+                });
+            }
         });
+
+        // Urutan PLU Buah Function 
+
+        function getJenisPB(keyCode) {
+            if (keyCode === 119) {
+                return 'IMPORT';
+            } else if (keyCode === 120) {
+                return 'LOKAL';
+            } else if (keyCode === 121) {
+                return 'CHILLED FOOD';
+            }
+        }
+
+        function queryUrutanBuah(jenisPB){
+            if(tb_header.rows().data().length < 1){
+                Swal.fire({
+                    title: 'Peringatan..!',
+                    text: `Tidak Ada Data ${jenisPB} Yang Dapat Diproses !`,
+                    icon: 'warning',
+                });
+                return;
+            }
+            $('#modal_loading').modal('show');
+            tb_urutan_buah.clear().draw();
+            $.ajax({
+                url: `/upload-pb-idm/datatablesUrutanBuah/${jenisPB}`,
+                type: "GET",
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    setTimeout(function () { $('#modal_loading').modal('hide'); }, 500);
+                    tb_urutan_buah.rows.add(response.data).draw();
+                    $('#jenis_pb_urutan_buah').val(jenisPB);
+                    $('#pb_buah_button').attr('disabled', false);
+                    $('#proses_no_urut_button').addClass('d-none');
+                    $('#modal').modal('show');
+                }, error: function(jqXHR, textStatus, errorThrown) {
+                    setTimeout(function () { $('#modal_loading').modal('hide'); }, 500);
+                    Swal.fire({
+                        text: "Oops! Terjadi kesalahan segera hubungi tim IT (" + errorThrown + ")",
+                        icon: "error"
+                    });
+                }
+            });
+
+        }
+
+        $('#modal').on('hidden.bs.modal', function () {
+            tb_urutan_buah.clear().draw();
+            updatedData = undefined;
+            $('#pb_buah_button').attr('disabled', false);
+            $('#proses_no_urut_button').addClass('d-none');
+            $('#jenis_pb_urutan_buah').val(null)
+        });
+
+        $(document).on('click', function(event) {
+            if (!$(event.target).closest('#tb_urutan_buah tbody tr').length && $('#tb_urutan_buah tbody tr').hasClass('select-r')) {
+                $('#tb_urutan_buah tbody tr').removeClass('select-r');
+            }
+        });
+
+        function getUpdatedData() {
+            updatedData = [];
+            $('tbody tr', tb_urutan_buah.table().node()).each(function () {
+                var rowData = {};
+                $('td', this).each(function (i) {
+                    rowData[$('th', tb_urutan_buah.table().node()).eq(i).text()] = $(this).text();
+                });
+                updatedData.push(rowData);
+            });
+            return updatedData;
+        }
+
+
+        $(document).on('keydown', function(e) {
+            var selectedRow = $('#tb_urutan_buah tbody tr.select-r');
+
+            if (selectedRow.length === 1) {
+                e.preventDefault();
+                
+                if (e.key === 'PageUp') {
+                    selectedRow.insertBefore(selectedRow.prev());
+                } else if (e.key === 'PageDown') {
+                    selectedRow.insertAfter(selectedRow.next());
+                }
+            }
+        });
+
+        function prosesFormBuah(){
+            Swal.fire({
+                title: 'Yakin?',
+                text: `Apakah anda yakin ingin melakukan proses Form Buah ?`,
+                icon: 'warning',
+                showCancelButton: true,
+            })
+            .then((result) => {
+                if (result.value) {
+                    $('#modal_loading').modal('show');
+                    $.ajax({
+                        url: `/upload-pb-idm/action/proses-pb-buah`,
+                        type: "POST",
+                        data: {jenisPB: $('#jenis_pb_urutan_buah').val()},
+                        success: function(response) {
+                            setTimeout(function () { $('#modal_loading').modal('hide'); }, 500);
+                            Swal.fire('Success!',response.message,'success');
+                            $('#pb_buah_button').attr('disabled', true);
+                            $('#proses_no_urut_button').removeClass('d-none');
+                        }, error: function(jqXHR, textStatus, errorThrown) {
+                            setTimeout(function () { $('#modal_loading').modal('hide'); }, 500);
+                            Swal.fire({
+                                text: "Oops! Terjadi kesalahan segera hubungi tim IT (" + errorThrown + ")",
+                                icon: "error"
+                            });
+                        }
+                    });
+                }
+            })
+        }
+
+        function prosesFormNoUrut(){
+            var jenisPB = $('#jenis_pb_urutan_buah').val();
+            Swal.fire({
+                title: 'Yakin?',
+                text: `Sudah Yakin dengan urutan PLU Picking ${jenisPB} ?`,
+                icon: 'warning',
+                showCancelButton: true,
+            })
+            .then((result) => {
+                if (result.value) {
+                    var datatableData = getUpdatedData();
+                    if(datatableData[0].PLU === "Tidak Ada Data" && datatableData.length == 1){
+                        Swal.fire({
+                            title: 'Peringatan..!',
+                            text: `Tidak Ada Data ${jenisPB} Yang Dapat Diproses !`,
+                            icon: 'warning',
+                        });
+                        return;
+                    }
+                    $('#modal_loading').modal('show');
+                    $.ajax({
+                        url: `/upload-pb-idm/action/proses-urutan-buah`,
+                        type: "POST",
+                        data: {jenisPB: jenisPB, datatables: datatableData},
+                        success: function(response) {
+                            setTimeout(function () { $('#modal_loading').modal('hide'); }, 500);
+                            $('#modal').modal('hide');
+                            Swal.fire('Success!',response.message,'success').then(function(){
+                                showDatatablesHead();
+                            });
+                        }, error: function(jqXHR, textStatus, errorThrown) {
+                            setTimeout(function () { $('#modal_loading').modal('hide'); }, 500);
+                            Swal.fire({
+                                text: "Oops! Terjadi kesalahan segera hubungi tim IT (" + errorThrown + ")",
+                                icon: "error"
+                            });
+                        }
+                    });
+                }
+            })
+        }
     </script>
     @endpush
 @endsection

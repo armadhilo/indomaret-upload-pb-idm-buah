@@ -88,7 +88,8 @@ Route::middleware(['mylogin'])->group(function () {
         Route::group(['prefix' => 'action'], function(){
             Route::post('upload-csv', [UploadPbIdmController::class, 'actionF3']);
             Route::get('proses-alokasi', [UploadPbIdmController::class, 'actionF6']);
-            Route::get('/proses-urutan-buah', [UploadPbIdmController::class, 'actionProsesFormNoUrutBuah']);
+            Route::post('/proses-pb-buah', [UploadPbIdmController::class, 'prosesPbBuah']);
+            Route::post('/proses-urutan-buah', [UploadPbIdmController::class, 'actionProsesFormNoUrutBuah']);
         });
     });
 

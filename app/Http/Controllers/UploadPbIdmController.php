@@ -716,39 +716,39 @@ class UploadPbIdmController extends Controller
         //? kasih catch jika gagal maka return false
     }
 
-    //! Keys.F8, Keys.F9, Keys.F10
-    public function actionF8F9F10(){
+    // //! Keys.F8, Keys.F9, Keys.F10
+    // public function actionF8F9F10(){
 
-        //! VARIABLE
-        //? default
-        $buttonPress = '';
+    //     //! VARIABLE
+    //     //? default
+    //     $buttonPress = '';
 
-        // If Strings.Format(Now, "HHmmss") >= "234000" Then
-        //     MsgBox("Mohon Tunggu Sampai JAM 12 MALAM" & vbNewLine & "Untuk Melakukan UPLOAD PB!!", MsgBoxStyle.Information, ProgName)
-        //     Exit Sub
-        // End If
+    //     // If Strings.Format(Now, "HHmmss") >= "234000" Then
+    //     //     MsgBox("Mohon Tunggu Sampai JAM 12 MALAM" & vbNewLine & "Untuk Melakukan UPLOAD PB!!", MsgBoxStyle.Information, ProgName)
+    //     //     Exit Sub
+    //     // End If
 
-        //! CHECK TOMBOL YANG DITEKAN
-        $JenisPB = 'CHILLED FOOD';
-        if($buttonPress == 'F8'){
-            $JenisPB = 'IMPORT';
-        }elseif($buttonPress == 'F9'){
-            $JenisPB = 'LOKAL';
-        }
+    //     //! CHECK TOMBOL YANG DITEKAN
+    //     $JenisPB = 'CHILLED FOOD';
+    //     if($buttonPress == 'F8'){
+    //         $JenisPB = 'IMPORT';
+    //     }elseif($buttonPress == 'F9'){
+    //         $JenisPB = 'LOKAL';
+    //     }
 
-        //* YAKIN INGIN MEMPROSES" & vbNewLine & PADC(JenisPB & " ??
+    //     //* YAKIN INGIN MEMPROSES" & vbNewLine & PADC(JenisPB & " ??
 
-        //? check apakah datatables header ada isinya?
-        //? jika tidak
+    //     //? check apakah datatables header ada isinya?
+    //     //? jika tidak
 
-        //*  Tidak Ada Data " & JenisPB & " Yang Dapat Diproses !
+    //     //*  Tidak Ada Data " & JenisPB & " Yang Dapat Diproses !
 
-        //? open form frmNoUrutBuah
-         //* NAMA HEADER -> Urutan PLU Buah - & JenisPB
-        //* NAMA BUTTON -> PROSES UPLOAD BUAH - & JenisPB
+    //     //? open form frmNoUrutBuah
+    //      //* NAMA HEADER -> Urutan PLU Buah - & JenisPB
+    //     //* NAMA BUTTON -> PROSES UPLOAD BUAH - & JenisPB
 
-        return view('urutan_buah');
-    }
+    //     return view('urutan_buah');
+    // }
 
     public function prosesPbBuah(ProsesPbBuahRequest $request){
         DB::beginTransaction();
