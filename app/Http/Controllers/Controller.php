@@ -570,40 +570,17 @@ class Controller extends BaseController
     }
 
     public function getIP(){
+        return '127.0.0.4'; //! dummy
         return $_SERVER['REMOTE_ADDR'];
     }
 
     public function prosesPBIdm($noPB, $tglPB, $KodeToko, $JenisPB, $fileName, $NoUrJenisPB){
-        $jum = 0;
         $CounterKarton = 0;
         $CounterKecil = 0;
-        $AdaKartonan = False;
-        $AdaKecil = False;
         $KodeSBU = "";
         $jumItmCSV = 0;
-        $jumTolakan = 0;
-        $rphValid = 0;
         $PersenMargin = 0;
-        $rphOrder = 0;
         $PBO_NoUrut = 0;
-        $KubikPB = 0;
-        $NoPick = 0;
-        $Gate = "";
-        $GateOrder = 0;
-        $TipeMobil = "";
-        $JumlahKontainer = 0;
-        $JumlahBronjong = 0;
-        $KodeCluster = "";
-        $GroupCluster = "";
-        $KubikasiMobil = 0;
-        $KubikasiKontainer = 0;
-        $KubikasiBronjong = 0;
-        $NoSJ = "";
-        $GR1 = "";
-        $GR2 = "";
-        $GR3 = "";
-        $VolContainer = 0;
-        $VolBronjong = 0;
 
         $ip = $this->getIP();
         $KDIGR = session('KODECABANG');
@@ -695,6 +672,7 @@ class Controller extends BaseController
         $query .= "   AND CPB_NoPB = '" . $noPB . "'";
         $query .= "   AND DATE_TRUNC('DAY', CPB_TglPB) = to_date('" . $tglPB. "','DD-MM-YYYY') ";
         $query .= "   AND CPB_KodeToko = '" . $KodeToko . "' ";
+        DB::insert($query);
 
         //! PLU IDM TIDAK MEMPUNYAI PLU INDOGROSIR
         $query = "";
@@ -752,6 +730,7 @@ class Controller extends BaseController
         $query .= "   AND CPB_NoPB = '" . $noPB . "'";
         $query .= "   AND DATE_TRUNC('DAY', CPB_TglPB) = to_date('" . $tglPB. "','DD-MM-YYYY') ";
         $query .= "   AND CPB_KodeToko = '" . $KodeToko . "' ";
+        DB::insert($query);
 
         //! PLUIDM DISCONTINUE Tag:ARNGX
         $query = "";
@@ -816,6 +795,7 @@ class Controller extends BaseController
             $query .= "   AND prc_kodeigr = '" . session('KODECABANG') . "' ";
             $query .= "   AND COALESCE(prc_KodeTag,'0') IN ('A','R','N','G','X') ";
         }
+        DB::insert($query);
 
         //! PLU IGR PADA TBTEMP_PLUIDM TIDAK ADA DI PRODMAST
         $query = "";
@@ -876,6 +856,7 @@ class Controller extends BaseController
         if($kodeDCIDM <> ""){
             $query .= "   AND IDM_KDIDM = '" . $kodeDCIDM . "' ";
         }
+        DB::insert($query);
 
         //! AVG.COST <= 0 - 1
         $query = "";
@@ -970,6 +951,7 @@ class Controller extends BaseController
             $query .= "     WHERE PHP_PRDCD Like SUBSTR(PRC_PLUIGR,1,6)||'%' ";
             $query .= "   )    ";
         }
+        DB::insert($query);
 
         //! AVG.COST <= 0 - 2
         $query = "";
@@ -1052,6 +1034,7 @@ class Controller extends BaseController
             $query .= "   AND PRC_GROUP = 'I' ";
             $query .= "   AND PRD_PRDCD = PRC_PLUIGR ";
         }
+        DB::insert($query);
 
         //! CEK TABLE
         // sb.AppendLine("Select COALESCE(COUNT(1),0)  ")
@@ -1145,6 +1128,7 @@ class Controller extends BaseController
             $query .= ") X,tbMaster_Prodmast ";
             $query .= "WHERE PRD_PRDCD = PLUKECIL ";
             $query .= "  AND PRD_KodeTag IN ('N','X','Q') ";
+            DB::insert($query);
         }else{
             //! DELETE FROM TEMP_CETAKPB_TOLAKAN_IDM2
             // sb.AppendLine("DELETE FROM TEMP_CETAKPB_TOLAKAN_IDM2 ")
@@ -1246,6 +1230,7 @@ class Controller extends BaseController
             $query .= ") X,tbMaster_Prodmast ";
             $query .= "WHERE PRD_PRDCD = PLUKECIL ";
             $query .= "  AND PRD_KodeTag IN ('N','X','Q') ";
+            DB::insert($query);
 
             //! INSERT INTO TEMP_CETAKPB_TOLAKAN_IDM2 - 1-FLAGAKTIVASI-X
             $query = "";
@@ -1341,6 +1326,7 @@ class Controller extends BaseController
             $query .= "WHERE PRD_PRDCD = PLUKECIL ";
             $query .= "  AND prd_flag_aktivasi IN ('X') ";
             $query .= "  AND prd_flag_aktivasi = AKT_KODEFLAG ";
+            DB::insert($query);
         }
 
         //! MERGE INTO TEMP_CETAKPB_TOLAKAN_IDM2 - KOMI
@@ -1479,6 +1465,7 @@ class Controller extends BaseController
             $query .= "    AND PRC_pluidm = CPB_PLUIDM ";
         }
         $query .= "    AND (CPB_Flag IS NULL OR CPB_Flag = '') ";
+        DB::insert($query);
 
         //! CEK TABLE
         // sb.AppendLine("Select COALESCE(COUNT(1),0)  ")
@@ -1755,6 +1742,7 @@ class Controller extends BaseController
             $query .= "WHEN MATCHED THEN ";
             $query .= "UPDATE SET TLKO_TAG_MD = b.PRC_KodeTag ";
         }
+        DB::insert($query);
 
         //! MERGE INTO TBTR_TOLAKANPBOMI-PRD_KodeTag
         DB::insert("
@@ -2142,13 +2130,13 @@ class Controller extends BaseController
         // sb.AppendLine("   And DATE_TRUNC('DAY', CPB_TglPB) = to_date('" & tglPB & "','DD-MM-YYYY') ")
         // sb.AppendLine("   AND CPB_KodeToko = '" & KodeToko & "' ")
 
-        $jumItmCSV = DB::table('CSV_PB_BUAH')
+        $jumItmCSV = DB::table('csv_pb_buah')
             ->where([
-                'CPB_IP' => $ip,
-                'CPB_NoPB' => $noPB,
-                'CPB_KodeToko' => $KodeToko,
+                'cpb_ip' => $ip,
+                'cpb_nopb' => $noPB,
+                'cpb_kodetoko' => $KodeToko,
             ])
-            ->where(DB::raw("DATE_TRUNC('DAY', CPB_TglPB)"), Carbon::parse($tglPB)->format('d-m-Y'))
+            ->where(DB::raw("DATE_TRUNC('DAY', cpb_tglpb)"), Carbon::parse($tglPB)->format('d-m-Y'))
             ->count();
 
         //! VARIABLE jumTolakan
@@ -2161,9 +2149,9 @@ class Controller extends BaseController
 
         $jumTolakan = DB::table('temp_cetakpb_tolakan_idm')
             ->where([
-                'REQ_ID' => $ip,
+                'req_id' => $ip,
                 'nodok' => $noPB,
-                'KCAB' => $KodeToko,
+                'kcab' => $KodeToko,
             ])
             ->where(DB::raw("DATE_TRUNC('DAY', tgldok)"), Carbon::parse($tglPB)->format('d-m-Y'))
             ->count();
@@ -2218,7 +2206,7 @@ class Controller extends BaseController
                 " . $jumItmCSV . ",
                     Count(PBO_PLUIGR),
                     SUM(PBO_NilaiOrder),
-                '" . $FilePB ."',
+                '" . $fileName ."',
                 '" . $JenisPB . "',
                 '" . session('userid') . "',
                     CURRENT_TIMESTAMP
@@ -2451,7 +2439,7 @@ class Controller extends BaseController
                 'tko_kodeigr' => session('KODECABANG'),
                 'tko_kodeomi' => $KodeToko,
             ])
-            ->whereRaw("coalesce(TKO_TGLTUTUP,CURRENT_DATE+1) > CURRENT_DATE")
+            ->whereRaw("coalesce(tko_tgltutup,CURRENT_DATE+1) > CURRENT_DATE")
             ->first()->tko_namaomi;
 
         //! f = "LIST ORDER PB"
@@ -2631,7 +2619,7 @@ class Controller extends BaseController
                 'tko_kodeigr' => session('KODECABANG'),
                 'tko_kodeomi' => $KodeToko,
             ])
-            ->whereRaw("coalesce(TKO_TGLTUTUP,CURRENT_DATE+1) > CURRENT_DATE")
+            ->whereRaw("coalesce(tko_tgltutup,CURRENT_DATE+1) > CURRENT_DATE")
             ->first()->tko_namaomi;
 
         //! f = "REKAP ORDER PB"
@@ -2796,7 +2784,7 @@ class Controller extends BaseController
                 'tko_kodeigr' => session('KODECABANG'),
                 'tko_kodeomi' => $KodeToko,
             ])
-            ->whereRaw("coalesce(TKO_TGLTUTUP,CURRENT_DATE+1) > CURRENT_DATE")
+            ->whereRaw("coalesce(tko_tgltutup,CURRENT_DATE+1) > CURRENT_DATE")
             ->first()->tko_namaomi;
 
         //! f = "KARTON NON DPD"
@@ -2907,7 +2895,7 @@ class Controller extends BaseController
                 'tko_kodeigr' => session('KODECABANG'),
                 'tko_kodeomi' => $KodeToko,
             ])
-            ->whereRaw("coalesce(TKO_TGLTUTUP,CURRENT_DATE+1) > CURRENT_DATE")
+            ->whereRaw("coalesce(tko_tgltutup,CURRENT_DATE+1) > CURRENT_DATE")
             ->first()->tko_namaomi;
 
         //! f = "ORDER DITOLAK"
@@ -2973,7 +2961,7 @@ class Controller extends BaseController
                 'tko_kodeigr' => session('KODECABANG'),
                 'tko_kodeomi' => $KodeToko,
             ])
-            ->whereRaw("coalesce(TKO_TGLTUTUP,CURRENT_DATE+1) > CURRENT_DATE")
+            ->whereRaw("coalesce(tko_tgltutup,CURRENT_DATE+1) > CURRENT_DATE")
             ->first()->tko_namaomi;
 
         //! f = "RAK JALUR TIDAK KETEMU"
@@ -3077,7 +3065,6 @@ class Controller extends BaseController
         //? rptTidakKetemu.SetParameterValue("NoPB", noPB)
         //? rptTidakKetemu.SetParameterValue("TglPB", tglPB)
         //? rptTidakKetemu.SetParameterValue("Batch", CounterKecil)
-
     }
 
     public function CetakALL_6(){

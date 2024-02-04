@@ -205,6 +205,12 @@ class UploadPbIdmController extends Controller
     }
 
     public function showDatatablesDetail($noPB, $tglPB, $KodeToko){
+
+        //! dummy
+        $noPB = '801581';
+        $tglPB = '17-08-2023';
+        $KodeToko = 'TUP3';
+
         $ip = $this->getIP();
         $data = DB::select("
             Select PLUIGR as PLU,
@@ -395,7 +401,7 @@ class UploadPbIdmController extends Controller
 
                 //! GET PLU DOBEL BUAH
                 $data = DB::select("
-                    Select CPB_PluIDM, COALESCE(count(CPB_KodeToko),0) as count
+                    Select CPB_PluIDM as plu, COALESCE(count(CPB_KodeToko),0) as count
                     From CSV_PB_BUAH2
                     Where CPB_IP = '" . $ip . "'
                         AND CPB_NoPB = '" . $noPB . "'
@@ -411,7 +417,7 @@ class UploadPbIdmController extends Controller
 
                     $listPlu = '';
                     foreach($data as $item){
-                        $listPlu .= $item->count . ',';
+                        $listPlu .= $item->plu . ',';
                     }
 
                     $message = "PLU " . rtrim($listPlu, ",") . " Dobel Di File " . $filename . " Yang Sedang Diproses, Harap Minta Revisi File PBBH Ke IDM - PLU DOBEL DI PBBH";
@@ -526,8 +532,6 @@ class UploadPbIdmController extends Controller
             throw new HttpResponseException($e->getResponse());
 
         }catch(\Exception $e){
-
-            dd($e, $csv);
 
             DB::rollBack();
 
@@ -763,7 +767,7 @@ class UploadPbIdmController extends Controller
             // sb.AppendLine("DELETE FROM TEMP_PB_VALID ")
             // sb.AppendLine(" Where IP = '" & IP & "' ")
 
-            DB::table('TEMP_PB_VALID')
+            DB::table('temp_pb_valid')
                 ->where('ip', $ip)
                 ->delete();
 
@@ -775,9 +779,9 @@ class UploadPbIdmController extends Controller
             // sb.AppendLine(" WHERE DATE_TRUNC('DAY', UJB_CREATE_DT) = CURRENT_DATE ")
             // sb.AppendLine("   AND UJB_JenisPB = '" & JenisPB & "' ")
 
-            $count = DB::table('URUTAN_JENISPB_BUAH')
-                ->whereRaw("DATE_TRUNC('DAY', UJB_CREATE_DT) = CURRENT_DATE")
-                ->where('UJB_JenisPB', $JenisPB)
+            $count = DB::table('urutan_jenispb_buah')
+                ->whereRaw("DATE_TRUNC('DAY', ujb_create_dt) = CURRENT_DATE")
+                ->where('ujb_jenispb', $JenisPB)
                 ->count();
 
             if($count == 0){
@@ -787,8 +791,8 @@ class UploadPbIdmController extends Controller
                 // sb.AppendLine("  FROM URUTAN_JENISPB_BUAH ")
                 // sb.AppendLine(" WHERE DATE_TRUNC('DAY', UJB_CREATE_DT) = CURRENT_DATE ")
 
-                $count = DB::table('URUTAN_JENISPB_BUAH')
-                    ->whereRaw("DATE_TRUNC('DAY', UJB_CREATE_DT) = CURRENT_DATE")
+                $count = DB::table('urutan_jenispb_buah')
+                    ->whereRaw("DATE_TRUNC('DAY', ujb_create_dt) = CURRENT_DATE")
                     ->count();
 
                 $NoUrJenisPB = $count + 1;
@@ -809,12 +813,12 @@ class UploadPbIdmController extends Controller
                 // sb.AppendLine("  CURRENT_TIMESTAMP ")
                 // sb.AppendLine(") ")
 
-                DB::table('URUTAN_JENISPB_BUAH')
+                DB::table('urutan_jenispb_buah')
                     ->insert([
-                        'UJB_JenisPB' => $JenisPB,
-                        'UJB_NoUrut' => $NoUrJenisPB,
-                        'UJB_Create_By' => session('userid'),
-                        'UJB_Create_Dt' => Carbon::now(),
+                        'ujb_jenispb' => $JenisPB,
+                        'ujb_nourut' => $NoUrJenisPB,
+                        'ujb_create_by' => session('userid'),
+                        'ujb_create_dt' => Carbon::now(),
                     ]);
             }else{
                 //! GET URUTAN JENISPB -> NoUrJenisPB
@@ -823,9 +827,9 @@ class UploadPbIdmController extends Controller
                 // sb.AppendLine(" WHERE DATE_TRUNC('DAY', UJB_CREATE_DT) = CURRENT_DATE ")
                 // sb.AppendLine("   AND UJB_JenisPB = '" & JenisPB & "' ")
 
-                $count = DB::table('URUTAN_JENISPB_BUAH')
-                    ->where('UJB_JenisPB', $JenisPB)
-                    ->whereRaw("DATE_TRUNC('DAY', UJB_CREATE_DT) = CURRENT_DATE")
+                $count = DB::table('urutan_jenispb_buah')
+                    ->where('ujb_jenispb', $JenisPB)
+                    ->whereRaw("DATE_TRUNC('DAY', ujb_create_dt) = CURRENT_DATE")
                     ->count();
 
                 $NoUrJenisPB = $count;
@@ -973,12 +977,12 @@ class UploadPbIdmController extends Controller
                 $this->prosesPBIdm($noPB, $tglPB, $KodeToko, $JenisPB, $fileName, $NoUrJenisPB);
 
                 //! INSERT INTO TEMP_PB_VALID
-                DB::table('TEMP_PB_VALID')
+                DB::table('temp_pb_valid')
                     ->insert([
-                        'KodeToko' => $KodeToko,
-                        'NoPB' => $noPB,
-                        'TglPB' => DB::raw("TO_DATE('" . $tglPB . "','DD-MM-YYYY')"),
-                        'IP' => $ip
+                        'kodetoko' => $KodeToko,
+                        'nopb' => $noPB,
+                        'tglpb' => DB::raw("TO_DATE('" . $tglPB . "','DD-MM-YYYY')"),
+                        'ip' => $ip
                     ]);
 
                 $JumlahPB += 1;
@@ -1107,13 +1111,13 @@ class UploadPbIdmController extends Controller
         $query .= " WHERE cpb_ip = '" . $ip . "' ";
         $query .= "   AND (CPB_Flag IS NULL OR CPB_Flag = '') ";
         $query .= "   AND CPB_PLUIDM = PRC_PLUIDM ";
-        $query .= "   AND CPB_JenisPB = '" . $JenisPB . "' ";
+        // $query .= "   AND CPB_JenisPB = '" . $JenisPB . "' "; //! dummy
         $query .= "   AND PRC_PLUIGR = PRD_PRDCD ";
-        $query .= "   AND PRC_GROUP = 'I' ";
-        $query .= "   AND PRD_KodeDivisi IN ('4','6') ";
+        // $query .= "   AND PRC_GROUP = 'I' "; //! dummy
+        // $query .= "   AND PRD_KodeDivisi IN ('4','6') "; //! dummy
         $query .= "   AND ST_PRDCD = PRC_PLUIGR ";
         $query .= "   AND ST_PRDCD = PRD_PRDCD ";
-        $query .= "   AND ST_LOKASI = '01' ";
+        // #$query .= "   AND ST_LOKASI = '01' "; //! dummy
         $query .= " GROUP BY CPB_PLUIDM, ";
         $query .= "       PRD_DESKRIPSIPANJANG, ";
         $query .= "       PRD_UNIT, ";

@@ -83,10 +83,12 @@ Route::middleware(['mylogin'])->group(function () {
         Route::get('/datatablesHeader', [UploadPbIdmController::class, 'showDatatablesHeader']);
         Route::get('/datatablesDetail/{noPB}/{tglPB}/{KodeToko}', [UploadPbIdmController::class, 'showDatatablesDetail']);
 
+        Route::get('/datatablesUrutanBuah/{JenisPB}', [UploadPbIdmController::class, 'datatablesFormNoUrutBuah']);
 
         Route::group(['prefix' => 'action'], function(){
             Route::post('upload-csv', [UploadPbIdmController::class, 'actionF3']);
             Route::get('proses-alokasi', [UploadPbIdmController::class, 'actionF6']);
+            Route::get('/proses-urutan-buah', [UploadPbIdmController::class, 'actionProsesFormNoUrutBuah']);
         });
     });
 
