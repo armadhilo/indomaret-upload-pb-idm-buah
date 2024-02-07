@@ -570,7 +570,6 @@ class Controller extends BaseController
     }
 
     public function getIP(){
-        return '127.0.0.4'; //! dummy
         return $_SERVER['REMOTE_ADDR'];
     }
 
@@ -584,21 +583,6 @@ class Controller extends BaseController
 
         $ip = $this->getIP();
         $KDIGR = session('KODECABANG');
-
-        //! dummy
-
-        $CounterKecil = 1;
-        $CounterKarton = 2;
-        $PersenMargin = 3;
-        $KodeSBU = "I";
-
-        return [
-            'cetak_all_1' => $this->CetakALL_1($KodeToko, $noPB, $tglPB, $PersenMargin),
-            'cetak_all_2' => $this->CetakALL_2($KodeToko, $noPB, $tglPB, $PersenMargin),
-            'cetak_all_3' => $this->CetakALL_3($KodeToko, $noPB, $tglPB, $CounterKarton),
-            'cetak_all_4' => $this->CetakALL_4($KodeToko, $noPB, $tglPB),
-            'cetak_all_6' => $this->CetakALL_6($KodeToko, $noPB, $tglPB, $CounterKecil),
-        ];
 
         //! DEL TEMP_CETAKPB_TOLAKAN_IDM
         // ExecQRY("DELETE FROM TEMP_CETAKPB_TOLAKAN_IDM WHERE REQ_ID = '" & IP & "' ", "DEL TEMP_CETAKPB_TOLAKAN_IDM")
@@ -2448,17 +2432,14 @@ class Controller extends BaseController
         // sb.AppendLine("   And TKO_KodeOMI = '" & KodeToko & "' ")
         // sb.AppendLine("   And COALESCE(TKO_TGLTUTUP,CURRENT_DATE+1) > CURRENT_DATE ")
 
-        //! DUMMY
-        // $data['namaToko'] = DB::table('tbmaster_tokoigr')
-        //     ->select('tko_namaomi')
-        //     ->where([
-        //         'tko_kodeigr' => session('KODECABANG'),
-        //         'tko_kodeomi' => $KodeToko,
-        //     ])
-        //     ->whereRaw("coalesce(tko_tgltutup,CURRENT_DATE+1) > CURRENT_DATE")
-        //     ->first()->tko_namaomi;
-
-        $data['namaToko'] = 'Nama Toko';
+        $data['namaToko'] = DB::table('tbmaster_tokoigr')
+            ->select('tko_namaomi')
+            ->where([
+                'tko_kodeigr' => session('KODECABANG'),
+                'tko_kodeomi' => $KodeToko,
+            ])
+            ->whereRaw("coalesce(tko_tgltutup,CURRENT_DATE+1) > CURRENT_DATE")
+            ->first()->tko_namaomi;
 
         //! f = "LIST ORDER PB"
 
@@ -2601,22 +2582,22 @@ class Controller extends BaseController
             ");
 
             //! dummy
-            $data['data'] = DB::select("
-                Select plukarton as plu,
-                    desk,
-                    unitkarton ||'/'|| frackarton as unit,
-                    qtyb as qty,
-                    qtyk as frc,
-                    fdqtyb as inpcs,
-                    Round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+ " . $PersenMargin . ")) as Harga,
-                    fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+" . $PersenMargin . ")) as Nilai,
-                    fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+" . $PersenMargin . ")) * (COALESCE(PRD_PPN,0)/100) * CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN 1 ELSE 0 END as PPN,
-                    fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+" . $PersenMargin . ")) * (1 + CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN (COALESCE(PRD_PPN,0)/100) ELSE 0 END) as TOTAL
-                From temp_pbidm_ready, tbMaster_prodmast
-                Where
-                    prd_prdcd = plukarton
-                Order By plukarton, FDQTYB LIMIT 10
-            ");
+            // $data['data'] = DB::select("
+            //     Select plukarton as plu,
+            //         desk,
+            //         unitkarton ||'/'|| frackarton as unit,
+            //         qtyb as qty,
+            //         qtyk as frc,
+            //         fdqtyb as inpcs,
+            //         Round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+ " . $PersenMargin . ")) as Harga,
+            //         fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+" . $PersenMargin . ")) as Nilai,
+            //         fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+" . $PersenMargin . ")) * (COALESCE(PRD_PPN,0)/100) * CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN 1 ELSE 0 END as PPN,
+            //         fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END * (1+" . $PersenMargin . ")) * (1 + CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN (COALESCE(PRD_PPN,0)/100) ELSE 0 END) as TOTAL
+            //     From temp_pbidm_ready, tbMaster_prodmast
+            //     Where
+            //         prd_prdcd = plukarton
+            //     Order By plukarton, FDQTYB LIMIT 10
+            // ");
         }
 
         //? rptListOrder.SetParameterValue("NamaCabang", NamaCab)
@@ -2651,17 +2632,14 @@ class Controller extends BaseController
         // sb.AppendLine("   And TKO_KodeOMI = '" & KodeToko & "' ")
         // sb.AppendLine("   And COALESCE(TKO_TGLTUTUP,CURRENT_DATE+1) > CURRENT_DATE ")
 
-        //! DUMMY
-        // $data['namaToko'] = DB::table('tbmaster_tokoigr')
-        //     ->select('tko_namaomi')
-        //     ->where([
-        //         'tko_kodeigr' => session('KODECABANG'),
-        //         'tko_kodeomi' => $KodeToko,
-        //     ])
-        //     ->whereRaw("coalesce(tko_tgltutup,CURRENT_DATE+1) > CURRENT_DATE")
-        //     ->first()->tko_namaomi;
-
-        $data['namaToko'] = 'Nama Toko';
+        $data['namaToko'] = DB::table('tbmaster_tokoigr')
+            ->select('tko_namaomi')
+            ->where([
+                'tko_kodeigr' => session('KODECABANG'),
+                'tko_kodeomi' => $KodeToko,
+            ])
+            ->whereRaw("coalesce(tko_tgltutup,CURRENT_DATE+1) > CURRENT_DATE")
+            ->first()->tko_namaomi;
 
         //! f = "REKAP ORDER PB"
 
@@ -2792,20 +2770,20 @@ class Controller extends BaseController
         }
 
         //! dummy
-        $data['data'] = DB::select("
-            Select DIV_NamaDivisi as NamaDivisi,
-                PRD_KodeDivisi as KodeDivisi,
-                Count(PLUKARTON) as Item,
-                SUM(fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END  * (1+" . $PersenMargin . "))) as Nilai,
-                SUM(fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END  * (1+" . $PersenMargin . ") * (COALESCE(PRD_PPN,0)/100) * CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN 1 ELSE 0 END)) as PPN,
-                SUM(fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END  * (1+" . $PersenMargin . ") * (1 + CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN (COALESCE(PRD_PPN,0)/100) ELSE 0 END))) as SUBTOTAL
-            From temp_pbidm_ready, tbMaster_prodmast, tbMaster_Divisi
-            Where prd_prdcd = plukarton
-                and DIV_KodeDivisi = PRD_KodeDivisi
-            Group By DIV_NamaDivisi,
-                    PRD_KodeDivisi
-            Order By PRD_KodeDivisi LIMIT 10
-        ");
+        // $data['data'] = DB::select("
+        //     Select DIV_NamaDivisi as NamaDivisi,
+        //         PRD_KodeDivisi as KodeDivisi,
+        //         Count(PLUKARTON) as Item,
+        //         SUM(fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END  * (1+" . $PersenMargin . "))) as Nilai,
+        //         SUM(fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END  * (1+" . $PersenMargin . ") * (COALESCE(PRD_PPN,0)/100) * CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN 1 ELSE 0 END)) as PPN,
+        //         SUM(fdqtyb * round(avgcost / CASE WHEN PRD_UNIT='KG' THEN 1000 ELSE 1 END  * (1+" . $PersenMargin . ") * (1 + CASE WHEN COALESCE(PRD_FlagBKP1,'X') = 'Y' THEN (COALESCE(PRD_PPN,0)/100) ELSE 0 END))) as SUBTOTAL
+        //     From temp_pbidm_ready, tbMaster_prodmast, tbMaster_Divisi
+        //     Where prd_prdcd = plukarton
+        //         and DIV_KodeDivisi = PRD_KodeDivisi
+        //     Group By DIV_NamaDivisi,
+        //             PRD_KodeDivisi
+        //     Order By PRD_KodeDivisi LIMIT 10
+        // ");
 
         //? rptRekap.SetParameterValue("NamaCabang", NamaCab)
         //? rptRekap.SetParameterValue("NamaToko", NamaToko)
@@ -2840,17 +2818,14 @@ class Controller extends BaseController
         // sb.AppendLine("   And TKO_KodeOMI = '" & KodeToko & "' ")
         // sb.AppendLine("   And COALESCE(TKO_TGLTUTUP,CURRENT_DATE+1) > CURRENT_DATE ")
 
-        //! DUMMY
-        // $data['namaToko'] = DB::table('tbmaster_tokoigr')
-        //     ->select('tko_namaomi')
-        //     ->where([
-        //         'tko_kodeigr' => session('KODECABANG'),
-        //         'tko_kodeomi' => $KodeToko,
-        //     ])
-        //     ->whereRaw("coalesce(tko_tgltutup,CURRENT_DATE+1) > CURRENT_DATE")
-        //     ->first()->tko_namaomi;
-
-        $data['namaToko'] = 'Nama Toko';
+        $data['namaToko'] = DB::table('tbmaster_tokoigr')
+            ->select('tko_namaomi')
+            ->where([
+                'tko_kodeigr' => session('KODECABANG'),
+                'tko_kodeomi' => $KodeToko,
+            ])
+            ->whereRaw("coalesce(tko_tgltutup,CURRENT_DATE+1) > CURRENT_DATE")
+            ->first()->tko_namaomi;
 
         //! f = "KARTON NON DPD"
 
@@ -2925,22 +2900,22 @@ class Controller extends BaseController
         ");
 
         //! dummy
-        $data['data'] = DB::select("
-            Select DISTINCT GRR_GroupRak as NamaGroup,
-                LKS_KodeRak as KodeRak,
-                LKS_KodeSubRak as SubRak,
-                LKS_TipeRak as TipeRak,
-                PLUKARTON as PLU,
-                LKS_NoUrut as NoUrut,
-                Desk,
-                PRD_KodeTag as TAG,
-                QTYB as Order,
-                UNITKarton ||'/'|| FracKarton as UNIT,
-                    Stok
-            From temp_karton_nondpd_idm,tbMaster_Prodmast
-            Where PRD_PRDCD = PLUKARTON
-            Order By GRR_GroupRak,LKS_KodeRak,LKS_KodeSubRak,LKS_TipeRak,LKS_NoUrut LIMIT 10
-        ");
+        // $data['data'] = DB::select("
+        //     Select DISTINCT GRR_GroupRak as NamaGroup,
+        //         LKS_KodeRak as KodeRak,
+        //         LKS_KodeSubRak as SubRak,
+        //         LKS_TipeRak as TipeRak,
+        //         PLUKARTON as PLU,
+        //         LKS_NoUrut as NoUrut,
+        //         Desk,
+        //         PRD_KodeTag as TAG,
+        //         QTYB as Order,
+        //         UNITKarton ||'/'|| FracKarton as UNIT,
+        //             Stok
+        //     From temp_karton_nondpd_idm,tbMaster_Prodmast
+        //     Where PRD_PRDCD = PLUKARTON
+        //     Order By GRR_GroupRak,LKS_KodeRak,LKS_KodeSubRak,LKS_TipeRak,LKS_NoUrut LIMIT 10
+        // ");
 
         //? rptKarton.SetParameterValue("NamaCabang", NamaCab)
         //? rptKarton.SetParameterValue("NamaToko", NamaToko)
@@ -2975,17 +2950,14 @@ class Controller extends BaseController
         // sb.AppendLine("   And TKO_KodeOMI = '" & KodeToko & "' ")
         // sb.AppendLine("   And COALESCE(TKO_TGLTUTUP,CURRENT_DATE+1) > CURRENT_DATE ")
 
-        //! DUMMY
-        // $data['namaToko'] = DB::table('tbmaster_tokoigr')
-        //     ->select('tko_namaomi')
-        //     ->where([
-        //         'tko_kodeigr' => session('KODECABANG'),
-        //         'tko_kodeomi' => $KodeToko,
-        //     ])
-        //     ->whereRaw("coalesce(tko_tgltutup,CURRENT_DATE+1) > CURRENT_DATE")
-        //     ->first()->tko_namaomi;
-
-        $data['namaToko'] = 'Nama Toko';
+        $data['namaToko'] = DB::table('tbmaster_tokoigr')
+            ->select('tko_namaomi')
+            ->where([
+                'tko_kodeigr' => session('KODECABANG'),
+                'tko_kodeomi' => $KodeToko,
+            ])
+            ->whereRaw("coalesce(tko_tgltutup,CURRENT_DATE+1) > CURRENT_DATE")
+            ->first()->tko_namaomi;
 
         //! f = "ORDER DITOLAK"
 
@@ -3007,17 +2979,17 @@ class Controller extends BaseController
         ");
 
         //! dummy
-        $data['data'] = DB::select("
-            Select PLU as PLUIDM,
-                PLUIGR,
-                PRD_DeskripsiPanjang as DESK,
-                PRD_UNIT||'/'||PRD_Frac as UNIT,
-                QTYO as QTY,
-                KETA as Keterangan
-            From temp_cetakpb_tolakan_idm,tbMaster_Prodmast
-            Where PRD_PRDCD = PLUIGR
-                And KETA <> 'PLU TIDAK TERDAFTAR DI TBMASTER_PRODCRM' LIMIT 10
-        ");
+        // $data['data'] = DB::select("
+        //     Select PLU as PLUIDM,
+        //         PLUIGR,
+        //         PRD_DeskripsiPanjang as DESK,
+        //         PRD_UNIT||'/'||PRD_Frac as UNIT,
+        //         QTYO as QTY,
+        //         KETA as Keterangan
+        //     From temp_cetakpb_tolakan_idm,tbMaster_Prodmast
+        //     Where PRD_PRDCD = PLUIGR
+        //         And KETA <> 'PLU TIDAK TERDAFTAR DI TBMASTER_PRODCRM' LIMIT 10
+        // ");
 
         //! SAMA JADI FR KEVIN COMMENT
         // $kodeDCIDM = $this->getKodeDC($KodeToko);
@@ -3037,10 +3009,15 @@ class Controller extends BaseController
     }
 
     //! RAK JALUR TIDAK KETEMU (PDF BELUM ADA)
-    public function CetakALL_5(){
+    public function CetakALL_5($KodeToko, $noPB, $tglPB, $CounterKecil){
 
         //! VARIABLE
         $ip = $this->getIP();
+
+        $data['kodeToko'] = $KodeToko;
+        $data['noPB'] = $noPB;
+        $data['tglPB'] = $tglPB;
+        $data['batch'] = $CounterKecil;
 
         //! GET HEADER CETAKAN
         // sb.AppendLine("Select PRS_NamaCabang ")
@@ -3056,17 +3033,14 @@ class Controller extends BaseController
         // sb.AppendLine("   And TKO_KodeOMI = '" & KodeToko & "' ")
         // sb.AppendLine("   And COALESCE(TKO_TGLTUTUP,CURRENT_DATE+1) > CURRENT_DATE ")
 
-        //! DUMMY
-        // $data['namaToko'] = DB::table('tbmaster_tokoigr')
-        //     ->select('tko_namaomi')
-        //     ->where([
-        //         'tko_kodeigr' => session('KODECABANG'),
-        //         'tko_kodeomi' => $KodeToko,
-        //     ])
-        //     ->whereRaw("coalesce(tko_tgltutup,CURRENT_DATE+1) > CURRENT_DATE")
-        //     ->first()->tko_namaomi;
-
-        $data['namaToko'] = 'Nama Toko';
+        $data['namaToko'] = DB::table('tbmaster_tokoigr')
+            ->select('tko_namaomi')
+            ->where([
+                'tko_kodeigr' => session('KODECABANG'),
+                'tko_kodeomi' => $KodeToko,
+            ])
+            ->whereRaw("coalesce(tko_tgltutup,CURRENT_DATE+1) > CURRENT_DATE")
+            ->first()->tko_namaomi;
 
         //! f = "RAK JALUR TIDAK KETEMU"
 
@@ -3196,17 +3170,14 @@ class Controller extends BaseController
         // sb.AppendLine("   And TKO_KodeOMI = '" & KodeToko & "' ")
         // sb.AppendLine("   And COALESCE(TKO_TGLTUTUP,CURRENT_DATE+1) > CURRENT_DATE ")
 
-        //! DUMMY
-        // $data['namaToko'] = DB::table('tbmaster_tokoigr')
-        //     ->select('tko_namaomi')
-        //     ->where([
-        //         'tko_kodeigr' => session('KODECABANG'),
-        //         'tko_kodeomi' => $KodeToko,
-        //     ])
-        //     ->whereRaw("coalesce(tko_tgltutup,CURRENT_DATE+1) > CURRENT_DATE")
-        //     ->first()->tko_namaomi;
-
-        $data['namaToko'] = 'Nama Toko';
+        $data['namaToko'] = DB::table('tbmaster_tokoigr')
+            ->select('tko_namaomi')
+            ->where([
+                'tko_kodeigr' => session('KODECABANG'),
+                'tko_kodeomi' => $KodeToko,
+            ])
+            ->whereRaw("coalesce(tko_tgltutup,CURRENT_DATE+1) > CURRENT_DATE")
+            ->first()->tko_namaomi;
 
         //! f = "JALUR CETAK KERTAS"
 
@@ -3281,20 +3252,20 @@ class Controller extends BaseController
         ");
 
         //! dummy
-        $data['data'] = DB::select("
-            Select GRR_GroupRak as namagroup,
-                PLUKARTON as plu,
-                LKS_KodeRak as koderak,
-                LKS_KodeSubRak as subrak,
-                LKS_TipeRak as tiperak,
-                LKS_NoUrut as nourut,
-                desk,
-                'kodetag' as prd_kodetag,
-                QTYK as ORDER,
-                UNITKECIL ||' /'|| FRACKECIL as UNIT,
-                STOK
-            From TEMP_JALURKERTAS_IDM LIMIT 10
-        ");
+        // $data['data'] = DB::select("
+        //     Select GRR_GroupRak as namagroup,
+        //         PLUKARTON as plu,
+        //         LKS_KodeRak as koderak,
+        //         LKS_KodeSubRak as subrak,
+        //         LKS_TipeRak as tiperak,
+        //         LKS_NoUrut as nourut,
+        //         desk,
+        //         'kodetag' as prd_kodetag,
+        //         QTYK as ORDER,
+        //         UNITKECIL ||' /'|| FRACKECIL as UNIT,
+        //         STOK
+        //     From TEMP_JALURKERTAS_IDM LIMIT 10
+        // ");
 
         //? rptKertas.SetParameterValue("NamaCabang", NamaCab)
         //? rptKertas.SetParameterValue("NamaToko", NamaToko)
